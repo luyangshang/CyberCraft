@@ -1,0 +1,7 @@
+2029,                                
+Califonia, USA
+^The power of Internet has already reached almost every corner of the world. And the rise of strong artificial intelligentce in the last decade has made it common that big companies use AI for their basic-level and medium-level decision making. A large number of people, including drivers, waiters, low level lawyers, are replaced by the robots or automated systems.
+^HackIt, one of the world's largest hacker group, is clearly against this situation. HackIt has two creeds:
+1. People shouldn't limitlessly exploit the power of artificial intelligence, otherwise, AI take over will be just a issue of time.
+2. People's privacy should be protected. The governments should not eavesdrop on the public, and the super companies should not hold too much detailed client information.
+^Having the same idea as HackIt, Christopher, a talented youth interested in cybersecurity, is going to join HackIt.

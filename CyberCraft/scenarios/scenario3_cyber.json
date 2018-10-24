@@ -1,0 +1,328 @@
+{"name":					"Credential guardian",
+"serverCapacity":			2,
+"serverRequestValley":		2,
+"serverRequestPeak":		2,
+"initialResource":			[60, 20],
+"constantIncome":			[25,0],
+"maxResource":				150,
+"maxRounds":				20,
+"assets":					200,
+"defensive":				true,
+"characterName":
+[
+	"Terrorist",
+	"Godfried"
+],
+"portrait":
+[
+	"terrorist",
+	"Godfried"
+],
+"commonActs": 
+[
+	["Promiscuous mode"],
+	["Hash algorithm"]
+],
+"acts": 
+[
+	[
+		{
+			"name":				"Sniffing attack",
+			"prerequists":		["Promiscuous mode"],
+			"learningCost":		5,
+			"desc":				"Obtain rival's username and password, as well as other data, if the rival's network communication is not encrypted or hashed.",
+			"needRivalBuffs":	["MITM"],
+			"noRivalBuffs":		["Password hashed", "OTP", "Credential compromised"],
+			"cost":				5,
+			"rivalBuffs":		["Credential compromised"],
+			"buffLength":		2,
+			"bonus":			50
+		},
+		{
+			"name": 			"Brute-force attack",
+			"desc":				"Brute force attack can be used for cracking hash. However, here it's used for trying on password: repeatively try all possible combinations of passwords.",
+			"noRivalBuffs":		["Password error limit", "Password error delay", "OTP", "Credential compromised"],
+			"cost":				20,
+			"successRate":		0.2,
+			"rivalBuffs":		["Credential compromised"],
+			"buffLength":		2,
+			"bonus":			50
+		},
+		{
+			"name": 			"Dictionary attack",
+			"prerequists":		["Brute-force attack"],
+			"learningCost":		30,
+			"desc":				"An upgrade of brute-force attack. Try only the limited subset of the password, which is composed of words from the dictionary. Higher successRate.",
+			"needRivalBuffs":	["Password hashed"],
+			"noRivalBuffs":		["Salt", "OTP"],
+			"cost":				15,
+			"successRate":		0.61,
+			"cleanRivalBuffs":	["Password hashed"]
+		},
+		{
+			"name": 			"Buy rainbow table",
+			"prerequists":		["Dictionary attack"],
+			"learningCost":		20,
+			"desc":				"Use the rainbow table to assist the dictionary attack on long password. Increase the success  rate of Dictionary attack.",
+			"noSelfBuffs":		["Rainbow table"],
+			"cost":				20,
+			"selfBuffs":		["Rainbow table"],
+			"modifier":			"0:Dictionary attack:successRate:*:1.5"
+		},
+		{
+			"name":				"Replay attack",
+			"desc":				"replay the last message, effective even if encrypted. Countered by the use of nonce, timestamp (kerberos has timestamp), MID and relieve by sequence number",
+			"noRivalBuffs":		["Timestamp", "Kerberos", "OTP", "Credential compromised"],
+			"cost":				5,
+			"rivalBuffs":		["Credential compromised"],
+			"buffLength":		2,
+			"bonus":			35
+		},
+		{
+			"name":				"Password DoS",
+			"desc":				"Delibrately insert wrong passwords to lock an account. Can be applied only if the rival has buff \"Password error limit\"",
+			"needRivalBuffs":	["Password error limit"],
+			"cost":				5,
+			"rivalBuffs":		["Denial of service attacked"],
+			"buffLength":		2,
+			"spamRequests":		6
+		},
+		{
+			"name":				"Privilege escalation",
+			"desc":				"Escalate the privilege after having cracked an account. Deals additional damages at the same round.",
+			"needRivalBuffs":	["Credential compromised"],
+			"noRivalBuffs":		["Privilege escalation"],
+			"cost":				30,
+			"rivalBuffs":		["Privilege escalation"],
+			"buffLength":		2,
+			"bonus":			50,
+			"unlocked":			false
+		}
+	],
+	[		
+		{
+			"name":				"Password hashed",
+			"prerequists":		["Hash algorithm"],
+			"desc":				"The server stores only the hash of the password. Resistent to Sniffing attack, and breakable by dictionary attack.",
+			"cost":				10,
+			"selfBuffs":		["Password hashed"],
+			"buffLength":		8
+		},
+		{
+			"name":				"MFA",
+			"learningCost":		15,
+			"desc":				"Multiple factor authentication. Using multiple methods of authentications of different types (don't put all of one's eggs in one basket). Halves the success rate of rival attacks.",
+			"cost":				60,
+			"modifier":			"0:Brute-force attack:successRate:/:2;0:Dictionary attack:successRate:/:2;0:Sniffing attack:successRate:/:2;0:Replay attack:successRate:/:2",
+			"selfBuffs":		["MFA"]
+		},
+		{
+			"name":				"Salt",
+			"learningCost":		10,
+			"desc":				"A random number to put with the password before it's hashed. Resistent against Dicionary attack.",
+			"cost":				15,
+			"selfBuffs":		["Salt"],
+			"buffLength":		6
+		},
+		{
+			"name":				"Password error limit",
+			"desc":				"Resistent to Brute-force attack, but open door for Password DoS attack.",
+			"cost":				5,
+			"selfBuffs":		["Password error limit"],
+			"cleanSelfBuffs":	["Password error delay"]
+		},
+		{
+			"name":				"Password error delay",
+			"prerequists":		["Password error limit"],
+			"learningCost":		5,
+			"desc":				"Resistent to Brute-force attack.",
+			"cost":				10,
+			"selfBuffs":		["Password error delay"],
+			"cleanSelfBuffs":	["Password error limit"],
+			"buffLength":		6
+		},
+		{
+			"name":				"Timestamp",
+			"learningCost":		5,
+			"desc":				"To put a time in the message, in order to fight the replay attack.",
+			"cost":				5,
+			"selfBuffs":		["Timestamp"],
+			"buffLength":		6
+		},
+		{
+			"name":				"OTP",
+			"learningCost":		25,
+			"desc":				"Use one time password to provide perfect security. Invincible when having the buff.",
+			"cost":				40,
+			"selfBuffs":		["OTP"],
+			"buffLength":		4
+		},
+		{
+			"name":				"Password manager",
+			"learningCost":		5,
+			"desc":				"Use a software to manage the passwords, gains resource each round because of the convenience provided to the users.",
+			"cost":				5,
+			"selfBuffs":		["Password auto-filled"],
+			"cleanSelfBuffs":	["Kerberos"]
+		},
+		{
+			"name":				"Kerberos",
+			"prerequists":		["Timestamp"],
+			"learningCost":		25,
+			"desc":				"An authentication protocol based on ticket. prevent replay attack, reduce Sniffing attack probability, and gains resource each round because it provides multi-domain Single Sign-On.",
+			"cost":				30,
+			"selfBuffs":		["Kerberos"],
+			"cleanSelfBuffs":	["Password auto-filled"],
+			"modifier":			"0:Sniffing attack:successRate:/:2",
+			"unlocked":			false
+		}
+	]
+],
+"commonBuffs":
+[
+	"MITM", "503 Server Unavailable", "Credential compromised", "Denial of service attacked", "Offline", "MFA"
+],
+"buffs":
+[
+	{
+		"name":		"Rainbow table",
+		"desc":		"With rainbow table, dictionary attack can be used against long password. Higher success rate."
+	},
+	{
+		"name":		"Password-based authentication",
+		"desc":		"The most traditional form of authentication. With no other defences, it's very susceptive to sniffing attacks.",
+		"upkeep":	1
+	},
+	{
+		"name":		"Privilege escalation",
+		"desc":		"In addition to stealing an account's credential, the attacker has made himself an administrator. The system is further damaged."
+	},
+	{
+		"name":		"Password hashed",
+		"desc":		"Instead of the password itself, the (one-way) hash of the password is transmitted and stored in the server. Sniffing attack alone will not compromise the credential."
+	},
+	{
+		"name":		"Salt",
+		"desc":		"Salt is added to the password before hashing. It has become a hard time for Dictionary attack.",
+		"upkeep":	1
+	},
+	{
+		"name":		"Password error limit",
+		"desc":		"Number of attempts for wrong password is limited. An brute-force attack on login is prevented. However, password DoS is possible."
+	},
+	{
+		"name":		"Password error delay",
+		"desc":		"An user is delayed at wrong password. An brute-force attack on login is prevented."
+	},
+	{
+		"name":		"Timestamp",
+		"desc":		"With a timestamp, the replay attack is impossible."
+	},
+	{
+		"name":		"OTP",
+		"desc":		"OTP grants the character a temporary invicibility."
+	},
+	{
+		"name":		"Password auto-filled",
+		"desc":		"Clients are happy for not having to insert passwords everytime.",
+		"upkeep":	-3
+	},
+	{
+		"name":		"Kerberos",
+		"desc":		"Clinets are happy for not having to insert passwords everytime, even across sites. The password is never transmitted after tickets are granted, so that sniffing attack becomes less effective. Replay attack is also defended by Kerberos's use of timestamp.",
+		"upkeep":	-4
+	}
+],
+"initialBuffs":
+[
+	[],
+	[
+		{
+			"name":		"MITM",
+			"length":	-1
+		},
+		{
+			"name":		"Password-based authentication",
+			"length":	-1
+		}
+	]
+],
+"AI":
+[
+	{
+		"pattern":
+		["Replay attack", "Privilege escalation"],
+		"chance":	0.2
+	},
+	{
+		"pattern":
+		["Dictionary attack", "Sniffing attack", "Privilege escalation"],
+		"chance":	0.15
+	},
+	{
+		"pattern":
+		["Replay attack"],
+		"chance":	0.2
+	},
+	{
+		"pattern":
+		["Buy rainbow table", "Dictionary attack", "Sniffing attack"],
+		"chance":	0.15
+	},
+	{
+		"pattern":
+		["Dictionary attack", "Sniffing attack"],
+		"chance":	0.15
+	},
+	{
+		"pattern":
+		["Password DoS", "Sniffing attack"],
+		"chance":	0.15
+	},
+	{
+		"pattern":
+		["Brute-force attack"],
+		"chance":	0.15
+	},
+	{
+		"pattern":
+		["Sniffing attack"],
+		"chance":	0.05
+	}
+],
+"scripts":
+[
+	{
+		"round":		7,
+		"dialogues":
+		[
+			{
+				"name":		"Scientist",
+				"portrait":	"headScientistPo",
+				"dialogue":	"We have developed a system called Kerberos! It's exellent for the functionality of single sign on. ^Password manager avoids inserting password for each single website, but kerberous does it for the whole domain! ^The clients will surely be more happy. ^Also, because no password is transmitted after ticket is granted, kerberous provides some defence against sniffing attack. ^What's more, Kerberos makes use of the timestamp, making it resistent to replay attack."
+			}
+		],
+		"newActs":
+		[
+			[],
+			["Kerberos"]
+		]
+	},
+	{
+		"round":		9,
+		"dialogues":
+		[
+			{
+				"name":		"Scientist",
+				"portrait":	"headScientistPo",
+				"dialogue":	"A bad news! An attack called privilege escalation is discovered. ^The attack is performed after a successfully compromise of the credential, and, in addition to credential of a normal user, the attacker could obtain the administrative privilege, so that our service will be even further damanged."
+			}
+		],
+		"newActs":
+		[
+			["Privilege escalation"],
+			[]
+		]
+	}
+]
+}

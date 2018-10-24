@@ -1,0 +1,4 @@
+Congratulations! You have successfully protected the secret client messages. The intruders find little valuable information and they vanished.
+
+^Tips: many of the "secure" technologies nowadays involves the use of digital certificates, or better say, the whole system of certificates. This is provided by PKI (Public Key Infrastructure). 
+Even the downloaded installation packages have certificates signed by the software producer, so that the crackers cannot easily manipulate the installation packages.

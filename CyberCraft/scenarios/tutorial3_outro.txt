@@ -1,0 +1,6 @@
+Thanks to the legendary work of Turing's team. The German's naval Enigma is cracked again. The super knowledge of Allies about german's military movements has greatly helped Allies in the battle. The work of Turing is considered having accelerated the pace of war in Europe by more than two years, saving fourteen millions of lives.
+
+^Playing as an intruder, you have to find the weak points, and strike where undefended. In this tutorial, Nazi didn't apply any defence except for encrypting the messages with Enigma. This is because they were too much confident in Enigma, thinking that it was unbreakable. However, in the formal scenarios, the defender will frustrate you in various of ways. So, be adaptive.
+
+^If your attack where defended, you spend the resource in vain. On the contrary, if you succeeded in dealing damage to the assets, you gain bounty, and you are one step closer to victory. 
+Also, don't be too timid. Whenever you have found a path to attack, do it. You are not able to deal huge damage and achieve your victory all in a single round.

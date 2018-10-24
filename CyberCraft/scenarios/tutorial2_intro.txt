@@ -1,0 +1,12 @@
+This tutorial will focus on the fight in the cyberspace.
+
+Cyberspace is where you are going to practice network attack or network defence technique against your rival.
+
+The cyberspace will look like the following:
+
+^#image$500$300$cyberspaceWithDescription
+
+^In this tutorial, your role is the defender. Your target is to use the defensive techniques (called "defensive acts") to defend the company assets for some number of rounds. Each defensive act usually enforces a positive buff on your side, granting immunity or resistance to some form of attacks.
+If the assets are severely compromised before the number of rounds expires, the defender loses. Contrarily, if the round expires with some assets still there, the defender wins.
+
+^However, to build up your defence, you need resources. In order to obtain resources quickly, you should also take care of the company's server (This is a network company). When a incoming client request is serverd, you get 10 bonus resource; but if the request is not served, the client will complain, and you loss 5 resource.

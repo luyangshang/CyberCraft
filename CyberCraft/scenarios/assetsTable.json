@@ -1,0 +1,644 @@
+{
+"images":
+[
+	{
+		"key":	"unknownCharacter",
+		"url":	"assets/images/portraits/unknownCharacter.png"
+	},
+	{
+		"key":	"Godfried",
+		"url":	"assets/images/portraits/Godfried.png"
+	},
+	{
+		"key":	"Christopher",
+		"url":	"assets/images/portraits/Christopher.png"
+	},
+	{
+		"key":	"JuanPujolGarcía",
+		"url":	"assets/images/portraits/Juan_Pujol_García.png"
+	},
+	{
+		"key":	"AlanTuring",
+		"url":	"assets/images/portraits/Alan_Turing.png"
+	},
+	{
+		"key":	"GordonWelchman",
+		"url":	"assets/images/portraits/Gordon_Welchman.png"
+	},
+	{
+		"key":	"Enigma",
+		"url":	"assets/images/portraits/enigma.png"
+	},
+	{
+		"key":	"portrait1",
+		"url":	"assets/images/portraits/portrait1.png"
+	},
+	{
+		"key":	"portrait2",
+		"url":	"assets/images/portraits/portrait2.png"
+	},
+	{
+		"key":	"jorek",
+		"url":	"assets/images/portraits/jorek.png"
+	},
+	{
+		"key":	"flintley",
+		"url":	"assets/images/portraits/flintley.png"
+	},
+	{
+		"key":	"soldner",
+		"url":	"assets/images/portraits/soldner.png"
+	},
+	{
+		"key":	"shifty_merchant",
+		"url":	"assets/images/portraits/shifty_merchant.png"
+	},
+	{
+		"key":	"male1",
+		"url":	"assets/images/portraits/male1.png"
+	},
+	{
+		"key":	"hunter",
+		"url":	"assets/images/portraits/hunter.png"
+	},
+	{
+		"key":	"youngbusinessman",
+		"url":	"assets/images/portraits/youngbusinessman.png"
+	},
+	{
+		"key":	"cyborg1",
+		"url":	"assets/images/portraits/cyborg1.png"
+	},
+	{
+		"key":	"rebina_casual",
+		"url":	"assets/images/portraits/rebina_casual.png"
+	},
+	{
+		"key":	"redGirl",
+		"url":	"assets/images/portraits/manga-girl.png"
+	},
+	{
+		"key":	"czesc",
+		"url":	"assets/images/portraits/czesc.png"
+	},
+	{
+		"key":	"headScientistPo",
+		"url":	"assets/images/portraits/zalek_scientist_placeholder.png"
+	},
+	{
+		"key":	"scientistPo",
+		"url":	"assets/images/portraits/scientist.png"
+	},
+	{
+		"key":	"Drunkard",
+		"url":	"assets/images/portraits/Drunkard.png"
+	},
+	{
+		"key":	"pirate1",
+		"url":	"assets/images/portraits/pirate1.png"
+	},
+	{
+		"key":	"pirate4",
+		"url":	"assets/images/portraits/pirate4.png"
+	},
+	{
+		"key":	"thief1",
+		"url":	"assets/images/portraits/thief1.png"
+	},
+	{
+		"key":	"thief2",
+		"url":	"assets/images/portraits/thief2.png"
+	},
+	{
+		"key":	"thief3",
+		"url":	"assets/images/portraits/thief3.png"
+	},
+	{
+		"key":	"dv_military_m1",
+		"url":	"assets/images/portraits/dv_military_m1.png"
+	},
+	{
+		"key":	"defensiveAI",
+		"url":	"assets/images/portraits/defensiveAI.png"
+	},
+	{
+		"key":	"terrorist",
+		"url":	"assets/images/portraits/shocktroopers_toy2.png"
+	},
+	
+	{
+		"key":	"combinedFace",
+		"url":	"assets/images/combinedFace.png"
+	},
+	{
+		"key":	"lock",
+		"url":	"assets/images/lock.png"
+	},
+	{
+		"key":	"bullet",
+		"url":	"assets/images/bullet.png"
+	},
+	{
+		"key":	"shield",
+		"url":	"assets/images/shield.png"
+	},
+	{
+		"key":	"shieldLeft",
+		"url":	"assets/images/shield_left.png"
+	},
+	{
+		"key":	"shieldRight",
+		"url":	"assets/images/shield_right.png"
+	},
+	{
+		"key":	"bubble",
+		"url":	"assets/images/bubble.png"
+	},
+	{
+		"key":	"itemFrame",
+		"url":	"assets/images/itemFrame.png"
+	},
+	{
+		"key":	"selfRivalBuffsWithDescription",
+		"url":	"assets/images/self_rival_buffs_with_description.PNG"
+	},
+	
+	{
+		"key":	"actCapture",
+		"url":	"assets/images/actCapture.png"
+	},
+	{
+		"key":	"cyberspaceWithDescription",
+		"url":	"assets/images/cyberspace_with_description.png"
+	},
+	{
+		"key":	"computerSmall1",
+		"url":	"assets/images/computerSmall1.png"
+	},
+	{
+		"key":	"computerSmall2",
+		"url":	"assets/images/computerSmall2.png"
+	},
+	{
+		"key":	"computer",
+		"url":	"assets/images/computer.png"
+	},
+	{
+		"key":	"notes",
+		"url":	"assets/images/notes.png"
+	},
+	{
+		"key":	"tron",
+		"url":	"assets/images/tron.png"
+	},
+	{
+		"key":	"logButton",
+		"url":	"assets/images/logButton.png"
+	},
+	{
+		"key":	"saveButton",
+		"url":	"assets/images/save_button.png"
+	},
+	{
+		"key":	"sendButton",
+		"url":	"assets/images/send_button.png"
+	},
+	{
+		"key":	"black",
+		"url":	"assets/images/black.png"
+	},
+	{
+		"key":	"binary",
+		"url":	"assets/images/binary.png"
+	},
+	{
+		"key":	"logo",
+		"url":	"assets/images/CYBERCRAFT_logo.png"
+	},
+	{
+		"key":	"bgFace",
+		"url":	"assets/images/face.jpg"
+	},
+	{
+		"key":	"box",
+		"url":	"assets/images/box.png"
+	},
+	{
+		"key":	"PNFrame",
+		"url":	"assets/images/PNFrame.png"
+	},
+	{
+		"key":	"arrow",
+		"url":	"assets/images/arrow.png"
+	},
+	{
+		"key":	"arrowUp",
+		"url":	"assets/images/arrowUp.png"
+	},
+	{
+		"key":	"arrowDown",
+		"url":	"assets/images/arrowDown.png"
+	},
+	{
+		"key":	"happy",
+		"url":	"assets/images/happy.png"
+	},
+	{
+		"key":	"unhappy",
+		"url":	"assets/images/unhappy.png"
+	},
+	{
+		"key":	"VICTORY",
+		"url":	"assets/images/VICTORY.png"
+	},
+	{
+		"key":	"DEFEAT",
+		"url":	"assets/images/DEFEAT.png"
+	},
+	{
+		"key":	"floor_tile",
+		"url":	"assets/images/floor_tile.png"
+	},
+	{
+		"key":	"wall_tile",
+		"url":	"assets/images/wall.png"
+	},
+	{
+		"key":	"wall_pieces",
+		"url":	"assets/images/wallp.png"
+	},
+	{
+		"key":	"dialogueBox",
+		"url":	"assets/images/dialogue_box.png"
+	},
+	
+	{
+		"key":	"arpSpoofingNotes",
+		"url":	"assets/images/notes/ARP_Spoofing.png"
+	},
+	{
+		"key":	"bombeNotes",
+		"url":	"assets/images/notes/Bombe.jpg"
+	},
+	{
+		"key":	"ddosNotes",
+		"url":	"assets/images/notes/220px-Stachledraht_DDos_Attack.png"
+	},
+	{
+		"key":	"AlanTuringNotes",
+		"url":	"assets/images/notes/Alan_Turing_big.jpg"
+	},
+	{
+		"key":	"GordonNotes",
+		"url":	"assets/images/notes/Gordon_Welchman_big.jpg"
+	},
+	{
+		"key":	"enigmaLogo",
+		"url":	"assets/images/notes/100px-Enigma-logo.png"
+	},
+	{
+		"key":	"enigmaNotes",
+		"url":	"assets/images/notes/220px-EnigmaMachineLabeled.jpg"
+	},
+	{
+		"key":	"DHNotes",
+		"url":	"assets/images/notes/250px-Diffie-Hellman_Key_Exchange.png"
+	},
+	{
+		"key":	"CAPTCHANotes",
+		"url":	"assets/images/notes/260px-FancyCaptcha_screenshot.png"
+	},
+	{
+		"key":	"phishingNotes",
+		"url":	"assets/images/notes/300px-PhishingTrustedBank.png"
+	},
+	{
+		"key":	"pkiNotes",
+		"url":	"assets/images/notes/300px-Public-Key-Infrastructure.png"
+	},
+	{
+		"key":	"replayNotes",
+		"url":	"assets/images/notes/300px-Replay_attack_on_hash.png"
+	},
+	{
+		"key":	"kerberosNotes",
+		"url":	"assets/images/notes/444px-Kerberos.png"
+	},
+	{
+		"key":	"cdnNotes",
+		"url":	"assets/images/notes/220px-NCDN_-_CDN.png"
+	},
+	{
+		"key":	"arpCachePoisoningNotes",
+		"url":	"assets/images/notes/arp-spoofing.png"
+	},
+	{
+		"key":	"xssNotes",
+		"url":	"assets/images/notes/cookie-sniffer.png"
+	},
+	{
+		"key":	"dnsHijackingNotes",
+		"url":	"assets/images/notes/dns-hijack.png"
+	},
+	{
+		"key":	"mitmNotes",
+		"url":	"assets/images/notes/Man_in_the_middle_attack.png"
+	},
+	{
+		"key":	"rogueAPNotes",
+		"url":	"assets/images/notes/wifi-spoofing.png"
+	},
+	{
+		"key":	"zeroDayNotes",
+		"url":	"assets/images/notes/vulnerabilityLifeCycle.png"
+	}
+],
+"spritesheets":
+[
+	{
+		"key":	"bridesmaid08",
+		"url":	"assets/images/sprites/bridesmaid08.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"scientistSp",
+		"url":	"assets/images/sprites/steampunk_m11.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"officeman3",
+		"url":	"assets/images/sprites/officeman3.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"fredcolon",
+		"url":	"assets/images/sprites/fredcolon.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"germany_nyo",
+		"url":	"assets/images/sprites/germany_nyo.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"nazi",
+		"url":	"assets/images/sprites/nazi.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"steampunk_m1",
+		"url":	"assets/images/sprites/steampunk_m1.png",
+		"frameWidth":	32,
+		"frameHeight":	52
+	},
+	{
+		"key":	"officeman4",
+		"url":	"assets/images/sprites/officeman4.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"mamoruchiba",
+		"url":	"assets/images/sprites/mamoruchiba.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"skye",
+		"url":	"assets/images/sprites/skye.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"buckybarnes",
+		"url":	"assets/images/sprites/buckybarnes.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"havelockvetinari",
+		"url":	"assets/images/sprites/havelockvetinari.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"cyangaramonde",
+		"url":	"assets/images/sprites/cyangaramonde.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	{
+		"key":	"nickfury",
+		"url":	"assets/images/sprites/nickfury.png",
+		"frameWidth":	32,
+		"frameHeight":	48
+	},
+	
+	{
+		"key":	"explosion",
+		"url":	"assets/images/explosion.png",
+		"frameWidth":	64,
+		"frameHeight":	64
+	},
+	{
+		"key":	"itemFrames",
+		"url":	"assets/images/itemFrames.png",
+		"frameWidth":	666,
+		"frameHeight":	39
+	},
+	{
+		"key":	"tutorialButton",
+		"url":	"assets/images/tutorialButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"playButton",
+		"url":	"assets/images/playButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"notesButton",
+		"url":	"assets/images/notesButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"creditsButton",
+		"url":	"assets/images/creditsButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"restartButton",
+		"url":	"assets/images/restartButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"menuButton",
+		"url":	"assets/images/menuButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"resumeButton",
+		"url":	"assets/images/resumeButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"reviewButton",
+		"url":	"assets/images/reviewButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"yesButton",
+		"url":	"assets/images/yesButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"noButton",
+		"url":	"assets/images/noButton.png",
+		"frameWidth":	255,
+		"frameHeight":	82
+	},
+	{
+		"key":	"endTurnButton",
+		"url":	"assets/images/endTurnButton.png",
+		"frameWidth":	174,
+		"frameHeight":	78
+	},
+	{
+		"key":	"learnButton",
+		"url":	"assets/images/learnButton.png",
+		"frameWidth":	174,
+		"frameHeight":	78
+	},
+	{
+		"key":	"applyButton",
+		"url":	"assets/images/applyButton.png",
+		"frameWidth":	174,
+		"frameHeight":	78
+	},
+	{
+		"key":	"cross",
+		"url":	"assets/images/cross.png",
+		"frameWidth":	61,
+		"frameHeight":	62
+	},
+	{
+		"key":	"book",
+		"url":	"assets/images/book.png",
+		"frameWidth":	92,
+		"frameHeight":	77
+	},
+	{
+		"key":			"link",
+		"url":			"assets/images/link.png",
+		"frameWidth":	130,
+		"frameHeight":	84
+	},
+	{
+		"key":			"gate",
+		"url":			"assets/images/gate.png",
+		"frameWidth":	60,
+		"frameHeight":	64
+	},
+	{
+		"key":	"chewie",
+		"url":	"assets/images/sprites/chewie.png",
+		"frameWidth":	40,
+		"frameHeight":	72
+	}
+],
+"audios":
+[
+	{
+		"key":	"typing",
+		"urls":	"assets/sound/393902__rodzuz__typing.mp3"
+	},
+	{
+		"key":	"intruderMustBeDestroyed",
+		"urls":	"assets/sound/kennysvoice__requested-robot1_part.mp3"
+	},
+	{
+		"key":	"accessGranted",
+		"urls":	"assets/sound/ethanolproductions__access-granted.mp3"
+	},
+	{
+		"key":	"accessDenied",
+		"urls":	"assets/sound/chilljeremy__access-denied.mp3"
+	},
+	{
+		"key":	"notice",
+		"urls":	"assets/sound/notice.mp3"
+	},
+	{
+		"key":	"blaster",
+		"urls":	"assets/sound/blaster.mp3"
+	},
+	{
+		"key":	"explosion",
+		"urls":	"assets/sound/explosion.mp3"
+	},
+	{
+		"key":	"sword",
+		"urls":	"assets/sound/sword.mp3"
+	},
+	{
+		"key":	"shieldBreak",
+		"urls":	"assets/sound/198876__bone666138__crash.mp3"
+	},
+	{
+		"key":	"acceptSound",
+		"urls":	"assets/sound/MESSAGE-B_Accept.wav"
+	},
+	{
+		"key":	"errorSound",
+		"urls":	"assets/sound/ALERT_Error.wav"
+	},
+	
+	{
+		"key":	"mainBGM",
+		"urls":	"assets/music/furbyguy__undercover.mp3"
+	},
+	{
+		"key":	"intruderBGM",
+		"urls":	"assets/music/cabled-mess__cyberpunk-24042017.mp3"
+	},
+	{
+		"key":	"defenderBGM",
+		"urls":	"assets/music/sci-fi-laboratory-ambience.mp3"
+	},
+	{
+		"key":	"cyberBGM0",
+		"urls":	"assets/music/barrelcarb__spy-or-action-tv-show-intro-song-LowQ.mp3"
+	},
+	{
+		"key":	"cyberBGM1",
+		"urls":	"assets/music/Bogart VGM - Scifi_Main_Theme_ Menu_LowQ.mp3"
+	},
+	{
+		"key":	"cyberBGM2",
+		"urls":	"assets/music/Scyphe-Goldrunner(Maccie_Pimp_Me Up_Remix)LowQ.mp3"
+	},
+	{
+		"key":	"cyberBGM3",
+		"urls":	"assets/music/jammerboy70__cyber-race_LowQ.mp3"
+	},
+	{
+		"key":	"outroBGM",
+		"urls":	"assets/music/modulationstation__spy-music.mp3"
+	}
+]
+}

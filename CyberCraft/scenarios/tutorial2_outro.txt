@@ -1,0 +1,3 @@
+Congratulations! You have defended the company from cyber threat!
+
+^Note that the intruder may use a combination of attacks. It's possible that the intruder uses first attacks to cripple your defence, while the last attack to really compromise your assets.

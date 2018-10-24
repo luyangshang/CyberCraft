@@ -1,0 +1,65 @@
+{"NPCs":
+[
+	{
+		"name": 	"Hank",
+		"sprite": 	"havelockvetinari",
+		"portrait":	"Drunkard",
+		"x":		100,
+		"y":		150,
+		"speeches":
+		[
+			{
+				"speech": "Hi, Christopher! You probably have heard of ArtificialCore as a company researching on a strong AIs. ^Traced from your last cracked messages, we finally discovered that ArtificialCore is the one who is secretly developing AI for the war machine. ^Yeah, I'm also shocked, just like you. ^Undoubtedly, we will fight ArtificialCore from now on. ^Intelligence reports that, a weak point has been found on ArtificialCore's telecommutors and those on travel. ^These bars and houses marked are where ArtificialCore's telecommutor usually stays, and this airport is where its managers usually travels. ^By going to these places, you can creep near the victim. ^Use your knowledge, especially the techniques on wireless networks, you can fool the victim, and get something of the company. ^Tell me when you are going to depart."
+			},
+			{
+				"speech": "` The devices you may need are packed. Are you ready to go?"
+			}
+		]
+	},
+	{
+		"name": 	"Zack",
+		"sprite": 	"cyangaramonde",
+		"portrait": "pirate1",
+		"x":		780,
+		"y":		450,
+		"speeches":
+		[	
+			{
+				"speech": "In this particular mission, if you have successfully performed one of the MITM (Man-In-The-Middle) attack, you will be rewarded a little bonus. ^However, in order to deal enough damange to the designated service and achieve your victory, you should adopt majorly those like XSS(Cross-Site Scripting)."
+			},
+			{
+				"speech": "We are developing a new form of attack. Probably you will be informed of it during your attack."
+			}
+		]
+	},
+	{
+		"name": 	"Calvin",
+		"sprite": 	"nickfury",
+		"portrait": "pirate4",
+		"x":		530,
+		"y":		200,
+		"speeches":
+		[	
+			{
+				"speech": "ArtificialCore may give out some Tips for its telecommutors on network security. This will make some of your attack fail. ^Check the buffs on the rival(optionally the \"R\" key), before you launch your attack. If one attack is hampered, try some other attacks. The action log will also note down if your attack succeeds. ^The good news is, the employees forgets about the tips after sometime, when they will fall for your trick again."
+			},
+			{
+				"speech": "Your Rogue DNS server may not work for all the situations. Maybe you can try \"DNS cache poisoning\" instead, confusing a big area."
+			}
+		]
+	},
+	{
+		"name": 	"Lucy",
+		"sprite": 	"skye",
+		"portrait": "thief3",
+		"x":		180,
+		"y":		480,
+		"speeches":
+		[	
+			{
+				"speech": "You are going to go near the victim and connect to the same wireless network. ^In this situation, DEAUTH attack is quite useful. ^It can kick the victim offline, which means the victim cannot perform any other actions during that time. ^Meanwhile, reconnection attempt makes it easier for the victim to fall into our Rogue Access Point. ^All in all, I suggest you perform a combo of \"Deauth attack + Rogue access point + Rogue DHCP server + Rogue DNS server + XSS\". The first ones gradually trap the victim into our fake server, while the last one send us the victim's precious cookie."
+			}
+		]
+	}
+]
+}

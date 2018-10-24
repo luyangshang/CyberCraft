@@ -1,0 +1,223 @@
+{"acts":
+[
+	[
+		{
+			"name":			"IP spoofing",
+			"desc":			"Send packages with the faked IP address. Counter those techniques based on IP addresses.",
+			"cost":			10,
+			"selfBuffs":	["IP spoofed"],
+			"buffLength":	-1
+		},
+		{
+			"name":			"Promiscuous mode",
+			"learningCost":	5,
+			"desc":			"The knowledge of setting up Network Interface Card (NIC) in promiscuous mode. Enables you to capture all packages in your local area network.",
+			"cost":			0
+		},
+		{
+			"name":				"Sniffing attack",
+			"prerequists":		["Promiscuous mode"],
+			"learningCost":		10,
+			"desc":				"Obtain rival's username and password, as well as other data, provided that the communication is not encrypted or hashed.",
+			"needRivalBuffs":	["MITM"],
+			"noRivalBuffs":		["Encrypted", "Credential compromised"],
+			"cost":				10,
+			"rivalBuffs":		["Credential compromised"],
+			"buffLength":		2,
+			"bonus":			50
+		},
+		{
+			"name":				"MITM",
+			"desc":				"Performe a Man-In-The-Midele attack. If no authentication of any kind, give the buff \"MITM\".",
+			"cost":				15,
+			"rivalBuffs":		["MITM"],
+			"buffLength":		2
+		},
+		{
+			"name":				"Deauth attack",
+			"needRivalBuffs":	["Shared channel", "Wifi channel"],
+			"desc":				"Deauthenticate in place of the victim in the Wifi network. This Kicks the victim's personal computer offline, so that the victim cannot perform acts in his round. Offline is also a buff required for \"Rogue access point\".",
+			"cost":				25,
+			"rivalBuffs":		["Offline"],
+			"buffLength":		2
+		},
+		{
+			"name":			"Zero-day attack",
+			"desc":			"Make a use of a most newly found vulnerability. Strike quickly, so that no one is able to counteract in any way. This attack costs grealy, but overwhelming.",
+			"cost":			90,
+			"rivalBuffs":	["Credential compromised", "Offline"],
+			"bonus":		50,
+			"buffLength":	2
+		},
+		{
+			"name":			"DoS",
+			"desc":			"Denial of Service attack. Send endless requests to serverer to paralyze it. Rival will have problem serving requests, and therefore, gains much less resouces. Consumes much resources on the attacker side.",
+			"cost":			30,
+			"rivalBuffs":	["Denial of service attacked"],
+			"buffLength":	2,
+			"spamRequests":	3		
+		},
+		{
+			"name":			"DDoS",
+			"prerequists":	["DoS"],
+			"needBuff":		[],
+			"desc":			"Distributed Denial of Service attack. Make use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its sucess rate is much more than the original DOS attack. Effect based on how many botnet machines bought.",
+			"cost":			20,
+			"rivalBuffs":	["Denial of service attacked"],
+			"buffLength":	2,
+			"spamRequests":	0
+		},
+		{
+			"name":			"Buy botnet machines",
+			"prerequists":	["DDoS"],
+			"desc":			"buy 2 botnet machines to increase the strength of the DDoS attack",
+			"cost":			40,
+			"modifier":		"0:DDoS:spamRequests:+:2"
+		},
+		
+		{
+			"name":			"Shadow server",
+			"prerequists":	[],
+			"desc":			"A fake server replicating the appearance and feel of another server. Usually created to lure the unaware clients to enter sensitive data.",
+			"noSelfBuffs":	["Shadow server"],
+			"cost":			20,
+			"selfBuffs":	["Shadow server"],
+			"buffLength":	-1
+		},
+		{
+			"name":			"Phishing",
+			"desc":			"One of social engineering method. Ignore all defensive techniques.",
+			"needBuff":		["Shadow server"],
+			"cost":			20,
+			"rivalBuffs":	["Credential compromised"],
+			"buffLength":	4,
+			"successRate":	0.3,
+			"bonus":		40
+		},
+		{
+			"name":			"Spear phishing",
+			"prerequists":	["Phishing"],
+			"desc":			"One of social engineering method. Ignore all defensive techniques. Different from ordinary fishing, it exploits more knowledge of the victim, which greatly increses success rate",
+			"needBuff":		["Shadow server"],
+			"cost":			40,
+			"rivalBuffs":	["Credential compromised"],
+			"buffLength":	4,
+			"successRate":	0.6,
+			"bonus":		40
+		},
+		{
+			"name":			"Whaling",
+			"prerequists":	["Phishing"],
+			"desc":			"One of social engineering method. Ignore all defensive techniques. Different from ordinary fishing, it targets high-value victim, which yeilds more when the attack success",
+			"needBuff":		["Shadow server"],
+			"cost":			20,
+			"rivalBuffs":	["Credential compromised"],
+			"buffLength":	4,
+			"successRate":	0.3,
+			"bonus":		80
+		}
+	],
+	[
+		{
+			"name":			"Hash algorithm",
+			"learningCost":	5,
+			"desc":			"The knowledge of what a cryptographic hash function is. Prerequist for hash-related techniques.",
+			"cost":			0
+		},
+		{
+			"name":			"Symmetric cryptography",
+			"learningCost":	5,
+			"desc":			"The knowledge of symmetric cryptography. Prerequist for nearly all the encryption techniques.",
+			"cost":			0
+		},
+		{
+			"name":			"Asymmetric cryptography",
+			"learningCost":	10,
+			"desc":			"The knowledge of Asymmetric cryptography. Prerequist for PKI and RSA key exchange.",
+			"cost":			0
+		},
+		{
+			"name":				"PKI",
+			"prerequists":		["Asymmetric cryptography"],
+			"desc":				"Build the public key infrastructure. The buff is necessary for MQV and RSA key exchange.",
+			"noSelfBuffs":		["PKI"],
+			"cost":				30,
+			"selfBuffs":		["PKI"],
+			"buffLength":		-1
+		},
+		{
+			"name":			"CDN",
+			"learningCost":	5,
+			"desc":			"Create Content Delivering Network. The server becomes more resistant to the burst of requests and to DoS attack as well.",
+			"cost":			50,
+			"selfBuffs":	["CDN"],
+			"buffLength":	10
+		},
+		{
+			"name":			"SYN monitor/SYN interceptor"
+		},
+		{
+			"name":			"timeout"
+		}
+	]
+],
+"buffs":
+[
+	{
+		"name":		"503 Server Unavailable",
+		"desc":		"Our server is overleaded with requests. Are we under DoS attack? Or it's just because of the boom of our business?"
+	},
+	{
+		"name":		"Offline",
+		"desc":		"The character is offline. Is it somebody's trick?"
+	},
+	{
+		"name":		"Credential compromised",
+		"desc":		"the character's password is compromised by the rival."
+	},
+	{
+		"name": 	"Denial of service attacked",
+		"desc":		"The target server is under denial of service attack. The server is much more loaded, and it may fail to serve the legitimated users."
+	},
+	{	
+		"name":		"Shared channel",
+		"desc":		"The characters have a shared channel. All unencrypted data can be easily sniffed."
+	},
+	{
+		"name":		"Wifi channel",
+		"desc":		"Both characters are connected to the same Wifi. Cautious for Wifi-based attack like Rogue access point."
+	},
+	{	"name":		"MITM",
+		"desc":		"the rival has performed MITM(Man In The Middle) attack. Unencripted data could be sniffed by the rival; Unauthenticated data could be modified by the rival. Reply attack is also possible."
+	},
+	
+	{
+		"name":		"Encrypted",
+		"desc":		"the data transfered over the Internet is encrypted. Sniffing attack alone will not compromise secrecy.",
+		"upkeep":	3
+	},
+	{	
+		"name":		"PKI",
+		"desc":		"The public key infrastructure is built. certificate-based techniques like MQV and RSA key exchange are possible."
+	},
+	{
+		"name":		"IP spoofing",
+		"desc":		"The packages are sent with spoofed ip. Who knows what a real IP the sender has."
+	},
+	{
+		"name":		"MFA",
+		"desc":		"this character has activated multiple factors of authentication. The success rate of the opponent's attack is reduced",
+		"upkeep":	6
+	},
+	{
+		"name":				"CDN",
+		"desc":				"Content Delivering Network is created. The server becomes more resistant to the burst of requests and to DoS attack as well.",
+		"capacity":			3,
+		"dosResistance":	0.25
+	},
+	{
+		"name":		"Shadow server",
+		"desc":		"This character has created a shadow server in place of a real one. He can use social engineering techniques or DNS spoofing to trick the rival to visit this server, which results in credential compromised"
+	}
+]
+}

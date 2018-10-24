@@ -1,0 +1,19 @@
+{
+  "trailing" : true,
+"browserify":true,
+"latedef":true,
+"futurehostile":true,
+"noempty":true,
+"noarg":true,
+"eqeqeq":true,
+"newcap":true,
+"devel":true,
+"jquery":true,
+"browser":true,
+"bitwise":true,
+"curly":true,
+"undef":true,
+"nonew":true,
+"forin":true,
+"globals": {"$":false, "jquery":false, "moment":false, "alertify":false}
+}

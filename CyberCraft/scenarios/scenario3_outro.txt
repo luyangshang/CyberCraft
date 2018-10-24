@@ -1,0 +1,3 @@
+Congratulations! The intruders are kept out of your system, and the nuclear plant is kept untouched.
+
+Tip: One time pad is uncrackable. It's only that it contains a limited number of passwords.

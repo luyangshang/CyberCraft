@@ -1,0 +1,62 @@
+{"NPCs":
+[
+	{	"name": 	"Boss",
+		"sprite": 	"buckybarnes",
+		"portrait":	"shifty_merchant",
+		"x":		100,
+		"y":		150,
+		"speeches":
+		[
+			{
+				"speech": "Welcome to our company. ^I heard that you are trained in cyber defence. We just need someone of your kind. ^You probably know that we are a company providing network services, especially the email. ^Whereas, we have been under cyber attack these days. The attackers seems interested in the secret messages of our VIP customers. ^Our security advisor is busy with other defences, so we need your help. ^If you have questions, you can ask other employee, but for our security advisor... I don't know if he will piss you off."
+			},
+			{
+				"speech": "` Are you ready for the fight?"
+			}
+		]
+	},
+	{	
+		"name": 	"Employee",
+		"sprite": 	"officeman3",
+		"portrait": "portrait1",
+		"x":		430,
+		"y":		450,
+		"speeches":
+		[	
+			{	
+				"speech": "Use one of the key change algorithm: DH, MQV or RSA key exchange, and you will create a secret key. ^Any future messages will be encrypted with this key, and if lucky, they will not be uncovered by the intruder. If you gets resource, use the second and the third algorithm, DH is still susceptible to MITM attack."
+			},
+			{
+				
+				"speech": "Many of the defences you established may expire with time. Remember to renew them. Otherwise, you will be exposed to those attacks again."
+			},
+			{
+				
+				"speech": "The intruder may launch replay attack. Remember to use nonce against it."
+			},
+			{
+				"speech": "Our email service could be disturbed with numerous spam emails. Greylisting is one of the defensive technique we can adopt."
+			}
+		]
+	},
+	{	
+		"name": 	"Security advisor",
+		"sprite": 	"scientistSp",
+		"portrait": "scientistPo",
+		"x":		730,
+		"y":		250,
+		"speeches":
+		[	
+			{
+				"speech": "I'm busy."
+			},
+			{
+				"speech": "Oh, sorry. I was overloaded and had no mood to talk. ^So, you are the cyber defender our boss have called for, right? Finally someone comes to offload my work."
+			},
+			{
+				"speech": "I'm worried that the first quantum computer will be built soon. It will be a disaster for cryptography. ^"
+			}
+		]
+	}
+]
+}

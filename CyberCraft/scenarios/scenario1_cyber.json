@@ -1,0 +1,210 @@
+{"name":					"You will not understand",
+"serverCapacity":			4,
+"serverRequestValley":		3,
+"serverRequestPeak":		4,
+"initialResource":			[60, 40],
+"constantIncome":			[15,0],
+"maxResource":				200,
+"maxRounds":				16,
+"assets":					150,
+"defensive":				true,
+"characterName":
+[
+	"Unknown character",
+	"Godfried"
+],
+"portrait":
+[
+	"unknownCharacter",
+	"Godfried"
+],
+"commonActs": 
+[
+	["Promiscuous mode"],
+	["Symmetric cryptography", "Asymmetric cryptography", "PKI"]
+],
+"acts": 
+[
+	[
+		{
+			"name":				"Sniffing attack",
+			"prerequists":		["Promiscuous mode"],
+			"learningCost":		10,
+			"desc":				"obtain rival's username and password, as well as other data, if the rival's network communication is not encrypted or hashed.",
+			"needRivalBuffs":	["MITM"],
+			"noRivalBuffs":		["Shared secret", "Credential compromised"],
+			"cost":				10,
+			"rivalBuffs":		["Credential compromised"],
+			"buffLength":		2,
+			"bonus":			50
+		},
+		{
+			"name":				"MITM",
+			"desc":				"Performe a Man-In-The-Midele attack. If no authentication of any kind, give the buff \"MITM\".",
+			"noRivalBuffs":		["MQV", "RSA key exchange", "Quantum cryptography"],
+			"cost":				15,
+			"rivalBuffs":		["MITM"],
+			"cleanRivalBuffs":	["Shared secret"],
+			"buffLength":		2
+		},
+		{
+			"name":				"Quantum computing",
+			"desc":				"Crack DH, MQV and RSA key exchange, but not Quantum cryptography",
+			"noRivalBuffs":		["Quantum cryptography"],
+			"cost":				50,
+			"cleanRivalBuffs":	["Shared secret", "MQV", "RSA key exchange"],
+			"unlocked":			false
+		},
+		{
+			"name":				"Replay attack",
+			"desc":				"replay the last message, effective even if encrypted. Countered by the use of nonce, timestamp, and relieved by sequence number",
+			"noRivalBuffs":		["Nonce", "Credential compromised"],
+			"cost":				5,
+			"rivalBuffs":		["Credential compromised"],
+			"buffLength":		2,
+			"bonus":			35
+		},
+		{
+			"name":				"Spam email",
+			"desc":				"Send spam email to overload the rival's mailbox.",
+			"cost":				25,
+			"rivalBuffs":		["Denial of service attacked"],
+			"buffLength":		2,
+			"spamRequests":		5
+		}
+	],
+	[
+		{
+			"name":				"DH",
+			"prerequists":		["Symmetric cryptography"],
+			"desc":				"One method to exchange share secret between two parties, so that the message can be encrypted. Defend from sniffing attack, but will be fooled by MITM attack.",
+			"cost":				15,
+			"selfBuffs":		["Shared secret"],
+			"buffLength":		6
+		},
+		{
+			"name":				"MQV",
+			"prerequists":		["DH"],
+			"desc":				"The scured DH. Resistent to MITM attack, but requires PKI.",
+			"needSelfBuffs":	["PKI"],
+			"cost":				20,
+			"selfBuffs":		["Shared secret", "MQV"],
+			"cleanSelfBuffs":	["RSA key exchange"],
+			"buffLength":		6
+		},
+		{
+			"name":				"RSA key exchange",
+			"prerequists":		["Asymmetric cryptography", "PKI"],
+			"desc":				"Another method for key exchange, based RSA. Resistent to MITM, but requires PKI",
+			"needSelfBuffs":	["PKI"],
+			"cost":				20,
+			"selfBuffs":		["Shared secret", "RSA key exchange"],
+			"cleanSelfBuffs":	["MQV"],
+			"buffLength":		6
+		},
+		{
+			"name":				"Nonce",
+			"desc":				"A random number used to fight Replay attack.",
+			"cost":				15,
+			"selfBuffs":		["Nonce"],
+			"buffLength":		6
+		},
+		{
+			"name":				"Greylisting",
+			"desc":				"A method to fight spam email by delaying email messages. It has an unkeep, due to the delay of legitimate email.",
+			"cost":				15,
+			"selfBuffs":		["Greylisting"],
+			"buffLength":		6
+		},
+		{
+			"name":				"Quantum cryptography",
+			"desc":				"Use quantum mechanics for cryptography. Unbreakable.",
+			"cost":				40,
+			"selfBuffs":		["Shared secret", "Quantum cryptography"],
+			"cleanSelfBuffs":	["RSA key exchange", "MQV"],
+			"buffLength":		6,
+			"unlocked":			false
+		}
+	]
+],
+"commonBuffs":
+[
+	"503 Server Unavailable", "Denial of service attacked", "MITM", "Credential compromised", "PKI"
+],
+"buffs":
+[
+	{	
+		"name":		"Shared secret",
+		"desc":		"The server and it client have built a secure connection, with a encryption key shared by both sides, and unknown by others. Sniffing is not possible."
+	},
+	{
+		"name":		"MQV",
+		"desc":		"An advanced version of DH. With the use of digital certificates, Man-in-the-middle attack is not possible."
+	},
+	{
+		"name":		"RSA key exchange",
+		"desc":		"Another way to exchange encryption key. Resistent to MITM attack, but weak against Quantum computing."
+	},
+	{	
+		"name":		"Nonce",
+		"desc":		"A random number used to fight Replay attack."
+	},
+	{	
+		"name":				"Greylisting",
+		"desc":				"A method to fight spam email by delaying email messages. It has an unkeep, due to the delay of legitimate email.",
+		"upkeep":			4,
+		"dosResistance":	0.8
+	},
+	{	
+		"name":				"Quantum cryptography",
+		"desc":				"Use quantum mechanics for cryptography. Unbreakable."
+	}
+],
+"initialBuffs":
+[
+	[],
+	[]
+],
+"AI":
+[
+	{
+		"pattern":	["Spam email"],
+		"chance":	0.28
+	},
+	{
+		"pattern":	["Replay attack"],
+		"chance":	0.28
+	},
+	{
+		"pattern":	["Quantum computing", "MITM", "Sniffing attack"],
+		"chance":	0.2
+	},
+	{
+		"pattern":	["MITM", "Sniffing attack"],
+		"chance":	0.25
+	},
+	{
+		"pattern":	["Sniffing attack"],
+		"chance":	0.3
+	}
+],
+"scripts":
+[
+	{
+		"round":		10,
+		"dialogues":
+		[
+			{
+				"name":		"Security advisor",
+				"portrait":	"scientistPo",
+				"dialogue":	"A terrible news. The first quantum computer has been built. I say terrible because no current cryptographic approaches can stand the crack of quantum computer. ^Nevertheless, Quantum cryptography is ready for use. Let's use quantum mechanics to defeat quantum mechanics."
+			}
+		],
+		"newActs":
+		[
+			["Quantum computing"],
+			["Quantum cryptography"]
+		]
+	}
+]
+}

@@ -1,0 +1,92 @@
+{"NPCs":
+[
+	{
+		"name": 	"Hank",
+		"sprite": 	"havelockvetinari",
+		"portrait":	"Drunkard",
+		"x":		100,
+		"y":		150,
+		"speeches":
+		[
+			{
+				"speech": "Good morning, Christopher. Welcome back. An exellent job you have done."
+			},
+			{
+				"speech": "Your last cracking revealed that the country J is building a new AI controled war machine. ^The war machine can target enemies automatically, which is obviously not complaint with the Three Laws of Robotics. ^This is a serious issue then. We will never leave the lives of the human in the hand of machines. ^So this time, your mission is to infiltrate into the computer system of country J. ^We have already performed Man-In-The-Middle attack, and we will maintain this state during your intrusion."
+			},
+			{
+				"speech": "` Are you ready for your intrusion?"
+			}
+		]
+	},
+	{
+		"name": 	"Zack",
+		"sprite": 	"cyangaramonde",
+		"portrait": "pirate1",
+		"x":		780,
+		"y":		450,
+		"speeches":
+		[	
+			{
+				"speech": "Glad to be your coworker."
+			},
+			{
+				"prerequists":
+				[
+					{"npc": "Hank",
+					"state": 1}
+				],
+				"speech": "Sniffing attack is the major form of attack that we will use. At success, you will get the credential of ArtificialCore partner. ^Nevertheless, your rival may use hash or other techniques to hamper your sniffing. ^Dictionary attack is one of the ways you can use to crack the hashing. With the hashing cracked, you can sniff the credential successfully. ^The rainbow table will takes up a large storage space on your computer, but it will accelerate the your speed of dictionary attack."
+			},
+			{
+				"speech": "You might just want to use Brtute-force attack to try out the password in an try-and-error manner, independent of our Man-In-The-Middle. ^It's not recommended. After all, Brute-force attack is inefficient. What's more, the defensive AI may apply some techniques against this effort."
+			},
+			{
+				"speech": "One of the possible method against our repetitive password trial is to enforce an limit for wrong passwords. ^However, we can then make use of it, to delibrately insert wrong passwords so as to lock the account of the innocent victim."
+			}
+		]
+	},
+	{
+		"name": 	"Calvin",
+		"sprite": 	"nickfury",
+		"portrait": "pirate4",
+		"x":		530,
+		"y":		200,
+		"speeches":
+		[	
+			{
+				"speech": "Just as I said, HackIt is a terrific place for the talented, isn't it."
+			},
+			{
+				"prerequists":
+				[
+					{"npc": "Hank",
+					"state": 1}
+				],
+				"speech": "Zero-day attack is overwhelming! You exploit a flaw in code that no one have ever discovered, and therefore, no one is ready to defend. ^The problem of apply Zero-day attack is that you have to find a new flaw yourself. ^This process will take much of your effort, so, use it if necessary."
+			}
+		]
+	},
+	{
+		"name": 	"Lucy",
+		"sprite": 	"skye",
+		"portrait": "thief3",
+		"x":		180,
+		"y":		480,
+		"speeches":
+		[	
+			{
+				"speech": "Your last intrusion was awesome!"
+			},
+			{
+				"prerequists":
+				[
+					{"npc": "Hank",
+					"state": 1}
+				],
+				"speech": "When you find it hard to sniff the partner's credential, there is an alternative. ^Replay attack is one that requires no cracking. ^You just intercept the message, assuming its content is as expected, and send the message again, as it was. ^It has not grant you as much valuable information as sniffing attack though, but it still deals damange to the target, and you earns."
+			}
+		]
+	}
+]
+}

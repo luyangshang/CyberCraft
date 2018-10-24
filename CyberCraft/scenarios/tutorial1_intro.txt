@@ -1,0 +1,15 @@
+Welcome to CyberCraft, a pedagogic serious game on computer system security.
+The game focuses on presenting you with common security attack as well as the defensive approaches against them.
+Click on the downward arrow near the right bottom of the screen to proceed with next page. Alternatively, you can use shortcut key pageUp and pageDown for the navigation.^
+
+In some scenarios, you will play as intruder, who exploits offensive acts to impair the rival and compromise the target assets.
+In some other scenarios, you will take the role as defender, who uses defensive techniques to protect company assets, while also keeping the company's server running.
+Note that, the game is only a simplified simulation, without covering all the possible attacks or defences. In the real life, the situation could be much more complexed than what is presented here.^
+
+This piece of tutorial in particular, mainly concentrates on the control in the "hall", where you usually gather information or even hints about the upcoming challenge.^
+
+There will be some NPCs (e.g. boss, technician, desk clerk) in the hall of the organization. You can talk to them by clicking on them.
+In the top-right corner, there is a door. You can abandon your mission and exit from the door.^
+
+Enough talk. I think you prefer a real parctice much more, right? Let go!
+Try to give the company a good impression of you!

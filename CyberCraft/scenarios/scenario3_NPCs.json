@@ -1,0 +1,58 @@
+{"NPCs":
+[
+	{	"name": 	"Colonel",
+		"sprite": 	"germany_nyo",
+		"portrait":	"soldner",
+		"x":		100,
+		"y":		150,
+		"speeches":
+		[
+			{
+				"speech": "Good morning Godfried. I am the Colonel here. I will get to it straight. ^This branch of my army is the guardian for this nuclear plant. However, some terrorists seems to have targeted the plant. ^We have already captured some carrying bomes with them, trying to rush into the plant by force. ^Nevertheless, they have become much circuitous these months, as they decided to launch cyber attacks to gain the control of our control system of the plant. ^Our controling AI have some self defence, but, you know, software have bugs, and we cannot afford to fail. If they succeeded in penetration, the terrorists will undoubtedly denote the nuclear plant. ^Therefore, we decided to ask you, as a human, to help our cyber defence. ^For more specific information of the plant, or the potential attack, you can refer to my subordinates."
+			},
+			{
+				"speech": "` So, are you ready for to help out?"
+			}
+		]
+	},
+	{	"name": 	"Scientist",
+		"sprite": 	"scientistSp",
+		"portrait": "scientistPo",
+		"x":		830,
+		"y":		450,
+		"speeches":
+		[	
+			{
+				"speech": "Multiple Factor of Authentication is an superb technique for the defence. ^It does not fight one form of attack only, but all of them. The intruder may break one factor of authenticate, but they will cry to see another one."
+			},
+			{
+				"speech": "Our income here is quite limited. You should find a way to get more resource. ^I suggests you to use something like Password wallet, in order to facilitate the login in process. Maybe the client will be happy and grant you a little gratuity."
+			},
+			{
+				"speech": "One-time-pad is fabulous and uncrackable! It just costs much. You can use it at the last rounds so that you can rest easy."
+			},
+			{
+				"speech": "Some security genius has fallen and has joined the terrorists. They might discover some new flaws in the system, and perform the Zero-day attack. ^In face of that, I can only say, may god bless you."
+			}
+		]
+	},
+	{	"name": 	"Advisor",
+		"sprite": 	"nazi",
+		"portrait": "czesc",
+		"x":		230,
+		"y":		350,
+		"speeches":
+		[	
+			{
+				"speech": "After you have learnt the hash algorithm, hashing the password is extremely easy. So it's recommended to hash the password. Whereas, hashing alone is not enough. ^The terrorists will undoubtedly try to crack your hash, even with the help of a rainbow table. ^Adding \"salt\" to the password before hashing will make the (precomputed) dictionary attack infeasible."
+			},
+			{
+				"speech": "I believe the terrorists knows a lot about Replay attack. Use MID to protect you from Replay attack."
+			},
+			{
+				"speech": "The terrorist would constantly try out passwords. You should adopt a technique to refrain this attempt."
+			}
+		]
+	}
+]
+}

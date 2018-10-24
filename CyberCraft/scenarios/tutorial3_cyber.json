@@ -1,0 +1,254 @@
+{"name":					"Attack on Enigma",
+"serverCapacity":			2,
+"serverRequestValley":		1,
+"serverRequestPeak":		1,
+"initialResource":			[60, 40],
+"constantIncome":			[15,0],
+"maxResource":				150,
+"maxRounds":				16,
+"assets":					150,
+"defensive":				false,
+"characterName":
+[
+	"AlanTuring",
+	"Enigma"
+],
+"portrait":
+[
+	"AlanTuring",
+	"Enigma"
+],
+"commonActs": 
+[
+	[],
+	[]
+],
+"acts": 
+[
+	[
+		{
+			"name":				"Sniffing attack",
+			"learningCost":		0,
+			"desc":				"To capture Nazi's secret message. Should be performed when the encryption is broken.",
+			"needRivalBuffs":	["Shared channel"],
+			"noRivalBuffs":		["Encrypt with Enigma", "Confidential message divulged"],
+			"cost":				5,
+			"rivalBuffs":		["Confidential message divulged"],
+			"buffLength":		2,
+			"bonus":			50,
+			"learnt":			true
+		},
+		{
+			"name":				"Brute-force attack",
+			"desc":				"The most basic form of attack on the cipher code. It tries all possible combinations until succeeds. It turn out nearly infeasible in face of strong encryption.",
+			"needRivalBuffs":	["Encrypt with Enigma"],
+			"cost":				20,
+			"successRate":		0.05,
+			"cleanRivalBuffs":	["Encrypt with Enigma"],
+			"buffLength":		2
+		},
+		{
+			"name":				"Known-plaintext attack",
+			"prerequists":		["Brute-force attack"],
+			"learningCost":		10,
+			"desc":				"With some or all of the plaintext already known, a big amount of possible situations is eliminated. Therefore, the cracking process is greatly boosted.",
+			"needRivalBuffs":	["Encrypt with Enigma"],
+			"cost":				20,
+			"successRate":		0.21,
+			"cleanRivalBuffs":	["Encrypt with Enigma"],
+			"buffLength":		2,
+			"unlocked":			false
+		},
+		{
+			"name":				"Chosen-plaintext attack",
+			"prerequists":		["Known-plaintext attack"],
+			"learningCost":		15,
+			"desc":				"Delibrately enforce some of the plaintexts in favor of the cracking of security key. More effective than Known-plaintext attack",
+			"needRivalBuffs":	["Encrypt with Enigma"],
+			"cost":				25,
+			"successRate":		0.24,
+			"cleanRivalBuffs":	["Encrypt with Enigma"],
+			"buffLength":		2,
+			"unlocked":			false
+		},
+		{
+			"name":				"Bombe",
+			"learningCost":		30,
+			"noSelfBuffs":		["Bombe"],
+			"desc":				"British electro-mechanical device on cracking Enigma. Greatly improves your cracking power(enhancesBrute-force attack, Known-plaintext attack and Chosen-plaintext attack).",
+			"cost":				25,
+			"selfBuffs":		["Bombe"],
+			"buffLength":		-1,
+			"modifier":			"0:Brute-force attack:successRate:*:2;0:Known-plaintext attack:successRate:*:2;0:Chosen-plaintext attack:successRate:*:2",
+			"unlocked":			false
+		},
+		{
+			"name":				"Gordon's improvement",
+			"needSelfBuffs":	["Bombe"],
+			"noSelfBuffs":		["Gordon's improvement"],
+			"desc":				"Gordon's improvement makes Bombe even more efficient at cracking Enigma(enhances Brute-force attack, Known-plaintext attack and Chosen-plaintext attack).",
+			"cost":				20,
+			"selfBuffs":		["Gordon's improvement"],
+			"buffLength":		-1,
+			"modifier":			"0:Brute-force attack:successRate:*:2;0:Known-plaintext attack:successRate:*:2;0:Chosen-plaintext attack:successRate:*:2",
+			"unlocked":			false
+		}
+		
+	],
+	[
+		{
+			"name":				"Encrypt with Enigma",
+			"desc":				"German's state of the art encryption technology",
+			"cost":				10,
+			"selfBuffs":		["Encrypt with Enigma"],
+			"buffLength":		-1,
+			"learnt":			true
+		}
+	]
+],
+"commonBuffs":
+[
+	"503 Server Unavailable", "Shared channel"
+],
+"buffs":
+[
+	{	"name":	"Encrypt with Enigma",
+		"desc": "The German communication is encrypted with Enigma machine. It's really hard to break the ciphertext without know the key."
+	},
+	{	"name":	"Confidential message divulged",
+		"desc": "The Enigma encryption is cracked. German's confidential messages for the day is divulged to the Allies. Great work!"
+	},
+	{	"name":	"Bombe",
+		"desc": "With the help of the machine, cracking becomes much quicker."
+	},
+	{	"name":	"Gordon's improvement",
+		"desc": "Thanks to Gordon's observation, the area where Bombe has to search for encryption key has greatly shunked. The cracking probability greatly increased."
+	}
+],
+"initialBuffs":
+[
+	[
+		{
+			"name":		"Shared channel",
+			"length":	-1
+		}
+	],
+	[
+		{
+			"name":		"Shared channel",
+			"length":	-1
+		}
+	]
+],
+"AI":
+[
+	{
+		"pattern":
+		[
+			"Encrypt with Enigma"
+		],
+		"chance":	1
+	}
+],
+"scripts":
+[
+	{
+		"round": 2,
+		"dialogues":
+		[
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "It's unbelievable! The polish cryptanalysts Marian Rejewski, Henryk Zygalski and Jerzy Różycki has already broken the unbreakable Enigma! ^It's only a pitty that the German has improved the machine, making Rejewski's technique hardly effective. ^What's worse, now the whole Poland has fallen to Germany. ^I have to break the improved Enigma, so as to save Allies from the scourge of the Nazi. ^Our mission is to break the Enigma encryption, and then use Sniffing attack to get Nazi's secret messages."
+			}
+		]
+	},
+	{
+		"round": 4,
+		"dialogues":
+		[
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "The work of cracking Enigma is beyond the computation power of human. ^Inspired by the work of Rejewski, I strongly suggest we using machine to fight machine. ^Let's build a cracking machine called Bombe, and use it against Enigma."
+			}
+		],
+		"newActs":
+		[
+			["Bombe"],
+			[]
+		],
+		"shouldApply": ["Bombe"]
+	},
+	{
+		"round": 6,
+		"dialogues":
+		[
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "The Nazi has become subtle. They change the Enigma setting at least once a day. ^This means, whenever we have succeed in cracking its key (e.g. with Brute-force attack), we should immediately use the key to obtain the confidential information (with \"Sniffing attack\"). ^When this is done, Nazi will be detrimented, and we will be awarded some more resources in honor of our success. ^The bounty for successful attack is one of the most important source of resource that intruders like us can get."
+			}
+		]
+	},
+	{
+		"round": 8,
+		"dialogues":
+		[
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "It's discovered that, we can actually guess a part of the plaintext in the german messages. ^Sentences like \"nothing to report\", \"Hail Hitlter\" could be conjectured in some places of the message. ^With this knowledge, we can use the \"Known-plaintext attack\", instead of \"Brute-force attack\", to greatly speed up our cracking process."
+			}
+		],
+		"newActs":
+		[
+			["Known-plaintext attack"],
+			[]
+		]
+	},
+	{
+		"round": 10,
+		"dialogues":
+		[
+			{
+				"name":		"Gordon Welchman",
+				"portrait":	"GordonWelchman",
+				"dialogue":	"I have found some characteristics of Enigma. With these characteristics, we can use the diagonal board to substantially boost our cracking of Enigma. ^You will see the success rate of those cracking techniques like \"Brute-force attack\" or \"Known-plaintext attack\" increased when you have applied my improvement."
+			}
+		],
+		"newActs":
+		[
+			["Gordon's improvement"],
+			[]
+		],
+		"shouldApply": ["Gordon's improvement"]
+	},
+	{
+		"round": 12,
+		"dialogues":
+		[
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "We have instructed the Royal Air Force to lay mines at some positions which German have no abbreviation or alternative names. ^If only the German use Enigma to encrypt the warning message for the mines, and \"all clear\" message after removing the mines, we will obtain more messages, whose plaintext and ciphertext are both known."
+			},
+			{
+				"name": 	"Juan Pujol García",
+				"portrait":	"JuanPujolGarcía",
+				"dialogue": "I will do it! \nI am Juan Pujol García. You may have known me as a double agent against Nazi. I will gurantee your messages to be encrypted with Enigma."
+			},
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "Exellent! Now we can use chosen-plaintext attack, which increase our cracking probability even more."
+			}
+		],
+		"newActs":
+		[
+			["Chosen-plaintext attack"],
+			[]
+		]
+	}
+]
+}

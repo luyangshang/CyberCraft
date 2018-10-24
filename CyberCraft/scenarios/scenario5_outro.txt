@@ -1,0 +1,3 @@
+Congratulations! You have successfully defended the system. Now the company is safe for another day.
+
+^Tip: Clicking on causal links from unknown sender (e.g. through short message or email) is extremely dangerous! The attacker may perform Cross-site request forgery on you, which is also called as one-click attack.

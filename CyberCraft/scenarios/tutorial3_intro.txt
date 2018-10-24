@@ -1,0 +1,22 @@
+This tutorial will focus on how to play as an intruder.
+
+The intruder is supposed to use offensive techniques on the rival, trying to steal confidential information, resulting in the loss of the victim's assets.
+
+If the intruder have dealt enough damage to the assets before the number of rounds exhausted, the intruder wins. Otherwise, the defender wins.
+
+^The defender however, will try to use defensive acts to fortify his defence. Therefore, the intruder may fail, especially if he just arbitrarily launch the attacks.
+Thereby, an intruder should pay special attention to the buffs on the defender, avoiding those dead ends, and strike only where undefend.
+
+^You may have noticed the colorful words like "Self+", "Rival-" in the popup screen of acts.
+The purple ones are the indicators for the act's requirements on buffs. If the requirements don't meet, the act will fail.
+The orange ones are the effect on buffs when the act succeeds. It tells what buff will be enforced to you or to your rival, and what buff will be cleaned.
+
+^#image$500$250$selfRivalBuffsWithDescription
+
+^You will be happy with attacks that directly deals damage to the assets (with explosion animation). e.g. Sniffing attack. When you succeeded in this attacks, you also gain the same amount of resource as the damage you have dealt. 
+Nevertheless, some defensive techniques may protect the assets from these attacks. Therefore, you need other acts, especially those with "Rival -", which break the defence (with shield-break animation). e.g. brute-force attack. Usually, you will firstly impair the defence, and then launch the direct attack on assets in the same round.
+
+^1939,                                
+Bletchley Park, UK
+^Alan Turin, who is later on recognized as the father of theoretical computer and the father of articicial intelligence, is engaged with breaking the German advanced cipher machine known as Enigma.
+UK was able to intercept the German top-secret message, but without a decryption key, no one can understand what it said.

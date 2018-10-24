@@ -1,0 +1,332 @@
+{"name":					"Network Defender",
+"serverCapacity":			4,
+"serverRequestValley":		5,
+"serverRequestPeak":		6,
+"initialResource":			[0, 0],
+"constantIncome":			[40,0],
+"maxResource":				200,
+"maxRounds":				18,
+"assets":					150,
+"defensive":				true,
+"characterName":
+[
+	"Unknown character",
+	"Godfried"
+],
+"portrait":
+[
+	"unknownCharacter",
+	"Godfried"
+],
+"commonActs": 
+[
+	[],
+	["CDN"]
+],
+"acts": 
+[
+	[
+		{
+			"name":			"DDoS",
+			"desc":			"Distributed Denial of Service attack. Make use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its sucess rate is much more than the original DOS attack. Effect based on how many botnet machines bought.",
+			"cost":			30,
+			"rivalBuffs":	["Denial of service attacked"],
+			"buffLength":	2,
+			"spamRequests":	6,
+			"unlocked":		false
+		},
+		{
+			"name":				"MITM",
+			"desc":				"Performe a Man-In-The-Midele attack. If no authentication of any kind, give the buff \"MITM\".",
+			"cost":				15,
+			"rivalBuffs":		["MITM"],
+			"buffLength":		2,
+			"unlocked":			false
+		},
+		{
+			"name":				"Sniffing attack",
+			"learningCost":		10,
+			"desc":				"Obtain rival's username and password, as well as other data, provided that the communication is not encrypted.",
+			"needRivalBuffs":	["MITM"],
+			"noRivalBuffs":		["Encrypted", "Credential compromised"],
+			"cost":				10,
+			"rivalBuffs":		["Credential compromised"],
+			"buffLength":		2,
+			"bonus":			50,
+			"unlocked":			false
+		}		
+	],
+	[
+		{
+			"name":			"CAPTCHA",
+			"learningCost":	5,
+			"desc":			"Completely Automated Public Turing test to tell Computers and Humans Apart. Grant 50% defence against DoS attacks.",
+			"cost":			20,
+			"selfBuffs":	["CAPTCHA"],
+			"buffLength":	10,
+			"unlocked":		false
+		},
+		{
+			"name":			"Symmetric cryptography",
+			"learningCost":	5,
+			"desc":			"The knowledge of symmetric cryptography. Prerequist for nearly all the encryption techniques.",
+			"cost":			0,
+			"unlocked":		false
+		},
+		{
+			"name":			"DES encryption",
+			"prerequists":	["Symmetric cryptography"],
+			"learningCost":	5,
+			"desc":			"One of the historical symmetric-key algorithm for encryption. Obsolete now.",
+			"cost":			0,
+			"unlocked":		false
+		},
+		{
+			"name":			"3DES encryption",
+			"prerequists":	["DES encryption"],
+			"learningCost":	5,
+			"desc":			"One symmetric encryption method to encrypt with DES three times to achieve the satisfying security strength.",
+			"cost":			15,
+			"selfBuffs":	["Encrypted"],
+			"buffLength":	4,
+			"unlocked":		false
+		}
+	]
+],
+"commonBuffs":
+[
+	 "503 Server Unavailable", "Denial of service attacked","CDN", "Encrypted", "Credential compromised", "MITM"
+],
+"buffs":
+[
+	{
+		"name":				"CAPTCHA",
+		"desc":				"Completely Automated Public Turing test to tell Computers and Humans Apart. Widely used by websites to keep off automated attacks in cases likea registration or login.",
+		"upkeep":			1,
+		"dosResistance":	0.5
+	}
+],
+"initialActs":
+[
+	[],
+	[]
+],
+"initialBuffs":
+[
+	[],
+	[]
+],
+"AI":
+[
+	{
+		"pattern":
+		["DDoS", "MITM", "Sniffing attack"],
+		"chance":	1
+	},
+	{
+		"pattern":
+		["DDoS"],
+		"chance":	1
+	}
+],
+"scripts":
+[
+	{
+		"round": 1,
+		"dialogues":
+		[
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Ah, get a little nervous for my first internship in network defence. Let's see what are there. ^This is the first round among those 18 rounds, as can be seen in the top-left corner. The menu button, my persoanl notes and the action log are also there. ^I love the action log. With it, I can know the detail information about the effects of my actions and potential intruder's as well. It's for the moment empty though. ^Then, the company have offered me a computer with possible acts I can perform in the main panel. Now there is only a \"CDN\". ^Nevertheless, no mission is assigned for the moment, so I will just look around and do no acts. ^Then, just click on the \"End turn\" button to end my turn."
+			}
+		]
+	},
+	{
+		"round": 3,
+		"dialogues":
+		[
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Hei, Godfried, come here. One important work for you. ^You should have known that, this is a network company, whose business is to serve incoming client requests. ^From our investigation, we discovered that the current number of requests has surpassed the power our server to sustain. Not to say the rush hours. ^Probably you have already see one or two unhappy faces poping out. Each unhappy face represent the failure to serve one client's request. One served client will grant you 10 resource, but one unserved client will result in 5 resource lose. ^Whenever any of the clients encounter problems getting served, they will report to us that they get the \"503 Server Unavailable\" page. ^Such buff is presented on you, to warn you that of the problem. You can find buffs on you by clicking on your portrait, or by the \"S\" shortcut key. ^Then if you click on one particular buff, you can view the details of the buff. ^And, at the detail of the buff, you can even directly find the term in your notes. ^The shortcut key for your own notes is \"N\"."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Um, so, similarly, by clicking on the rival's portrait, I can see buff on him also?"
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Right. And the shortcut key for the rival is \"R\". Now we have not encounter any intruder, and you see no buff there. ^Now, in order to address on the problem of server capacity, I suggest you build something like CDN(Content Delivery Network) to increase our server capacity."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "CDN...Um, I remember see that back in the university. There is also an entry of it in my personal notes... ^Nevertheless, I haven't yet built one with my own hands. I should firstly study what practically should be done. ^Click on \"CDN\" in the main panel, them click on \"learn\" (shortcut key \"E\"). After that, I am able to \"Apply\" it to our server (shortcut key \"A\")."
+			}
+		],
+		"shouldApply": ["CDN"]
+	},
+	{
+		"round": 5,
+		"dialogues":
+		[
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "With the CDN built, our server capacity has boomed, and our business boomed. no clients complains, and I earns more. Now I have a buff called \"CDN\" on me. ^My action of applying CDN is also noted down in the action log. ^No more mission today, I will take a nap."
+			}
+		],
+		"newActs":
+		[
+			["DDoS"],
+			[]
+		]
+	},
+	{
+		"round": 7,
+		"dialogues":
+		[
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Ah, my work is easy and boring. I am under challenged. I even start to expect some intruders now."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Hei, Godfried, dont' Jinx it. ^Intelligence tells that a group of hackers have set us as their new target. They used to use DoS, well, actually DDoS attack to paralyze the target server. ^CDN itself provides some defence against DoS attack, and that's one of the reasons why I suggested you CDN yesterday. ^However, CDN alone is supposed to be inadequate for it. ^Wait, the newest report says that they are aready attacking! ^Go to check the action logs (shortcut key \"L\"). ^We should immediately apply CAPTCHA to intercept as much spam requests as possible, otherwise, our server will be totally flooded with spam requests."
+			}
+		],
+		"newActs":
+		[
+			[],
+			["CAPTCHA"]
+		],
+		"shouldApply": ["CAPTCHA"]
+	},
+	{
+		"round": 9,
+		"dialogues":
+		[
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Godfried! How is it going?"
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "At ease, the CAPTCHA is already in use."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Nevertheless, clients begin to complain about the 503 Server Unavailable error again."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "What? Why? The defence should be airtight."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Not like other attacks, DoS attack is unlikely to be totally resolved. What we do is only to alleviate its harm. Don't you know that? Go back and check your personal notes!"
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Well, as you say it... I remember seeing that in the university. ^Oh, I see. This point was not listed among those questions for the examination, so I just..."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Ok. Enough. ^These are the maximum defences we can put up for now. ^By the way, if you check the buff \"CAPTCHA\", you will see it has an upkeep, which means you earn a little less. ^This is because some clients don't like CAPTCHA as it requires them to do one more validation. ^They just don't know, without CAPTCHA, our server will be engaged with spam requests, and they could not even connect to the server."
+			}
+		],
+		"newActs":
+		[
+			["MITM","Sniffing attack"],
+			[]
+		]
+	},
+	{
+		"round": 11,
+		"dialogues":
+		[
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "An urgent report! ^The hackers have started intercepting messages between our server and our clients. ^Some clients have reported that their login passwords are uncovered. ^I will not tell them that our connection with them are actually unencrypted... ^You may have already noticed that some of our assets are already lost due to this leakage. ^Godfried, quickly find a solution at least to encrypt our message!"
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "eh, encryption... ^My memory of cryptography has faded with time. I have nearly forgotten everything one month after the exam... I need to review the knowledge of \"symmetric cryptography\" first. ^Nevertheless, after reviewing the knowledge of symmetric cryptography, I need to select a specific encryption technique and \"apply\" it."
+			}
+		],
+		"newActs":
+		[
+			[],
+			["Symmetric cryptography","DES encryption","3DES encryption"]
+		],
+		"shouldApply": ["3DES encryption"]
+	},
+	{
+		"round": 13,
+		"dialogues":
+		[
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "You have encrypted our message with 3DES. I was worried that you would use DES."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "I'm not that stupid. ^DES has been obsolete long ago. With the current computational power, DES with its short key could be cracked within a day. Therefore, I have not even considered DES a choice."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Nice work. ^Now there is another issue. Our contract with the ISP supporting our CDN service has expired. ^Our CDN is inactive again. Remember to renew the service."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Yes, I have also noticed the problem with CDN... The buff vanished, and more clinets complains. ^Um, to solve the problem, I don't have to re-learn CDN, I will just re-apply it."
+			}
+		],
+		"shouldApply":	["CDN"]
+	},
+	{
+		"round": 15,
+		"dialogues":
+		[
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "The hackers are annoying! Why are we just passively defending? Why don't we strike back?"
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Strike back? Not to say the fact that it's against the law that we perform network attacks. Just think of this, who are you going to attack?"
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "The hackers of course! From their connections we have obtained their IP address... ^Oh, I see, for the DDoS attack, the spam requests come from the manipulated machines, not the real hackers'. And for other attacks, they can easily use IP spoofing to hide their real IP address."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "At least this time you have realized the point by yourself. ^Just keep going. It's almost done. ^By the way, except for CDN, you should also care about the expiration of other buffs. ^You don't want our server be exposed to attacks again, do you? ^Note that You can apply acts before its corresponding buff expires. The buff length will be refreshed. ^It's not so much cost-effective, but you may need such kind of operation in the future."
+			}
+		]
+	}
+]
+}

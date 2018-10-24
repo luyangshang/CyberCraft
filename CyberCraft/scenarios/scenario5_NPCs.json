@@ -1,0 +1,74 @@
+{"NPCs":
+[
+	{	"name": 	"Boss",
+		"sprite": 	"steampunk_m1",
+		"portrait":	"flintley",
+		"x":		100,
+		"y":		200,
+		"speeches":
+		[
+			{
+				"speech": "Hello, Godfried. Your performance during your internship years ago turns out quite up to our expectation. I hope you enjoyed your experience here."
+			},
+			{
+				"speech": "There is a bad new here. My friend in ArtificialCore suspects that the company is under security attack. ^Rumors says that the outbreak starts with the wireless network. ^This has reminds me that our company is also vulnerable to wireless attacks. ^We are still short of hands, so you get the chance to prove yourself again. ^Therefore, your mission is to protect our server, as well as the clients' important data. ^Thank to your previous work, our channel connecting our clients are encrypted. Whereas your senior still insists that we reinforce on wireless security... ^I don't know why. So, if you have some technical questions, go to ask him. Yeah, right there, topright corner near the exit. ^I'm sure that you will be more happy to discuss with him."
+			},
+			{
+				"speech": "` Our time is limited. So, are you ready to act?"
+			}
+		]
+	},
+	{	"name": 	"Senior",
+		"sprite": 	"officeman4",
+		"portrait": "youngbusinessman",
+		"x":		830,
+		"y":		150,
+		"speeches":
+		[	
+			{
+				"speech": "Hi, Godfried! Good to see you again."
+			},
+			{
+				"prerequists":
+				[
+					{"npc": "Boss",
+					"state": 1}
+				],
+				"speech": "You are asking why encryption alone will not protect us? ^Right. The attackers this time was clearly aware of the encryption. As a result, they attacked the remote users to the service. ^The performed Man-In-The-Middle attack. And they launched Cross-Site scrypting attack. The latter is not a cracking passwords, but an abuse of the session cookie."
+			},
+			{
+				"speech": "Sorry that I can not directly help you with the defence. Our boss have instructed me to deal with the data recovery. The last attack was overthelming. ^Nevertheless, he has faith in you, otherwise, he would not let you in charge of the defence of wireless networks."
+			},
+			{
+				"speech": "Deauth attack is annoying. Unfortunately it's not much defendable. ^Nevetheless, compared to be kicked offline, your reconnection itself is more what the hacker want."
+			}
+		]
+	},
+	{	"name": 	"Cyborg",
+		"sprite": 	"chewie",
+		"portrait": "cyborg1",
+		"x":		530,
+		"y":		300,
+		"speeches":
+		[	
+			{
+				"speech": "Hi, Godfried! Still recognize me? As you can see, I have made myself a cyborg! ^With the help of the machine, I have experienced a great boost in physical activity and memory as well!"
+			},
+			{
+				"prerequists":
+				[
+					{"npc": "Boss",
+					"state": 1}
+				],
+				"speech": "There are some defensive acts to protect the cookies... ^I don't mean the biscuits of course. I mean the client side cookie to be put into their browsers. ^For example, you can bind the cookies to the IP address, so that the intruder with different IP address cannot use the cookie of our client. ^If the cookie has flag \"HTTP-only\" set, the browser will not send the cookie if the intruder's javascript code is run."
+			},
+			{
+				"speech": "Those attacks like ARP poisoning has been known long ago. This is the shortcoming of shared network devices. ^ARP firewall is always available on this issue."
+			},
+			{
+				"speech": "Manual DNS setting is useful for defending Rogue DNS server: the client always refer to the designated DNS server. However, with IP spoofing..."
+			}
+		]
+	}
+]
+}
