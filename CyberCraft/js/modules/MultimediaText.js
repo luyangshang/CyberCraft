@@ -202,6 +202,11 @@ MultimediaText.prototype.imageText = function(textToParse, currentPage)
 						image.width = parseInt(args[4]);
 						image.height = parseInt(args[5]);
 					}
+					else if(args[4] && !args[5])
+					{	//one parameter only. It will be used for both width and height.
+						image.width = parseInt(args[4]);
+						image.height = parseInt(args[4]);
+					}
 				}
 				//Identifies if a current command is the creation of a text box
 				else if (args[0] === "text") {

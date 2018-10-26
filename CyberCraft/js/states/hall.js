@@ -45,17 +45,26 @@ var hall = {
 	},
 
 	/**
-     * Creates the background map from tilemap.
+     * Creates the background map for the intruder and the defender from tilemap.
      */
     createMap: function() {
-        this.map = window.game.add.tilemap('hallMap', 32, 32);
-
-        //Imports the tileset image in the map object
-        //The first parameter is the tileset name as specified in Tiled, the second is the key to the asset
-        this.map.addTilesetImage('floor_tile', 'floor_tile');
-        this.map.addTilesetImage('wall', 'wall_tile');
-        this.map.addTilesetImage('wallp', 'wall_pieces');
-
+		if(this.index%2 == 0)
+		{	//intruder's hall
+			var hallName = "hallMapIntruder";
+			this.map = window.game.add.tilemap(hallName, 32, 32);
+			//imports the tileset image in the map object
+			this.map.addTilesetImage('ceramics_32x32aigei_com', 'ceramics_32x32aigei_com');
+		}
+		else
+		{	//defender's hall	
+			var hallName = "hallMapDefender";
+			this.map = window.game.add.tilemap(hallName, 32, 32);
+			//Imports the tileset image in the map object
+			//The first parameter is the tileset name as specified in Tiled, the second is the key to the asset
+			this.map.addTilesetImage('floor_tile', 'floor_tile');
+			this.map.addTilesetImage('wall', 'wall_tile');
+			this.map.addTilesetImage('wallp', 'wall_pieces');
+		}
         //Creates layer
         this.backgroundLayer = this.map.createLayer('ground');
     },

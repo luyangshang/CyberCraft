@@ -31,7 +31,7 @@
 			"name":				"Sniffing attack",
 			"prerequists":		["Promiscuous mode"],
 			"learningCost":		10,
-			"desc":				"obtain rival's username and password, as well as other data, if the rival's network communication is not encrypted or hashed.",
+			"desc":				"obtain rival's username and password, secret key, as well as other data, if the rival's network communication is not encrypted or hashed.",
 			"needRivalBuffs":	["MITM"],
 			"noRivalBuffs":		["Shared secret", "Credential compromised"],
 			"cost":				10,
@@ -119,7 +119,7 @@
 		},
 		{
 			"name":				"Quantum cryptography",
-			"desc":				"Use quantum mechanics for cryptography. Unbreakable.",
+			"desc":				"Use quantum mechanics for the key distribution. The key distribution itself is Unbreakable.",
 			"cost":				40,
 			"selfBuffs":		["Shared secret", "Quantum cryptography"],
 			"cleanSelfBuffs":	["RSA key exchange", "MQV"],

@@ -2558,6 +2558,11 @@ MultimediaText.prototype.imageText = function(textToParse, currentPage)
 						image.width = parseInt(args[4]);
 						image.height = parseInt(args[5]);
 					}
+					else if(args[4] && !args[5])
+					{	//one parameter only. It will be used for both width and height.
+						image.width = parseInt(args[4]);
+						image.height = parseInt(args[4]);
+					}
 				}
 				//Identifies if a current command is the creation of a text box
 				else if (args[0] === "text") {
@@ -4915,17 +4920,26 @@ var hall = {
 	},
 
 	/**
-     * Creates the background map from tilemap.
+     * Creates the background map for the intruder and the defender from tilemap.
      */
     createMap: function() {
-        this.map = window.game.add.tilemap('hallMap', 32, 32);
-
-        //Imports the tileset image in the map object
-        //The first parameter is the tileset name as specified in Tiled, the second is the key to the asset
-        this.map.addTilesetImage('floor_tile', 'floor_tile');
-        this.map.addTilesetImage('wall', 'wall_tile');
-        this.map.addTilesetImage('wallp', 'wall_pieces');
-
+		if(this.index%2 == 0)
+		{	//intruder's hall
+			var hallName = "hallMapIntruder";
+			this.map = window.game.add.tilemap(hallName, 32, 32);
+			//imports the tileset image in the map object
+			this.map.addTilesetImage('ceramics_32x32aigei_com', 'ceramics_32x32aigei_com');
+		}
+		else
+		{	//defender's hall	
+			var hallName = "hallMapDefender";
+			this.map = window.game.add.tilemap(hallName, 32, 32);
+			//Imports the tileset image in the map object
+			//The first parameter is the tileset name as specified in Tiled, the second is the key to the asset
+			this.map.addTilesetImage('floor_tile', 'floor_tile');
+			this.map.addTilesetImage('wall', 'wall_tile');
+			this.map.addTilesetImage('wallp', 'wall_pieces');
+		}
         //Creates layer
         this.backgroundLayer = this.map.createLayer('ground');
     },
@@ -5143,8 +5157,8 @@ var intro = {
 						}
 					}
 				}
-				else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? Don't lose your heart. Go to Review, find where you have not done well and try again."];
-					else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those area well defended? \nMaybe you attacked too timidly and missed a lot of chances? Don't lose heart. Go to Review, find where you have not done well and try again."];
+				else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? \n\nDon't lose your heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
+					else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those well defended? \nMaybe you attacked too timidly and missed too many chances before the rounds expired? \n\nDon't lose heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
 				break;
 			case 2: //credit
 				this.texts = game.globals.credits.split("^");
@@ -5161,7 +5175,7 @@ var intro = {
 		this.multimedia = new MultimediaText(150, 150, 0);
 		this.scrollButtons = new ScrollButtons(950, 50, 500, this.updatePage, this, this.texts.length);
 		
-		//click on the dialogue to finish writing immediately
+		//click on the dynamic text to finish writing immediately
 		bg.inputEnabled = true;
 		bg.events.onInputDown.add(this.multimedia.finishWriting, this.multimedia, 0);
 		
@@ -5377,7 +5391,8 @@ var load = {
         
 		this.loadAssets();
 		//load tilemap for the hall
-		window.game.load.tilemap('hallMap', 'scenarios/map_hall.json', null, Phaser.Tilemap.TILED_JSON);
+		window.game.load.tilemap('hallMapIntruder', 'scenarios/hallMapIntruder.json', null, Phaser.Tilemap.TILED_JSON);
+		window.game.load.tilemap('hallMapDefender', 'scenarios/hallMapDefender.json', null, Phaser.Tilemap.TILED_JSON);
 		//try to load the saved data
 		loadSave.loadSaveData();
 

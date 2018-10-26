@@ -6,7 +6,7 @@
 "constantIncome":			[25,0],
 "maxResource":				200,
 "maxRounds":				16,
-"assets":					180,
+"assets":					200,
 "defensive":				true,
 "characterName":
 [
@@ -39,7 +39,7 @@
 			"desc":				"Send fake arp response to fool the victim. Can be used to perform MITM attack. Defended by ARP firewall.",
 			"needSelfBuffs":	["Shared channel"],
 			"noRivalBuffs":		["ARP firewall", "MITM"],
-			"cost":				10,
+			"cost":				5,
 			"rivalBuffs":		["MITM"],
 			"buffLength":		4,
 			"bonus":			10
@@ -52,7 +52,8 @@
 			"cost":				20,
 			"successRate":		0.95,
 			"rivalBuffs":		["Connected to rogue AP"],
-			"buffLength":		4
+			"buffLength":		4,
+			"bonus":			10
 		},
 		{
 			"name":				"Rogue DHCP server",
@@ -70,25 +71,26 @@
 			"desc":				"Use a fake DNS server to reply to victim's DNS request wrongly. Lure the victim to the attacker's websites.",
 			"needRivalBuffs":	["DHCP hijacked"],
 			"noRivalBuffs":		["Manual DNS setting", "DNSSEC"],
-			"cost":				15,
+			"cost":				10,
 			"rivalBuffs":		["DNS hijacked", "MITM"],
 			"buffLength":		4,
-			"bonus":			10
+			"bonus":			20
 		},
 		{
 			"name":				"DNS cache poisoning",
 			"desc":				"Spead out wrong DNS response to poison the cache of hosts and DNS servers of a large area. Lure the victim to the attacker's websites.",
 			"noRivalBuffs":		["DNSSEC"],
-			"cost":				35,
+			"cost":				45,
+			"successRate":		0.75,
 			"rivalBuffs":		["DNS hijacked", "MITM"],
 			"buffLength":		4,
-			"bonus":			10
+			"bonus":			20
 		},
 		{
 			"name":				"XSS",
 			"desc":				"One type of session hijacking or cookie hijacking. Run unexpected javascript code to send cookies to the attacker's server. Penetrate same-origin policy",
 			"needRivalBuffs":	["DNS hijacked"],
-			"noRivalBuffs":		["Cookie bind to IP", "HTTP-only cookie", "Secure cookie"],
+			"noRivalBuffs":		["Cookie bind to IP", "HTTP-only cookie", "Secure cookie", "Credential compromised"],
 			"cost":				10,
 			"rivalBuffs":		["Credential compromised"],
 			"buffLength":		2,
@@ -271,32 +273,28 @@
 "AI":
 [
 	{
-		"pattern":	["ARP cache poisoning"],
+		"pattern":	["Deauth attack", "Rogue access point", "Rogue DHCP server", "Rogue DNS server", "XSS"],
 		"chance":	0.2
 	},
 	{
-		"pattern":	["IP spoofing"],
-		"chance":	0.1
-	},
-	{
-		"pattern":	["Deauth attack", "Rogue access point", "Rogue DHCP server", "Rogue DNS server", "XSS"],
-		"chance":	0.15
-	},
-	{
 		"pattern":	["Deauth attack", "Rogue access point", "IP spoofing", "Rogue DHCP server", "Rogue DNS server", "XSS"],
-		"chance":	0.1
+		"chance":	0.2
 	},
 	{
 		"pattern":	["DNS cache poisoning", "XSS"],
-		"chance":	0.1
+		"chance":	0.15
 	},
 	{
 		"pattern":	["DNS cache poisoning", "IP spoofing", "XSS"],
-		"chance":	0.1
+		"chance":	0.15
 	},
 	{
 		"pattern":	["CSRF"],
-		"chance":	0.15
+		"chance":	0.2
+	},
+	{
+		"pattern":	["ARP cache poisoning"],
+		"chance":	0.2
 	}
 ],
 "scripts":

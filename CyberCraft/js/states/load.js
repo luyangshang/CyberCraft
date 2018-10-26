@@ -14,7 +14,8 @@ var load = {
         
 		this.loadAssets();
 		//load tilemap for the hall
-		window.game.load.tilemap('hallMap', 'scenarios/map_hall.json', null, Phaser.Tilemap.TILED_JSON);
+		window.game.load.tilemap('hallMapIntruder', 'scenarios/hallMapIntruder.json', null, Phaser.Tilemap.TILED_JSON);
+		window.game.load.tilemap('hallMapDefender', 'scenarios/hallMapDefender.json', null, Phaser.Tilemap.TILED_JSON);
 		//try to load the saved data
 		loadSave.loadSaveData();
 

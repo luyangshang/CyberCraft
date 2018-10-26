@@ -216,20 +216,12 @@
 		"url":	"assets/images/CYBERCRAFT_logo.png"
 	},
 	{
-		"key":	"bgFace",
-		"url":	"assets/images/face.jpg"
-	},
-	{
 		"key":	"box",
 		"url":	"assets/images/box.png"
 	},
 	{
 		"key":	"PNFrame",
 		"url":	"assets/images/PNFrame.png"
-	},
-	{
-		"key":	"arrow",
-		"url":	"assets/images/arrow.png"
 	},
 	{
 		"key":	"arrowUp",
@@ -266,6 +258,10 @@
 	{
 		"key":	"wall_pieces",
 		"url":	"assets/images/wallp.png"
+	},
+	{
+		"key":	"ceramics_32x32aigei_com",
+		"url":	"assets/images/ceramics_32x32aigei_com.png"
 	},
 	{
 		"key":	"dialogueBox",

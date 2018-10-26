@@ -11,18 +11,20 @@
 #image$750$170$rogueAPNotes$150$100
 #text$160$420$Other pictures except that of Zero-day attack comes from wikipedia.org
 
-^#text$160$180$All the sprites are downloaded from Sithjester's RMXP Resources (untamed.wild-refuge.net/rmxpresources.php?characters)$500
-#image$750$150$nazi$60$90
+^#text$160$130$All the sprites are downloaded from Sithjester's RMXP Resources (untamed.wild-refuge.net/rmxpresources.php?characters)$500
+#image$750$100$nazi$60$90
 
-#text$160$350$The wall, floor and the door at the hall, the progress bar at loading, the reload button, the PDA-like background, the "delete game data" and "send game data" buttons come from the work of Dropit!$500
+#text$160$230$The background of intruder's hall is made with Tiled, from images comes from aigei.com (except for the gate)
+
+#text$160$360$The background of defender's hall, gate of the hall, the progress bar at loading, the reload button, the PDA-like background, the "delete game data" and "send game data" buttons come from the work of Dropit!$500
 #image$750$350$gate$80$90
 
 ^#text$160$180$The intruder's bullet, the explosion sprite sheet, the keyboard, and the mother-board-like background comes from phaser.io$500
 #image$750$180$bullet
-#text$160$300$The two computers at tutorial selection and scenario selection comes from openGameArt.org$500
+#text$160$290$The two computers at tutorial selection and scenario selection comes from openGameArt.org$500
 #image$750$280$computerSmall1$130$130
 #text$160$400$The start screen picture was created based on two pictures from openGameArt.org$500
-#image$750$400$combinedFace$130$130
+#image$750$410$combinedFace$130$130
 
 ^Sound effect
 Those shooting, explosion or defence sound comes from Phaser.io

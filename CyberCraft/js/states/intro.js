@@ -63,8 +63,8 @@ var intro = {
 						}
 					}
 				}
-				else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? Don't lose your heart. Go to Review, find where you have not done well and try again."];
-					else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those area well defended? \nMaybe you attacked too timidly and missed a lot of chances? Don't lose heart. Go to Review, find where you have not done well and try again."];
+				else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? \n\nDon't lose your heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
+					else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those well defended? \nMaybe you attacked too timidly and missed too many chances before the rounds expired? \n\nDon't lose heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
 				break;
 			case 2: //credit
 				this.texts = game.globals.credits.split("^");
@@ -81,7 +81,7 @@ var intro = {
 		this.multimedia = new MultimediaText(150, 150, 0);
 		this.scrollButtons = new ScrollButtons(950, 50, 500, this.updatePage, this, this.texts.length);
 		
-		//click on the dialogue to finish writing immediately
+		//click on the dynamic text to finish writing immediately
 		bg.inputEnabled = true;
 		bg.events.onInputDown.add(this.multimedia.finishWriting, this.multimedia, 0);
 		

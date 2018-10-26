@@ -3,31 +3,31 @@ The folder contain the following files (most of the files are bind to a particul
 
 README.txt: The file you are reading is a text file describing the content of this folder.
 
-map_hall.json: a json file made with Tiled to illustrate the 2D map of the hall.
+hallMapIntruder.json and hallMapDefender.json: A json file made with Tiled to illustrate the 2D map of the hall. If you want to create a better background for the hall scene, e.g. adding more decorations, you can do it here. However, if you want to add any moving objects or animations, you have to touch the code in js/states/hall.js. If you want to add new assets to the hall, you have to add one mapping to assetsTable.json and add one statement to js/states/hall.js (you should recreate the bundle before any change to the JS files takes effect).
 
-personalNotes.json: this file stores the entries related to the personal notes. Most importantly, the acts and buffs activated in the game will have a link to the corresponding entry in the personal notes, where the security terms will be more deeply discussed. It's strongly suggested that, whenever a new act or a new buff is added to a scenario, an entry of it to be added to personal notes also.
+personalNotes.json: This file stores the entries related to the personal notes. Most importantly, the acts and buffs activated in the game will have a link to the corresponding entry in the personal notes, where the security terms will be more deeply discussed. It's strongly suggested that, whenever a new act or a new buff is added to a scenario, an entry of it to be added to personal notes also.
 
-credits.txt: what will be shown at the credits phase.
+credits.txt: What will be shown at the credits scene.
 
-assetsTable.json: an table for all the images, spritesheets and audio(sound and music), to be loaded at load phase, which covers nearly all the assets of the game. images contains the path of the image and the key assigned to it. spritesheets need also the specification of frameWidth and frameHeight. audios allows the urls to take the value of a single string or an array of strings, but in this game, no urls is given as array of strings.
+assetsTable.json: An table for all the images, spritesheets and audio(sound and music), to be loaded at load scene, which covers nearly all the assets of the game. Images contains the path of the image and the key assigned to it. spritesheets need also the specification of frameWidth and frameHeight. For audios, urls takes the value of a single string or an array of strings. In this game, all urls are given in single strings though.
 
-common_acts.json: the common acts file defines the acts and buffs used by cyberspace phasethat is frequently shared across scenarios. However, for a certain scenario, not all of the acts or buffs are used. Also, the scenario can define its own acts or buffs in addition to those defined here. The scenario can even redefine some acts or buffs. All these settings for the scenario are done by the files called scenarioX_cyber.json
+common_acts.json: The common acts file defines the acts and buffs used by cyberspace scene, that are frequently shared across scenarios. However, for a certain scenario, not all of the acts or buffs are used. Also, the scenario can define its own acts or buffs in addition to those defined here. The scenario can even redefine some acts or buffs. All these settings for the scenario are done by the files called scenarioX_cyber.json
 
-scenarioX_cyber.json: The cyber file specifies the data used in the cyberspace phase for scenario X exclusively. Examples of the data include the player's role in the fight, the defender's assets, as well as the acts and buffs used in the cyberspace. Note that, this file takes some acts or buffs from common_acts.json, but it also define its own acts or buffs.
+scenarioX_cyber.json: The cyber file specifies the data used in the cyberspace scene for scenario X exclusively. Examples of the containing data include the player's role in the fight, the defender's assets, as well as the acts and buffs used in the cyberspace. Note that, this file takes some acts or buffs from common_acts.json, but it also define its own acts or buffs.
 
-scenarioX_intro.txt: (optional for each scenario) the intro file illustrates what will be shown at the introduction phase of a scenario. It involves text as well as pictures. With it the players are supposed to see a short introduction of the story of this scenario before the game formally starts(e.g. a short briefing of time, place, characters).
+scenarioX_intro.txt: (optional for each scenario) The intro file illustrates what will be shown at the introduction scene of a scenario. It involves texts as well as pictures. With it the players are supposed to see a short introduction of the story of this scenario before the game formally starts (e.g. a short briefing of time, place, characters).
 
-scenarioX_NPCs.json: the NPC file stores for the scenario the information of the NPCs that will be found in the hall. Most important of all, it contains the dialogues of the NPCs, as well as how the NPCs change their dialogues (states) with the player's interaction with them. The hall is supposed to be a place where the player can freely gather information realted to the incoming fight. The NPCs are to give hints and recommendations for the player.
+scenarioX_NPCs.json: The NPC file stores for the scenario the information of the NPCs that will be found in the hall. Most important of all, it contains the dialogues of the NPCs, as well as how the NPCs change their dialogues (states) with the player's interaction with them. The hall is supposed to be a place where the player can freely gather information realted to the incoming fight. The NPCs are to give hints and recommendations for the player.
 
-scenarioX_outro.txt: (optional for each scenario) the outro file is similar to the intro file, only that it's put at the end of the level, showing the result of the what the player has done in the game. It also support texts and pictures.
+scenarioX_outro.txt: (optional for each scenario) The outro file is similar to the intro file, only that it's put at the end of the level, showing the result of the what the player has done in the game. It also support texts and pictures. It's a good place for the revision or extension of the knowledge delivered in the game.
 
-tutorial2_cyber.json and tutorial3_cyber.json: the cyber file for the two tutorials teaching things about cyberspace. Tutorial2_cyber teaches how to play as defender, and tutorial3_cyber teaches how to play as intruder.
+tutorial2_cyber.json and tutorial3_cyber.json: The cyber file for the two tutorials teaching things about cyberspace. Tutorial2_cyber teaches how to play as defender, and tutorial3_cyber teaches how to play as intruder.
 
-tutorialX_intro.txt: the tutorial equivalence of introduction file.
+tutorialX_intro.txt: The tutorial equivalence of introduction file.
 
-tutorial1_NPCs.json: the NPC file for tutorial 1 esclusively. Only this tutorial focuses on hall phase, so only tutorial 1 has NPC file.
+tutorial1_NPCs.json: The NPC file for tutorial 1 esclusively. Only this tutorial focuses on hall scene, so only tutorial 1 has NPC file.
 
-tutorialX_outro.txt: the outro file for the three tutorials.
+tutorialX_outro.txt: The outro file for the three tutorials.
 
 Therefore, to add a new scenario, one need to add one cyber file and one NPC file, and optionally an intro file and one outro file. The scenario number is not in any way bound to the content of the scenario. So that you can renumber them as you want, even adding scenarios in between old ones. However, the scenario numbers have to be consecutive, otherwise, the loader will stop at the first missing scenario. It's also recommended to add entries in personalNotes.json for new acts and buffs you have created.
 
@@ -75,7 +75,7 @@ The file contains an array called NPCs, whose elements are description of each N
 
 Each piece of speech contains prerequists (optinal) and speech. speech is of course what the NPC will say at the particular state. Long speech need to be devided into multiple pages. The character "^" will be used to separate pages.
 
-prerequists is the condition on other NPCs' states that need to be firstly meet, before this NPC will come to this state. This functionality is useful to build a experience of discovery in the hall phase. e.g. NPC1 asks the player to collect information by asking NPC2. NPC1 will repeat the same sentence if the player just keep clicking on NPC1. When the player has talked to NPC2, having found the information, setting NPC2's state to the appropriate value, NPC1 will change to the next state to congratulate the player for the finding.	To see a really definition, if the prerequisits is the following:
+prerequists is the condition on other NPCs' states that need to be firstly meet, before this NPC will come to this state. This functionality is useful to build a experience of discovery in the hall scene. e.g. NPC1 asks the player to collect information by asking NPC2. NPC1 will repeat the same sentence if the player just keep clicking on NPC1. When the player has talked to NPC2, having found the information, setting NPC2's state to the appropriate value, NPC1 will change to the next state to congratulate the player for the finding.	To see a really definition, if the prerequisits is the following:
 	"prerequisits": 
 	[
 		{"npc": "npc2",
