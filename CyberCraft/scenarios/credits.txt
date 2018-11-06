@@ -52,4 +52,4 @@ All other stories are purely fictional, and any resemblance to the actual events
 ^This game is developed as the master thesis of Politecnico di Torino.
 Thesis Title: CyberCraft, a security serious game
 Designed and created by Lu Yang
-Thesis supervisors: professor Antonio Lioy and Engineer Andrea Atzeni
+Thesis supervisors: professor Antonio Lioy and engineer Andrea Atzeni

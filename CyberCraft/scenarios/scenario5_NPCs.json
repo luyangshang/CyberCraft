@@ -29,7 +29,7 @@
 				"speech": "Hi, Godfried! Good to see you again."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Boss",
 					"state": 1}
@@ -55,7 +55,7 @@
 				"speech": "Hi, Godfried! Still recognize me? As you can see, I have made myself a cyborg! ^With the help of the machine, I have experienced a great boost in physical activity and memory as well!"
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Boss",
 					"state": 1}

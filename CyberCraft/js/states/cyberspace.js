@@ -399,12 +399,12 @@ var cyberspace = {
 		
 		//if not learnt
 		if(!act.learnt)
-		{	//prerequisits
-			if(act.prerequists.length)
+		{	//prerequisites
+			if(act.prerequisites.length)
 			{
-				preText = "Prerequisits for learning: ";
-				for(p in act.prerequists)
-					preText += this.actManager.id2name(this.role, act.prerequists[p]) + ", ";
+				preText = "prerequisites for learning: ";
+				for(p in act.prerequisites)
+					preText += this.actManager.id2name(this.role, act.prerequisites[p]) + ", ";
 				preText = preText.slice(0, -2);	//delete tail
 				this.preSprite = game.add.text(150, 150, preText, this.styleResource, this.variableGroup);
 			}

@@ -7,9 +7,9 @@ hallMapIntruder.json and hallMapDefender.json: A json file made with Tiled to il
 
 personalNotes.json: This file stores the entries related to the personal notes. Most importantly, the acts and buffs activated in the game will have a link to the corresponding entry in the personal notes, where the security terms will be more deeply discussed. It's strongly suggested that, whenever a new act or a new buff is added to a scenario, an entry of it to be added to personal notes also.
 
-credits.txt: What will be shown at the credits scene.
+credits.txt: What will be shown at the credits scene. Add credit to you for your contribution to the game.
 
-assetsTable.json: An table for all the images, spritesheets and audio(sound and music), to be loaded at load scene, which covers nearly all the assets of the game. Images contains the path of the image and the key assigned to it. spritesheets need also the specification of frameWidth and frameHeight. For audios, urls takes the value of a single string or an array of strings. In this game, all urls are given in single strings though.
+assetsTable.json: An table for all the images, sprite sheets and audio(sound and music), to be loaded at load scene, which covers nearly all the assets of the game. Images contains the path of the image and the key assigned to it. spritesheets need also the specification of frameWidth and frameHeight. For audios, urls takes the value of a single string or an array of strings. In this game, all urls are given in single strings though.
 
 common_acts.json: The common acts file defines the acts and buffs used by cyberspace scene, that are frequently shared across scenarios. However, for a certain scenario, not all of the acts or buffs are used. Also, the scenario can define its own acts or buffs in addition to those defined here. The scenario can even redefine some acts or buffs. All these settings for the scenario are done by the files called scenarioX_cyber.json
 
@@ -25,11 +25,13 @@ tutorial2_cyber.json and tutorial3_cyber.json: The cyber file for the two tutori
 
 tutorialX_intro.txt: The tutorial equivalence of introduction file.
 
-tutorial1_NPCs.json: The NPC file for tutorial 1 esclusively. Only this tutorial focuses on hall scene, so only tutorial 1 has NPC file.
+tutorial1_NPCs.json: The NPC file for tutorial 1 exclusively. Only this tutorial focuses on hall scene, so only tutorial 1 has NPC file.
 
 tutorialX_outro.txt: The outro file for the three tutorials.
 
-Therefore, to add a new scenario, one need to add one cyber file and one NPC file, and optionally an intro file and one outro file. The scenario number is not in any way bound to the content of the scenario. So that you can renumber them as you want, even adding scenarios in between old ones. However, the scenario numbers have to be consecutive, otherwise, the loader will stop at the first missing scenario. It's also recommended to add entries in personalNotes.json for new acts and buffs you have created.
+Therefore, to add a new scenario, one needs to add one cyber file and one NPC file, and optionally an intro file and one outro file. The scenario number is not in any way bound to the content of the scenario. So that you can renumber them as you want, even adding scenarios in between old ones. However, the scenario numbers have to be consecutive, otherwise, the loader will stop at the first missing scenario. It's also recommended to add entries in personalNotes.json for new acts and buffs you have created.
+
+
 
 
 
@@ -50,18 +52,18 @@ It's recommended to create an entry for each new acts or buffs defined in scenar
 
 2. scenarioX_intro.txt/scenarioX_outro.txt/tutorialX_intro.txt/tutorialX_outro.txt/credits.txt: these files follow the same pattern: It involves pages of pure text or image-text-mixed pages. The pure text page will be displayed with typing animation, while the image-text-mixed page will be displayed immediately. The pages will be delimited by a character "^". 
 
-A pure text page contain only pure text of course. Note that the character "^" is reserved character, which is not supposed to be anywhere inside the page. Character "#" is also not supposed to be placed at the start of the pure text page.
+A pure text page contains only pure text of course. Note that the character "^" is reserved character, which is not supposed to be anywhere inside the page. Character "#" is also not supposed to be placed at the start of the pure text page.
 
-A image-text-mixed page is characterized by a character "#" at the start of the page. As a matter of fact, this kind of page is composed of images and texts, each described after a "#" character. Here, newline as \r \n or \r\n will be ignored by the program.
+An image-text-mixed page is characterized by a character "#" at the start of the page. As a matter of fact, this kind of page is composed of images and texts, each described after a "#" character. Here, newline as \r \n or \r\n will be ignored by the program.
 
-To create a image, follow this pattern:
+To create an image, follow this pattern:
 #image$<x coordinate>$<y coordinate>$<path to the image file>
 To create a text in the image-text-mixed page, follow this pattern:
 #text$<x coordinate>$<y coordinate>$<text to create>
 The text can also have one more argument:
 #text$<x coordinate>$<y coordinate>\$<text to create>\$<word wrap width>
 
-Note here that, all those within angular brackets should be replaced with actual values. Also, if the readers know about Phaser, they will realize that the arguments in this pattern are just align with the arguments to define image sprite and text sprite.
+Note here that, all those within angular brackets should be replaced with actual values. Also, if the readers know about Phaser, they will realize that the arguments in this pattern are just aligned with the arguments to define image sprite and text sprite.
 
 3. scenarioX_NPCs.json:
 The file contains an array called NPCs, whose elements are description of each NPC in the scenario.
@@ -75,8 +77,8 @@ The file contains an array called NPCs, whose elements are description of each N
 
 Each piece of speech contains prerequists (optinal) and speech. speech is of course what the NPC will say at the particular state. Long speech need to be devided into multiple pages. The character "^" will be used to separate pages.
 
-prerequists is the condition on other NPCs' states that need to be firstly meet, before this NPC will come to this state. This functionality is useful to build a experience of discovery in the hall scene. e.g. NPC1 asks the player to collect information by asking NPC2. NPC1 will repeat the same sentence if the player just keep clicking on NPC1. When the player has talked to NPC2, having found the information, setting NPC2's state to the appropriate value, NPC1 will change to the next state to congratulate the player for the finding.	To see a really definition, if the prerequisits is the following:
-	"prerequisits": 
+prerequists is the condition on other NPCs' states that need to be firstly meet, before this NPC will come to this state. This functionality is useful to build an experience of discovery in the hall scene. e.g. NPC1 asks the player to collect information by asking NPC2. NPC1 will repeat the same sentence if the player just keeps clicking on NPC1. When the player has talked to NPC2, having found the information, setting NPC2's state to the appropriate value, NPC1 will change to the next state to congratulate the player for the finding.	To see a really definition, if the prerequisites is the following:
+	"prerequisites": 
 	[
 		{"npc": "npc2",
 		"state": 2},
@@ -84,20 +86,20 @@ prerequists is the condition on other NPCs' states that need to be firstly meet,
 		"state": 3}
 	]
 	That means npc3 has to reach state 2 (the third speech defined in speeches), and npc3 has to reach state 3, before this npc will come to this particular state.
-	There is one special speech (state), that is the speech asking if the player is done with the talk in the hall, and is ready to go into the cyberspace to challenge the opponent. This particular speech is necessary for every scenario (in order to process from hall phase), and it's indicated by a "`" character at the first page of a speech. When an NPC when talked to, reaches this speech, a question like "Are you ready for the cyber battle?", together with "Yes" button and "No" button will be shown. The real question can be configured by writing a single page text after the "`" character. Extra pages of text after the "`" character will be ignored by the program. N.B. don't add more speeches (states) after this final question. If you do so, if the player wanted to hall around a little longer, and clicked on the "No" button, the NPC will never ask the question again, trapping the player forever in the hall.
-Final point: the first NPC will come to talk to the player when the player enters the hall, even if the player has not clicked on anyone. It's quite reasonable for this NPC to be the manager or the dest clerk of this place
+	There is one special speech (state), which is the speech asking if the player is done with the talk in the hall, and is ready to go into the cyberspace to challenge the opponent. This particular speech is necessary for every scenario (in order to process from hall phase), and it's indicated by a "`" character at the first page of a speech. When an NPC when talked to, reaches this speech, a question like "Are you ready for the cyber battle?", together with "Yes" button and "No" button will be shown. The real question can be configured by writing a single page text after the "`" character. Extra pages of text after the "`" character will be ignored by the program. N.B. don't add more speeches (states) after this final question. If you do so, if the player wanted to hall around a little longer, and clicked on the "No" button, the NPC will never ask the question again, trapping the player forever in the hall.
+Final point: the first NPC will come to talk to the player when the player enters the hall, even if the player has not clicked on anyone. It's quite reasonable for this NPC to be the manager or the desk clerk of this place
 
 4. common_acts.json:
-acts: it consists of two arrays. The first array define acts for the intruder, and the second array define acts for the defender.
+acts: it consists of two arrays. The first array defines acts for the intruder, and the second array defines acts for the defender.
 	name: (required)the name of the act
-	prerequists: an array of acts that need to be unlocked beforeunlocking this act
+	prerequists: an array of acts that need to be unlocked before unlocking this act
 	learningCost: the cost to unlock this act
 	desc: short, single page description. It's shown in non-scrollable popup window, so don't make it long. To put long explanation, use personal notes
 	needSelfBuffs: the player has to have this buff in order to perform the act
 	needRivalBuffs: the rival has to have these buffs for the player to perform the act successfully
 	noSelfBuffs: the player should not have these buffs in order to perform the act
 	noRivalBuffs: the rival should not have these buffs for the player to perform the act successfully
-	cost: (required) the cost of performing this act. Zero-cost act cannot be performed. It will be used as prerequist for other acts.
+	cost: (required) the cost of performing this act. Zero-cost act cannot be performed. It will be used as prerequisite for other acts.
 	successRate: the initial success rate of the act. It can be modified in game by other acts. By default, it takes 1.	
 	selfBuffs: the buff enforced to the player when the act succeeds
 	rivalBuffs: the buff enforced to the rival when the act succeeds
@@ -127,10 +129,10 @@ scenarioX_cyber.json and tutorialX_cyber.json:
 	serverAccessValley: the minimum amount of requests to the server each defender's round
 	serverAccessPeak: the maximum amount of requests to the server each defender's round
 	initialResource: how much resource the intruder and the defender have (before round 1)
-	constantIncome: the resource obtained each time the character starts his round. This guarantees a minimum income. However, it's more suitable to let the defender gain resource from responding to the clients requests rather than from this.
+	constantIncome: the resource obtained each time the character starts his round. This guarantees a minimum income. However, it's more suitable to let the defender gain resource from responding to the client requests rather than from this.
 	maxResource: the players can't keep more resource than this value.
 	maxRounds: the number of rounds of this scenario. If the defender can sustain until this time, the defender wins.
-	assets: the initial "HP" of the defender. The defender will be penalized on assets at each credential breach. If the assets droped to zero or less than zero before the maxRounds reaches, the intruder wins.
+	assets: the initial "HP" of the defender. The defender will be penalized on assets at each credential breach. If the assets dropped to zero or less than zero before the maxRounds reaches, the intruder wins.
 	defensive: if true, the player plays as the intruder; if false, the player plays as the defender. The AI written in the latter part of this file should be consistent with the value here: the AI plays the opposite role.
 	characterName: the name to be displayed as the name of the intruder and the defender
 	portrait: key value of the portrait pictures of the intruder and the defender
@@ -138,17 +140,17 @@ scenarioX_cyber.json and tutorialX_cyber.json:
 	acts/buffs: the new definition and redefinition of acts/buffs for this scenario, compared to those in common_acts.json. For detailed format of definition, refer to common_acts.json above.
 	initialBuffs: describes the buffs that the intruder or the defender already have at the start of the game. name: the name of the buff. length: for how many rounds the buff will last. length == -1 means the buff will be there from the start till the end; length > 0 means the buff will be there for the first rounds; length == 0 is erroneous.
 	AI: an array of action patterns that AI will follow.
-		pattern: an array of acts characterizes this action pattern. When the pattern is chosen, AI will firstly guarantee the acts are all learnt (could take multiple rounds). Then, if the resource is enough, AI will apply this acts in sequence in one round. If the resource is insufficient for all the acts, AI will wait, until the necessary resource is obtained. The acts in the pattern are usually supposed to be a combo.
+		pattern: an array of acts characterizes this action pattern. When the pattern is chosen, AI will firstly guarantee the acts are all learnt (could take multiple rounds). Then, if the resource is enough, AI will apply these acts in sequence in one round. If the resource is insufficient for all the acts, AI will wait, until the necessary resource is obtained. The acts in the pattern are usually supposed to be a combo.
 		chance: the chance that AI will choose this pattern out of all others. Note that if any of the acts in the pattern is not unlocked yet, the pattern is considered lock, and AI will ignore the pattern. 
-	The sum of the percentages of all the action pattern can exceed 1. This is because for each turn, AI will only consider the unlocked patterns. The sum of unlocked action patterns can also exceeds 1. In this case, the patterns will consumes the chances in sequence, meaning that the last patterns may suffer their chance decreased. This is understandable and even useful, in the sense that one can make use of this effect to reduce AI's likely hood to perform some acts that are designed for the earlier stages.
+	The sum of the percentages of all the action patterns can exceed 1. This is because for each turn, AI will only consider the unlocked patterns. The sum of unlocked action patterns can also exceeds 1. In this case, the patterns will consume the chances in sequence, meaning that the last patterns may suffer their chance decreased. This is understandable and even useful, in the sense that one can make use of this effect to reduce AI's likely hood to perform some acts that are designed for the earlier stages.
 	scripts: It's an array of scripts, each following this format:
 		round: the script will be activated at the start of this round
 		dialogues: the dialogues to display:
-			name: the name to be displayed for the speacker of the dialogue
+			name: the name to be displayed for the speaker of the dialogue
 			portrait: the portrait of the speacker
 			dialogue: the (multi-page)dialogue to display. Use "\^{}" to delimit pages.
-		newActs: arrays of acts to be unlocked. First array for the intruder, and second array for the defender
-		shouldApply: (should be specified only for player¡¯s rounds) it¡¯s an array of act names. It enforces the player to apply the those acts in the designated round. If
+		newActs: arrays of acts to be unlocked. First array for the intruder and second array for the defender
+		shouldApply: (should be specified only for player¡¯s rounds) it¡¯s an array of act names. It enforces the player to apply those acts in the designated round. If
 the player has not applied all the acts in the round, the ¡±End turn¡± button will be
 locked. This functionality is useful for the tutorial section, to force the player try
 out newly taught acts. Nevertheless, this functionality reduces player¡¯s freedom,
@@ -164,22 +166,22 @@ About numbering of scenarios: one can create as many new scenarios as he/she wan
 If you modify the files in the scenario folder, you may encounter some error messages related to the inconsistence or wrong format. Here are some of the erros messages:
 
 *Cannot find scenarios/assetsTable.json or the file is corrupted! 
-Maybe assertsTable.json is mission, maybe the file does not conform with JSON format. One common mistake is missing or having too much commas in an array.
+Maybe assertsTable.json is missing, maybe the file does not conform with JSON format. One common mistake is missing or having too much commas in an array.
 
 *Error! The act " XXX" activated for this scenario (scenario Y) is not defined in common_acts.json!"
-In scenarioY_cyber.json, under the element of "commonActs", you have written XXX. This means the scenario will take suh an act definition in common_acts.json. However, it's not found. Maybe it's because of wrong spelling (the name is case sensitive and should match exactly). Maybe you have got a wrong role: intruder's acts are always in the first array, while defender's acts always in the second array.
+In scenarioY_cyber.json, under the element of "commonActs", you have written XXX. This means the scenario will take the act definition for XXX from common\_acts.json. However, it's not found. Maybe it's because of wrong spelling (the name is case sensitive and should match exactly). Maybe you have got a wrong role: intruder's acts are always in the first array, while defender's acts always in the second array.
 
-*Error! The prerequist "ZZZ" of act "YYY" activated for this scenario (scenario Z) is wrong!
-In the definition of act called YYY from scenarioZ_cyber.json, the property of prerequists is specified. However, at least one of the prerequists (should be an act name) is not an act defined for this scenario.
+*Error! The prerequisite "ZZZ" of act "YYY" activated for this scenario (scenario Z) is wrong!
+In the definition of act called YYY from scenarioZ_cyber.json, the property of prerequisites is specified. However, at least one of the prerequisites (should be an act name) is not an act defined for this scenario.
 
 *Error! An act name is missing Recheck scenarioX_cyber.json
 In the definition of an act, the name is compulsory
 
 *Error! The act "YYY" is missing cost Recheck scenarioX_cyber.json or common_acts.json
-In the definition of an act, the cost is compulsory. No act should cost zero resource. Zero-cost act on the other hand means the act cannot be used. Then the act is only put in the game as a prerequist for other acts.
+In the definition of an act, the cost is compulsory. No act should cost zero resource. Zero-cost act on the other hand means the act cannot be used. Then the act is only put in the game as a prerequisite for other acts.
 
 *Error! The buff "XXX" related to an act in scenario Y is not found!
-This scenario will enforce/clean buff on the character. Whereas, the definition of the buff is not found.
+This scenario will enforce/clean buff on the character. Nevertheless, the definition of the buff is not found.
 
 *modifier format wrong
 It's not suggested to use modifier if you have other alternatives. But if you do want to use it, the  modifier should be written as a string, delimited by semicolon(;) into substrings, each following this regular expression:
@@ -195,11 +197,11 @@ A buff called XXX is not defined. The program assumes the buff has empty descrip
 *Sorry. This entry is not found in personal notes!
 It's recommended that when you add new acts or buffs to the game, you add entries to the personal notes also. In this way, the player will have a in-game help about the new security term. Also, personal notes serves as an in-game source of knowledge for those interested to learn.
 
-*Error! in the scenario file scenarioX_NPCs.json, in the prerequists of the speeches, a reference to a npc name is not found!
+*Error! in the scenario file scenarioX_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!
 The dependency of dialogues is based on the name of the NPC. Probably you have changed the name of the NPC, but have not changed the references to it. Remember that it's case sensitive.
 
 *Warning! The script for round X is not understandable.
-The script will run at the start of round X. X have to be a positive number of course.
+The script will run at the start of round X. X has to be a positive number of course.
 
 *The game just stop at loading or during the game
 It's quite possible that there are other runtime errors that can be viewed only by checking the console. The way to open console could be different from browser to browser, but the console is usually one part of Developer tools (opened with F12). For messages at console, see below.
@@ -208,7 +210,7 @@ It's quite possible that there are other runtime errors that can be viewed only 
 There are also some other console messages that can be seen only by opening developer tools.
 
 *GET http://localhost/CyberCraft/scenarios/scenarioX_cyber.json 404 (Not Found)
-This message always comes. The game knows about the number of scenarios at the first cyber file not found. Therefore, there is no problem here.
+This message always comes. The game knows about the number of scenarios at the first cyber file not found. That is to say, the game has found X-1 scenarios. Therefore, there is no problem here.
 
 *scenarioX_intro.txt not defined/scenarioX_outro.txt not defined
 You have created a scenarioX_cyber.json, which indicates a new scenario is added. However, the intro or outro file for the scenario is not created with it. There is no problem if you don't have intro or outro files. The game will just skip them.
@@ -220,4 +222,4 @@ The NPC file is always needed. The absence of NPC file will result in an error s
 You have added new reference to assets in assetsTable.json. However, the path is wrong.
 
 *Uncaught SyntaxError: Unexpected token , in JSON at position XXX
-One of the JSON files have syntax error. It could be the newly added JSON file. A debugger may offer you a link directly to the place of the error.
+One of the JSON files has syntax error. It could be the newly added JSON file. A debugger may offer you a link directly to the place of the error.

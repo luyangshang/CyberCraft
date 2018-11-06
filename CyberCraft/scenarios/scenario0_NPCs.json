@@ -31,7 +31,7 @@
 				"speech": "Glad to see you joining us. Ah, not yet. But you are sure able to fulfill your task and successfully join us, right?"
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Hank",
 					"state": 1}
@@ -55,7 +55,7 @@
 				"speech": "Good morning. A right choice you have made. HackIt is a terrific place for the talented."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Hank",
 					"state": 1}
@@ -79,7 +79,7 @@
 				"speech": "Nice to meet you."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Hank",
 					"state": 1}

@@ -14,7 +14,7 @@
 				"speech": "Have your met our boss? He is in the left top corner. For the detail of your work, ask him. I'm just a desk clerk..."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Manager",
 					"state": 0}
@@ -22,7 +22,7 @@
 				"speech": "Me? I just receive guests as my manager tells."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Manager",
 					"state": 2}
@@ -45,7 +45,7 @@
 				"speech": "So, have you talked to people around? Have you made some discoveries? Remember that they will never tell their secrets in the first sentences."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Bobby",
 					"state": 3}
@@ -67,7 +67,7 @@
 			{	"speech": "Oh, a new face. Bobby's busy working."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Manager",
 					"state": 0}
@@ -81,7 +81,7 @@
 				"speech": "Whenever you rebuilt your project, you have to close as much processes as possible. ^I will tell you a secret, newcomer.\nThis so called \"defensive system\" takes up huge amount of memory and CPU cycle. ^If you care to disble it... Your program will run completelysmoothly. ^My last week's work was done thanks to it."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Manager",
 					"state": 2}
@@ -100,7 +100,7 @@
 			{	"speech": "Oh, a new handsome boy here. Mind if I date you?"
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Manager",
 					"state": 0}
@@ -111,7 +111,7 @@
 				"speech": "Maybe we can go out for the lunch? It will be even better if we go for dinner."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Manager",
 					"state": 2}
@@ -130,7 +130,7 @@
 			{	"speech": "Hey, newcomer, ur?"
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Manager",
 					"state": 0}
@@ -144,10 +144,10 @@
 				"speech": "It's quite unfortunate that after the installation of the defensive system, we cannot anymore play MOBA game here...Well, during lunch time, during lunch time."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Manager",
-					"state": 3}
+					"state": 2}
 				],
 				"speech": "Oh, you are going? I thought you are a new programmer here..."
 			}

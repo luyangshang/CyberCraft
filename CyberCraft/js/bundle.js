@@ -297,7 +297,7 @@ module.exports = AIManager;
 @classdesc A class representing a single act.
 As a creation function, remember to create new arrays, rather than just pointing to the old arrays
 @param {string} actName - the name of the act
-@param {Array} prerequists - the array of prerequists before the player can learn this act
+@param {Array} prerequisites - the array of prerequisites before the player can learn this act
 @param {int} learningCost - the cost when the player learns this act 
 @param {string} desc - the description of the act
 @param {Array} needSelfBuffs - the buffs that the player has to have before the player performs the act
@@ -317,10 +317,10 @@ As a creation function, remember to create new arrays, rather than just pointing
 @param {int} enabled - if the act is enabled at the beginning (otherwise, it should be later on enabled by script)
 @constructor
 */
-function Act(name, prerequists, learningCost, desc, needSelfBuffs, needRivalBuffs, noSelfBuffs, noRivalBuffs, cost, successRate, selfBuffs, rivalBuffs, cleanSelfBuffs, cleanRivalBuffs, buffLength, bonus, spamRequests, modifier, learnt, unlocked)
+function Act(name, prerequisites, learningCost, desc, needSelfBuffs, needRivalBuffs, noSelfBuffs, noRivalBuffs, cost, successRate, selfBuffs, rivalBuffs, cleanSelfBuffs, cleanRivalBuffs, buffLength, bonus, spamRequests, modifier, learnt, unlocked)
 {
 	this.name = name;
-	this.prerequists = prerequists.slice(0);
+	this.prerequisites = prerequisites.slice(0);
 	this.learningCost = learningCost;
 	this.desc = desc;
 	this.needSelfBuffs = needSelfBuffs.slice(0);
@@ -416,23 +416,23 @@ ActManager.prototype.createActs = function(index, role)
 	for(cyb in this.cyber.acts[role])
 		this.createAct(this.cyber.acts[role][cyb], role);
 	
-	//the second round. change the prerequists, needSelfBuffs, needRivalBuffs, noRivalBuffs, selBuffs, rivalBuffs from name strings into ids.
+	//the second round. change the prerequisites, needSelfBuffs, needRivalBuffs, noRivalBuffs, selBuffs, rivalBuffs from name strings into ids.
 	for(a in this.acts[role])
 	{
 		act = this.acts[role][a];	//just to speed up
-		//prerequists
+		//prerequisites
 		var array = [];
-		for(p in act.prerequists)
+		for(p in act.prerequisites)
 		{
-			id = this.name2id(role, act.prerequists[p]);
+			id = this.name2id(role, act.prerequisites[p]);
 			if(id == -1)
 			{				
-				var errorMessage = "Error! The prerequist \"" + act.prerequists[p] + "\" of act \"" + act.name + "\" activated for this scenario (scenario " + index + ") is wrong!";
+				var errorMessage = "Error! The prerequist \"" + act.prerequisites[p] + "\" of act \"" + act.name + "\" activated for this scenario (scenario " + index + ") is wrong!";
 				game.state.start('error', true, false, errorMessage);
 			}
 			array.push(id);
 		}
-		act.prerequists = array;	//name array overwritten by id array
+		act.prerequisites = array;	//name array overwritten by id array
 		
 		this.convertBuff(act.needSelfBuffs);
 		this.convertBuff(act.needRivalBuffs);
@@ -452,7 +452,7 @@ Create a single act. This function provides some checkings and default values
 */
 ActManager.prototype.createAct = function(actSource, role)
 {
-	var name, prerequists =[];
+	var name, prerequisites =[];
 	var	learningCost = 0;
 	var desc, needSelfBuffs = [], needRivalBuffs=[], noSelfBuffs = [], noRivalBuffs = [];
 	var cost, successRate = 1.0;
@@ -468,8 +468,8 @@ ActManager.prototype.createAct = function(actSource, role)
 		return 1;
 	}
 	name = actSource.name;
-	if(actSource.prerequists != undefined)
-		prerequists = actSource.prerequists;
+	if(actSource.prerequisites != undefined)
+		prerequisites = actSource.prerequisites;
 	if(actSource.learningCost != undefined)
 		learningCost = actSource.learningCost;
 	if(actSource.desc != undefined)
@@ -516,7 +516,7 @@ ActManager.prototype.createAct = function(actSource, role)
 	if(actSource.unlocked != undefined)
 		unlocked = actSource.unlocked;
 	//finally create the act
-	var id = this.acts[role].push(new Act(name,prerequists,learningCost,desc,needSelfBuffs,needRivalBuffs,noSelfBuffs,noRivalBuffs,cost,successRate,selfBuffs,rivalBuffs,cleanSelfBuffs,cleanRivalBuffs,buffLength,bonus,spamRequests,modifier,learnt,unlocked));
+	var id = this.acts[role].push(new Act(name,prerequisites,learningCost,desc,needSelfBuffs,needRivalBuffs,noSelfBuffs,noRivalBuffs,cost,successRate,selfBuffs,rivalBuffs,cleanSelfBuffs,cleanRivalBuffs,buffLength,bonus,spamRequests,modifier,learnt,unlocked));
 	return --id;
 };
 /**
@@ -639,7 +639,7 @@ ActManager.prototype.learnAct = function(role, id)
 	
 	var requiredId;
 	var act = this.getAct(role, id);
-	var prerequists = act.prerequists;
+	var prerequisites = act.prerequisites;
 	//check resource
 	if(act.learningCost > this.gameManager.getResource(role))
 	{
@@ -647,14 +647,14 @@ ActManager.prototype.learnAct = function(role, id)
 		window.alert("not enough resource!");
 		return false;
 	}
-	//check prerequists
-	for(p in prerequists)
+	//check prerequisites
+	for(p in prerequisites)
 	{
 		//check if the required act is learnt
-		if(!this.getAct(role, act.prerequists[p]).learnt)
+		if(!this.getAct(role, act.prerequisites[p]).learnt)
 		{
 			game.globals.audioManager.accessDenied();
-			window.alert("prerequist not met: " + this.id2name(role, act.prerequists[p]));
+			window.alert("prerequist not met: " + this.id2name(role, act.prerequisites[p]));
 			return false;
 		}	
 	}
@@ -2682,7 +2682,7 @@ NPCs[id].name						//NPC name
 		.x							//x coordinate on the map
 		.y							//y coordinate on the map
 		.speechs[s].speech			//the speech at state s
-				.prerequists[p].npc			//the requirement on other npcs (denoted by id) before entering the state s
+				.prerequisites[p].npc			//the requirement on other npcs (denoted by id) before entering the state s
 								.state		//the requirement on other npc's state before this npc enters steate s
 		.currentState			//the current state of this npc (the state of his/her speech)
 */
@@ -2717,46 +2717,46 @@ function NPCManager(index)
 		for(s in npcSource.speeches)
 		{
 			speech = {"speech": npcSource.speeches[s].speech, 
-					"prerequists": []};
+					"prerequisites": []};
 			npc.speeches.push(speech);
 		}
 		this.NPCs.push(npc);
 	}
-	//second round, fill prerequists, changing the "npc" field from npc names into npc ids
+	//second round, fill prerequisites, changing the "npc" field from npc names into npc ids
 	for(n in this.NPCs)
 	{
 		npcSource = global.NPCs[n];
 		for(s in npcSource.speeches)
-			for(p in npcSource.speeches[s].prerequists)
+			for(p in npcSource.speeches[s].prerequisites)
 			{
 				//the name of the npc which will be converted into npc id
-				string = npcSource.speeches[s].prerequists[p].npc;
+				string = npcSource.speeches[s].prerequisites[p].npc;
 				targetId = this.name2id(string);
 				if(targetId == -1)
 				{
-					window.alert("Error! in the scenario file scenario" + index + "_NPCs.json, in the prerequists of the speeches, a reference to a npc name is not found!");
+					window.alert("Error! in the scenario file scenario" + index + "_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!");
 					exit(3);
 				}
 				else
 				{
 					pre = { "npc": targetId, 
-								"state": npcSource.speeches[s].prerequists[p].state };
-					this.NPCs[n].speeches[s].prerequists.push(pre);
+								"state": npcSource.speeches[s].prerequisites[p].state };
+					this.NPCs[n].speeches[s].prerequisites.push(pre);
 				}
 				/*pre = null;
 				for(id in NPCs)
 					if(this.NPCs[id].name == string)
 					{
 						pre = { npc: id, 
-								state: npcSource.speeches[s].prerequists.state };
+								state: npcSource.speeches[s].prerequisites.state };
 						break;
 					}
 				if(pre)
 				{
-					window.alert("Error! in the scenario file scenario" + scenarioIndex + "NPCs.json, in the prerequists of the speeches, a reference to a npc name is not found!");
+					window.alert("Error! in the scenario file scenario" + scenarioIndex + "NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!");
 					exit(3);
 				}
-				else this.NPCs[n].speeches[s].prerequists.push(pre);*/
+				else this.NPCs[n].speeches[s].prerequisites.push(pre);*/
 			}
 	}
 }
@@ -2805,22 +2805,22 @@ NPCManager.prototype.retrieveSpeech = function(id)
 
 /**
 Private function
-Check if the speech prerequists have fullfiled. If so, the NPC's speech state will advance to the next one
+Check if the speech prerequisites have fullfiled. If so, the NPC's speech state will advance to the next one
 Also return the current speech state 
 @param {int} id - the id (also the index) of the NPC the player is  talking to
 */
 NPCManager.prototype.updateSpeech = function(id)
 {
 	var state = this.NPCs[id].currentState + 1;		//the potential future state
-	var pre = [];		//buffers the prerequists of the concerned speech state
+	var pre = [];		//buffers the prerequisites of the concerned speech state
 	var targetId;		//the id of the NPC whose state is checked
-	var fullfiled;		//a boolean flage to check if all the update prerequists are fullfiled
+	var fullfiled;		//a boolean flage to check if all the update prerequisites are fullfiled
 	if(state < this.NPCs[id].speeches.length)		//if this is not the last speech
 	{
 		fulfilled = true;
-		//prerequists is always defined, even if not specified in file
-		pre = this.NPCs[id].speeches[state].prerequists;
-		for(p in pre)	//check each prerequists
+		//prerequisites is always defined, even if not specified in file
+		pre = this.NPCs[id].speeches[state].prerequisites;
+		for(p in pre)	//check each prerequisites
 		{
 			targetId = pre[p].npc;
 			//console.log("NPC["+id+"] want NPC ["+targetId+"] have state "+ pre[p].state+" but is"+this.NPCs[targetId].currentState);				///
@@ -4229,12 +4229,12 @@ var cyberspace = {
 		
 		//if not learnt
 		if(!act.learnt)
-		{	//prerequisits
-			if(act.prerequists.length)
+		{	//prerequisites
+			if(act.prerequisites.length)
 			{
-				preText = "Prerequisits for learning: ";
-				for(p in act.prerequists)
-					preText += this.actManager.id2name(this.role, act.prerequists[p]) + ", ";
+				preText = "prerequisites for learning: ";
+				for(p in act.prerequisites)
+					preText += this.actManager.id2name(this.role, act.prerequisites[p]) + ", ";
 				preText = preText.slice(0, -2);	//delete tail
 				this.preSprite = game.add.text(150, 150, preText, this.styleResource, this.variableGroup);
 			}

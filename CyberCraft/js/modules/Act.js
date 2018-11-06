@@ -2,7 +2,7 @@
 @classdesc A class representing a single act.
 As a creation function, remember to create new arrays, rather than just pointing to the old arrays
 @param {string} actName - the name of the act
-@param {Array} prerequists - the array of prerequists before the player can learn this act
+@param {Array} prerequisites - the array of prerequisites before the player can learn this act
 @param {int} learningCost - the cost when the player learns this act 
 @param {string} desc - the description of the act
 @param {Array} needSelfBuffs - the buffs that the player has to have before the player performs the act
@@ -22,10 +22,10 @@ As a creation function, remember to create new arrays, rather than just pointing
 @param {int} enabled - if the act is enabled at the beginning (otherwise, it should be later on enabled by script)
 @constructor
 */
-function Act(name, prerequists, learningCost, desc, needSelfBuffs, needRivalBuffs, noSelfBuffs, noRivalBuffs, cost, successRate, selfBuffs, rivalBuffs, cleanSelfBuffs, cleanRivalBuffs, buffLength, bonus, spamRequests, modifier, learnt, unlocked)
+function Act(name, prerequisites, learningCost, desc, needSelfBuffs, needRivalBuffs, noSelfBuffs, noRivalBuffs, cost, successRate, selfBuffs, rivalBuffs, cleanSelfBuffs, cleanRivalBuffs, buffLength, bonus, spamRequests, modifier, learnt, unlocked)
 {
 	this.name = name;
-	this.prerequists = prerequists.slice(0);
+	this.prerequisites = prerequisites.slice(0);
 	this.learningCost = learningCost;
 	this.desc = desc;
 	this.needSelfBuffs = needSelfBuffs.slice(0);

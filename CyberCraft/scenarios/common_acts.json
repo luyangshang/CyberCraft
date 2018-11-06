@@ -16,7 +16,7 @@
 		},
 		{
 			"name":				"Sniffing attack",
-			"prerequists":		["Promiscuous mode"],
+			"prerequisites":	["Promiscuous mode"],
 			"learningCost":		10,
 			"desc":				"Obtain rival's username and password, as well as other data, provided that the communication is not encrypted or hashed.",
 			"needRivalBuffs":	["MITM"],
@@ -59,7 +59,7 @@
 		},
 		{
 			"name":			"DDoS",
-			"prerequists":	["DoS"],
+			"prerequisites":	["DoS"],
 			"needBuff":		[],
 			"desc":			"Distributed Denial of Service attack. Make use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its sucess rate is much more than the original DOS attack. Effect based on how many botnet machines bought.",
 			"cost":			20,
@@ -69,7 +69,7 @@
 		},
 		{
 			"name":			"Buy botnet machines",
-			"prerequists":	["DDoS"],
+			"prerequisites":	["DDoS"],
 			"desc":			"buy 2 botnet machines to increase the strength of the DDoS attack",
 			"cost":			40,
 			"modifier":		"0:DDoS:spamRequests:+:2"
@@ -77,7 +77,7 @@
 		
 		{
 			"name":			"Shadow server",
-			"prerequists":	[],
+			"prerequisites":	[],
 			"desc":			"A fake server replicating the appearance and feel of another server. Usually created to lure the unaware clients to enter sensitive data.",
 			"noSelfBuffs":	["Shadow server"],
 			"cost":			20,
@@ -96,7 +96,7 @@
 		},
 		{
 			"name":			"Spear phishing",
-			"prerequists":	["Phishing"],
+			"prerequisites":	["Phishing"],
 			"desc":			"One of social engineering method. Ignore all defensive techniques. Different from ordinary fishing, it exploits more knowledge of the victim, which greatly increses success rate",
 			"needBuff":		["Shadow server"],
 			"cost":			40,
@@ -106,15 +106,15 @@
 			"bonus":		40
 		},
 		{
-			"name":			"Whaling",
-			"prerequists":	["Phishing"],
-			"desc":			"One of social engineering method. Ignore all defensive techniques. Different from ordinary fishing, it targets high-value victim, which yeilds more when the attack success",
-			"needBuff":		["Shadow server"],
-			"cost":			20,
-			"rivalBuffs":	["Credential compromised"],
-			"buffLength":	4,
-			"successRate":	0.3,
-			"bonus":		80
+			"name":				"Whaling",
+			"prerequisites":	["Phishing"],
+			"desc":				"One of social engineering method. Ignore all defensive techniques. Different from ordinary fishing, it targets high-value victim, which yeilds more when the attack success",
+			"needBuff":			["Shadow server"],
+			"cost":				20,
+			"rivalBuffs":		["Credential compromised"],
+			"buffLength":		4,
+			"successRate":		0.3,
+			"bonus":			80
 		}
 	],
 	[
@@ -138,7 +138,7 @@
 		},
 		{
 			"name":				"PKI",
-			"prerequists":		["Asymmetric cryptography"],
+			"prerequisites":	["Asymmetric cryptography"],
 			"desc":				"Build the public key infrastructure. The buff is necessary for MQV and RSA key exchange.",
 			"noSelfBuffs":		["PKI"],
 			"cost":				30,

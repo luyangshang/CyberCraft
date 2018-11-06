@@ -69,13 +69,13 @@
 		{
 			"name":			"Symmetric cryptography",
 			"learningCost":	5,
-			"desc":			"The knowledge of symmetric cryptography. Prerequist for nearly all the encryption techniques.",
+			"desc":			"The knowledge of symmetric cryptography. prerequisites for nearly all the encryption techniques.",
 			"cost":			0,
 			"unlocked":		false
 		},
 		{
 			"name":			"DES encryption",
-			"prerequists":	["Symmetric cryptography"],
+			"prerequisites":	["Symmetric cryptography"],
 			"learningCost":	5,
 			"desc":			"One of the historical symmetric-key algorithm for encryption. Obsolete now.",
 			"cost":			0,
@@ -83,7 +83,7 @@
 		},
 		{
 			"name":			"3DES encryption",
-			"prerequists":	["DES encryption"],
+			"prerequisites":	["DES encryption"],
 			"learningCost":	5,
 			"desc":			"One symmetric encryption method to encrypt with DES three times to achieve the satisfying security strength.",
 			"cost":			15,

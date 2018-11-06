@@ -28,7 +28,7 @@
 	[
 		{
 			"name":				"Sniffing attack",
-			"prerequists":		["Promiscuous mode"],
+			"prerequisites":	["Promiscuous mode"],
 			"learningCost":		5,
 			"desc":				"Obtain rival's username and password, as well as other data, if the rival's network communication is not encrypted or hashed.",
 			"needRivalBuffs":	["MITM"],
@@ -50,7 +50,7 @@
 		},
 		{
 			"name": 			"Dictionary attack",
-			"prerequists":		["Brute-force attack"],
+			"prerequisites":	["Brute-force attack"],
 			"learningCost":		30,
 			"desc":				"An upgrade of brute-force attack. Try only the limited subset of the password, which is composed of words from the dictionary. Higher successRate.",
 			"needRivalBuffs":	["Password hashed"],
@@ -61,7 +61,7 @@
 		},
 		{
 			"name": 			"Buy rainbow table",
-			"prerequists":		["Dictionary attack"],
+			"prerequisites":	["Dictionary attack"],
 			"learningCost":		20,
 			"desc":				"Use the rainbow table to assist the dictionary attack on long password. Increase the success  rate of Dictionary attack.",
 			"noSelfBuffs":		["Rainbow table"],
@@ -102,7 +102,7 @@
 	[		
 		{
 			"name":				"Password hashed",
-			"prerequists":		["Hash algorithm"],
+			"prerequisites":	["Hash algorithm"],
 			"desc":				"The server stores only the hash of the password. Resistent to Sniffing attack, and breakable by dictionary attack.",
 			"cost":				10,
 			"selfBuffs":		["Password hashed"],
@@ -133,7 +133,7 @@
 		},
 		{
 			"name":				"Password error delay",
-			"prerequists":		["Password error limit"],
+			"prerequisites":	["Password error limit"],
 			"learningCost":		5,
 			"desc":				"Resistent to Brute-force attack.",
 			"cost":				10,
@@ -167,7 +167,7 @@
 		},
 		{
 			"name":				"Kerberos",
-			"prerequists":		["Timestamp"],
+			"prerequisites":	["Timestamp"],
 			"learningCost":		25,
 			"desc":				"An authentication protocol based on ticket. prevent replay attack, reduce Sniffing attack probability, and gains resource each round because it provides multi-domain Single Sign-On.",
 			"cost":				30,

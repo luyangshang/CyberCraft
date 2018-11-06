@@ -28,7 +28,7 @@
 	[
 		{
 			"name":				"Sniffing attack",
-			"prerequists":		["Promiscuous mode"],
+			"prerequisites":		["Promiscuous mode"],
 			"learningCost":		10,
 			"desc":				"obtain rival's username and password, secret key, as well as other data, if the rival's network communication is not encrypted or hashed.",
 			"needRivalBuffs":	["MITM"],
@@ -76,7 +76,7 @@
 	[
 		{
 			"name":				"DH",
-			"prerequists":		["Symmetric cryptography"],
+			"prerequisites":		["Symmetric cryptography"],
 			"desc":				"One method to exchange share secret between two parties, so that the message can be encrypted. Defend from sniffing attack, but will be fooled by MITM attack.",
 			"cost":				15,
 			"selfBuffs":		["Shared secret"],
@@ -84,7 +84,7 @@
 		},
 		{
 			"name":				"MQV",
-			"prerequists":		["DH"],
+			"prerequisites":		["DH"],
 			"desc":				"The scured DH. Resistent to MITM attack, but requires PKI.",
 			"needSelfBuffs":	["PKI"],
 			"cost":				20,
@@ -94,7 +94,7 @@
 		},
 		{
 			"name":				"RSA key exchange",
-			"prerequists":		["Asymmetric cryptography", "PKI"],
+			"prerequisites":		["Asymmetric cryptography", "PKI"],
 			"desc":				"Another method for key exchange, based RSA. Resistent to MITM, but requires PKI",
 			"needSelfBuffs":	["PKI"],
 			"cost":				20,

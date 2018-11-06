@@ -10,7 +10,7 @@ NPCs[id].name						//NPC name
 		.x							//x coordinate on the map
 		.y							//y coordinate on the map
 		.speechs[s].speech			//the speech at state s
-				.prerequists[p].npc			//the requirement on other npcs (denoted by id) before entering the state s
+				.prerequisites[p].npc			//the requirement on other npcs (denoted by id) before entering the state s
 								.state		//the requirement on other npc's state before this npc enters steate s
 		.currentState			//the current state of this npc (the state of his/her speech)
 */
@@ -45,46 +45,46 @@ function NPCManager(index)
 		for(s in npcSource.speeches)
 		{
 			speech = {"speech": npcSource.speeches[s].speech, 
-					"prerequists": []};
+					"prerequisites": []};
 			npc.speeches.push(speech);
 		}
 		this.NPCs.push(npc);
 	}
-	//second round, fill prerequists, changing the "npc" field from npc names into npc ids
+	//second round, fill prerequisites, changing the "npc" field from npc names into npc ids
 	for(n in this.NPCs)
 	{
 		npcSource = global.NPCs[n];
 		for(s in npcSource.speeches)
-			for(p in npcSource.speeches[s].prerequists)
+			for(p in npcSource.speeches[s].prerequisites)
 			{
 				//the name of the npc which will be converted into npc id
-				string = npcSource.speeches[s].prerequists[p].npc;
+				string = npcSource.speeches[s].prerequisites[p].npc;
 				targetId = this.name2id(string);
 				if(targetId == -1)
 				{
-					window.alert("Error! in the scenario file scenario" + index + "_NPCs.json, in the prerequists of the speeches, a reference to a npc name is not found!");
+					window.alert("Error! in the scenario file scenario" + index + "_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!");
 					exit(3);
 				}
 				else
 				{
 					pre = { "npc": targetId, 
-								"state": npcSource.speeches[s].prerequists[p].state };
-					this.NPCs[n].speeches[s].prerequists.push(pre);
+								"state": npcSource.speeches[s].prerequisites[p].state };
+					this.NPCs[n].speeches[s].prerequisites.push(pre);
 				}
 				/*pre = null;
 				for(id in NPCs)
 					if(this.NPCs[id].name == string)
 					{
 						pre = { npc: id, 
-								state: npcSource.speeches[s].prerequists.state };
+								state: npcSource.speeches[s].prerequisites.state };
 						break;
 					}
 				if(pre)
 				{
-					window.alert("Error! in the scenario file scenario" + scenarioIndex + "NPCs.json, in the prerequists of the speeches, a reference to a npc name is not found!");
+					window.alert("Error! in the scenario file scenario" + scenarioIndex + "NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!");
 					exit(3);
 				}
-				else this.NPCs[n].speeches[s].prerequists.push(pre);*/
+				else this.NPCs[n].speeches[s].prerequisites.push(pre);*/
 			}
 	}
 }
@@ -133,22 +133,22 @@ NPCManager.prototype.retrieveSpeech = function(id)
 
 /**
 Private function
-Check if the speech prerequists have fullfiled. If so, the NPC's speech state will advance to the next one
+Check if the speech prerequisites have fullfiled. If so, the NPC's speech state will advance to the next one
 Also return the current speech state 
 @param {int} id - the id (also the index) of the NPC the player is  talking to
 */
 NPCManager.prototype.updateSpeech = function(id)
 {
 	var state = this.NPCs[id].currentState + 1;		//the potential future state
-	var pre = [];		//buffers the prerequists of the concerned speech state
+	var pre = [];		//buffers the prerequisites of the concerned speech state
 	var targetId;		//the id of the NPC whose state is checked
-	var fullfiled;		//a boolean flage to check if all the update prerequists are fullfiled
+	var fullfiled;		//a boolean flage to check if all the update prerequisites are fullfiled
 	if(state < this.NPCs[id].speeches.length)		//if this is not the last speech
 	{
 		fulfilled = true;
-		//prerequists is always defined, even if not specified in file
-		pre = this.NPCs[id].speeches[state].prerequists;
-		for(p in pre)	//check each prerequists
+		//prerequisites is always defined, even if not specified in file
+		pre = this.NPCs[id].speeches[state].prerequisites;
+		for(p in pre)	//check each prerequisites
 		{
 			targetId = pre[p].npc;
 			//console.log("NPC["+id+"] want NPC ["+targetId+"] have state "+ pre[p].state+" but is"+this.NPCs[targetId].currentState);				///

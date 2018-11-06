@@ -70,23 +70,23 @@ ActManager.prototype.createActs = function(index, role)
 	for(cyb in this.cyber.acts[role])
 		this.createAct(this.cyber.acts[role][cyb], role);
 	
-	//the second round. change the prerequists, needSelfBuffs, needRivalBuffs, noRivalBuffs, selBuffs, rivalBuffs from name strings into ids.
+	//the second round. change the prerequisites, needSelfBuffs, needRivalBuffs, noRivalBuffs, selBuffs, rivalBuffs from name strings into ids.
 	for(a in this.acts[role])
 	{
 		act = this.acts[role][a];	//just to speed up
-		//prerequists
+		//prerequisites
 		var array = [];
-		for(p in act.prerequists)
+		for(p in act.prerequisites)
 		{
-			id = this.name2id(role, act.prerequists[p]);
+			id = this.name2id(role, act.prerequisites[p]);
 			if(id == -1)
 			{				
-				var errorMessage = "Error! The prerequist \"" + act.prerequists[p] + "\" of act \"" + act.name + "\" activated for this scenario (scenario " + index + ") is wrong!";
+				var errorMessage = "Error! The prerequist \"" + act.prerequisites[p] + "\" of act \"" + act.name + "\" activated for this scenario (scenario " + index + ") is wrong!";
 				game.state.start('error', true, false, errorMessage);
 			}
 			array.push(id);
 		}
-		act.prerequists = array;	//name array overwritten by id array
+		act.prerequisites = array;	//name array overwritten by id array
 		
 		this.convertBuff(act.needSelfBuffs);
 		this.convertBuff(act.needRivalBuffs);
@@ -106,7 +106,7 @@ Create a single act. This function provides some checkings and default values
 */
 ActManager.prototype.createAct = function(actSource, role)
 {
-	var name, prerequists =[];
+	var name, prerequisites =[];
 	var	learningCost = 0;
 	var desc, needSelfBuffs = [], needRivalBuffs=[], noSelfBuffs = [], noRivalBuffs = [];
 	var cost, successRate = 1.0;
@@ -122,8 +122,8 @@ ActManager.prototype.createAct = function(actSource, role)
 		return 1;
 	}
 	name = actSource.name;
-	if(actSource.prerequists != undefined)
-		prerequists = actSource.prerequists;
+	if(actSource.prerequisites != undefined)
+		prerequisites = actSource.prerequisites;
 	if(actSource.learningCost != undefined)
 		learningCost = actSource.learningCost;
 	if(actSource.desc != undefined)
@@ -170,7 +170,7 @@ ActManager.prototype.createAct = function(actSource, role)
 	if(actSource.unlocked != undefined)
 		unlocked = actSource.unlocked;
 	//finally create the act
-	var id = this.acts[role].push(new Act(name,prerequists,learningCost,desc,needSelfBuffs,needRivalBuffs,noSelfBuffs,noRivalBuffs,cost,successRate,selfBuffs,rivalBuffs,cleanSelfBuffs,cleanRivalBuffs,buffLength,bonus,spamRequests,modifier,learnt,unlocked));
+	var id = this.acts[role].push(new Act(name,prerequisites,learningCost,desc,needSelfBuffs,needRivalBuffs,noSelfBuffs,noRivalBuffs,cost,successRate,selfBuffs,rivalBuffs,cleanSelfBuffs,cleanRivalBuffs,buffLength,bonus,spamRequests,modifier,learnt,unlocked));
 	return --id;
 };
 /**
@@ -293,7 +293,7 @@ ActManager.prototype.learnAct = function(role, id)
 	
 	var requiredId;
 	var act = this.getAct(role, id);
-	var prerequists = act.prerequists;
+	var prerequisites = act.prerequisites;
 	//check resource
 	if(act.learningCost > this.gameManager.getResource(role))
 	{
@@ -301,14 +301,14 @@ ActManager.prototype.learnAct = function(role, id)
 		window.alert("not enough resource!");
 		return false;
 	}
-	//check prerequists
-	for(p in prerequists)
+	//check prerequisites
+	for(p in prerequisites)
 	{
 		//check if the required act is learnt
-		if(!this.getAct(role, act.prerequists[p]).learnt)
+		if(!this.getAct(role, act.prerequisites[p]).learnt)
 		{
 			game.globals.audioManager.accessDenied();
-			window.alert("prerequist not met: " + this.id2name(role, act.prerequists[p]));
+			window.alert("prerequist not met: " + this.id2name(role, act.prerequisites[p]));
 			return false;
 		}	
 	}

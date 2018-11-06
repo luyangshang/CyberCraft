@@ -49,7 +49,7 @@
 		},
 		{
 			"name":				"Known-plaintext attack",
-			"prerequists":		["Brute-force attack"],
+			"prerequisites":	["Brute-force attack"],
 			"learningCost":		10,
 			"desc":				"With some or all of the plaintext already known, a big amount of possible situations is eliminated. Therefore, the cracking process is greatly boosted.",
 			"needRivalBuffs":	["Encrypt with Enigma"],
@@ -61,7 +61,7 @@
 		},
 		{
 			"name":				"Chosen-plaintext attack",
-			"prerequists":		["Known-plaintext attack"],
+			"prerequisites":	["Known-plaintext attack"],
 			"learningCost":		15,
 			"desc":				"Delibrately enforce some of the plaintexts in favor of the cracking of security key. More effective than Known-plaintext attack",
 			"needRivalBuffs":	["Encrypt with Enigma"],

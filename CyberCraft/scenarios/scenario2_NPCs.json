@@ -31,7 +31,7 @@
 				"speech": "Glad to be your coworker."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Hank",
 					"state": 1}
@@ -58,7 +58,7 @@
 				"speech": "Just as I said, HackIt is a terrific place for the talented, isn't it."
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Hank",
 					"state": 1}
@@ -79,7 +79,7 @@
 				"speech": "Your last intrusion was awesome!"
 			},
 			{
-				"prerequists":
+				"prerequisites":
 				[
 					{"npc": "Hank",
 					"state": 1}
