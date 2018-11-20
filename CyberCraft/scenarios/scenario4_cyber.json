@@ -6,8 +6,9 @@
 "constantIncome":			[15,0],
 "maxResource":				200,
 "maxRounds":				16,
-"assets":					170,
+"assets":					200,
 "defensive":				false,
+"doublePlayer":				true,
 "characterName":
 [
 	"Christopher",
@@ -36,19 +37,19 @@
 		},
 		{
 			"name":				"ARP cache poisoning",
-			"desc":				"Send fake arp response to fool the victim. Can be used to perform MITM attack. Defended by ARP firewall.",
+			"desc":				"Send fake ARP response to fool the victim. Can be used to perform MITM attack. Defended by ARP firewall.",
 			"needSelfBuffs":	["Shared channel"],
 			"noRivalBuffs":		["ARP firewall", "MITM"],
 			"cost":				5,
 			"rivalBuffs":		["MITM"],
 			"buffLength":		4,
-			"bonus":			10
+			"bonus":			15
 		},
 		{
 			"name":				"Rogue access point",
 			"desc":				"Set up a fake access point and lure the vicitms to connect. The first step towards MITM attack.",
-			"needRivalBuffs":	["Shared channel", "Wifi channel", "Offline"],
-			"noRivalBuffs":		["Tip:cautious for free wifi"],
+			"needRivalBuffs":	["Shared channel", "Wi-Fi channel", "Offline"],
+			"noRivalBuffs":		["Tip:cautious for free Wi-Fi"],
 			"cost":				20,
 			"successRate":		0.95,
 			"rivalBuffs":		["Connected to rogue AP"],
@@ -64,7 +65,7 @@
 			"successRate":		0.9,
 			"rivalBuffs":		["DHCP hijacked", "MITM"],
 			"buffLength":		4,
-			"bonus":			10
+			"bonus":			15
 		},
 		{
 			"name":				"Rogue DNS server",
@@ -88,7 +89,7 @@
 		},
 		{
 			"name":				"XSS",
-			"desc":				"One type of session hijacking or cookie hijacking. Run unexpected javascript code to send cookies to the attacker's server. Penetrate same-origin policy",
+			"desc":				"Finishing move. \nOne type of session hijacking or cookie hijacking. Run unexpected javascript code to send cookies to the attacker's server. Penetrate same-origin policy",
 			"needRivalBuffs":	["DNS hijacked"],
 			"noRivalBuffs":		["Cookie bind to IP", "HTTP-only cookie", "Secure cookie", "Credential compromised"],
 			"cost":				10,
@@ -98,7 +99,7 @@
 		},
 		{
 			"name":				"CSRF",
-			"desc":				"An attack to forge client request without the consents of the client. Can be thwarted by Tip:open no unauthorized link.",
+			"desc":				"Finishing move. \nAn attack to forge client request without the consents of the client. Can be thwarted by Tip:open no unauthorized link.",
 			"noRivalBuffs":		["Tip:open no unauthorized link", "Credential compromised"],
 			"cost":				20,
 			"successRate":		0.85,
@@ -119,16 +120,15 @@
 		{
 			"name":				"ARP firewall",
 			"desc":				"an firewall to fight against ARP cache poisioning.",
-			"noSelfBuffs":		["ARP firewall"],
 			"cost":				15,
 			"selfBuffs":		["ARP firewall"],
 			"buffLength":		6
 		},
 		{
-			"name":				"Tip:cautious for free wifi",
+			"name":				"Tip:cautious for free Wi-Fi",
 			"desc":				"A principle to fight Rogue access point.",
 			"cost":				20,
-			"selfBuffs":		["Tip:cautious for free wifi"],
+			"selfBuffs":		["Tip:cautious for free Wi-Fi"],
 			"buffLength":		4
 		},
 		{
@@ -141,7 +141,6 @@
 		{
 			"name":				"Manual DNS setting",
 			"desc":				"To manually configure DNS mappings on each machines in the network. Provide some protection against Rogue DNS server. IP-based technique.",
-			"noSelfBuffs":		["Manual DNS setting"],
 			"cost":				25,
 			"selfBuffs":		["Manual DNS setting"],
 			"buffLength":		6
@@ -149,7 +148,6 @@
 		{
 			"name":				"Cookie bind to IP",
 			"desc":				"Bind the cookies to the IP address, so that attackers who have stolen other's cookies can not easily use the cookie for impersonation. IP-based technique.",
-			"noSelfBuffs":		["Cookie bind to IP"],
 			"cost":				15,
 			"selfBuffs":		["Cookie bind to IP"],
 			"buffLength":		6
@@ -157,7 +155,6 @@
 		{
 			"name":				"HTTP-only cookie",
 			"desc":				"Preventing the cookie to be sent by client APIs. Counters XSS.",
-			"noSelfBuffs":		["HTTP-only cookie"],
 			"cost":				15,
 			"selfBuffs":		["HTTP-only cookie"],
 			"buffLength":		6
@@ -165,15 +162,13 @@
 		{
 			"name":				"Secure cookie",
 			"desc":				"Enforces the cookie to be sent only over secure connection. Counters XSS.",
-			"noSelfBuffs":		["Secure cookie"],
 			"cost":				15,
 			"selfBuffs":		["Secure cookie"],
 			"buffLength":		6
 		},
 		{
 			"name":				"DNSSEC",
-			"desc":				"The secure version(using certificates) of DNS. Counters attacks on DNS.",
-			"noSelfBuffs":		["DNSSEC"],
+			"desc":				"The secure version(using certificates) of DNS. It counters all attacks on DNS.",
 			"cost":				40,
 			"selfBuffs":		["DNSSEC"],
 			"cleanSelfBuffs":	["Manual DNS setting"],
@@ -184,7 +179,7 @@
 ],
 "commonBuffs":
 [
-	"503 Server Unavailable", "Shared channel", "Wifi channel", "MITM", "IP spoofing", "Offline", "Shadow server", "Credential compromised"
+	"503 Server Unavailable", "Shared channel", "Wi-Fi channel", "MITM", "IP spoofing", "Offline", "Shadow server", "Credential compromised"
 ],
 "buffs":
 [
@@ -222,7 +217,7 @@
 		"desc":		"By manually setting the IP address of the DNS server, the clients will turn blind eyes to the fake DNS replies from rogue DNS servers. However, IP spoofing is possible to fool them."
 	},
 	{
-		"name":	"Tip:cautious for free wifi",
+		"name":	"Tip:cautious for free Wi-Fi",
 		"desc":	"With the client's awareness, rogue access point will not be effective."
 	},
 	{
@@ -251,7 +246,7 @@
 			"length":	-1
 		},
 		{
-			"name":		"Wifi channel",
+			"name":		"Wi-Fi channel",
 			"length":	-1
 		}
 	],
@@ -261,7 +256,7 @@
 			"length":	-1
 		},
 		{
-			"name":		"Wifi channel",
+			"name":		"Wi-Fi channel",
 			"length":	-1
 		},
 		{
@@ -277,7 +272,7 @@
 		"chance":	0.2
 	},
 	{
-		"pattern":	["Tip:cautious for free wifi"],
+		"pattern":	["Tip:cautious for free Wi-Fi"],
 		"chance":	0.2
 	},
 	{

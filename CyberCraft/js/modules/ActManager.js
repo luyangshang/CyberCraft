@@ -4,17 +4,20 @@ var LogEntry = require("./LogEntry");
 @classdesc A class storing the acts activated in the scenario. It also managing the learning and the applying of the acts.
 N.B. All the relationship with other acts/buffs will use id, rather than the original name string.
 @param {int} index - the scenario number
+@param {boolean} doublePlayer - true: double player mode; false: single player mode
 @param {GameManager} gameManager - the reference to the character manager
 @param {BuffManager} buffManager - the reference to the buff manager
 @param {Object} logs - the reference to the attack/defense log. Actions will be applied by this manager, and logged into logs
 @param {int} playerRole - the role of the player. 0: intruder, 1: defender. This is used to see if the act is performed by the player or the AI, to avoid displaying warning message for the AI.
 @constructor
 */
-function ActManager(index, buffManager, effectManager, logs, playerRole)
+function ActManager(index, doublePlayer, buffManager, effectManager, messager, logs, playerRole)
 {
 	this.index = index;
+	this.doublePlayer = doublePlayer;
 	this.buffManager = buffManager;
 	this.effectManager = effectManager;
+	this.messager = messager;
 	this.logs = logs;
 	this.playerRole = playerRole;
 		
@@ -118,8 +121,8 @@ ActManager.prototype.createAct = function(actSource, role)
 	//set the act properties
 	if(actSource.name == undefined)
 	{
-		window.alert("Error! An act name is missing\n Recheck scenarioX_cyber.json");
-		return 1;
+		var errorMessage = "Error! An act name is missing\n Recheck scenarioX_cyber.json";
+		game.state.start('error', true, false, errorMessage);
 	}
 	name = actSource.name;
 	if(actSource.prerequisites != undefined)
@@ -138,8 +141,8 @@ ActManager.prototype.createAct = function(actSource, role)
 		noRivalBuffs = actSource.noRivalBuffs;
 	if(actSource.cost == undefined)
 	{
-		window.alert("Error! The act \""+name+"\" is missing cost\n Recheck scenarioX_cyber.json or common_acts.json");
-		return 1;
+		var errorMessage = "Error! The act \""+name+"\" misses cost\n Recheck scenarioX_cyber.json or common_acts.json";
+		game.state.start('error', true, false, errorMessage);
 	}
 	cost = actSource.cost;
 	if(actSource.successRate != undefined)
@@ -154,11 +157,6 @@ ActManager.prototype.createAct = function(actSource, role)
 		cleanRivalBuffs = actSource.cleanRivalBuffs;
 	if(actSource.buffLength != undefined && actSource.buffLength > 0)
 		buffLength = actSource.buffLength;
-	/*else if((actSource.selfBuffs!= undefined) || (actSource.rivalBuffs!= undefined))
-	{
-		window.alert("Error! The act \""+name+"\" is missing buff length\n Recheck scenarioX_cyber.json or common_acts.json");
-		return 1;
-	}*/
 	if(actSource.bonus != undefined && actSource.bonus > 0)
 		bonus = actSource.bonus;
 	if(actSource.spamRequests != undefined)
@@ -288,7 +286,7 @@ Checking managed here
 ActManager.prototype.learnAct = function(role, id)
 {
 	//catch all attempts to learn an act when the game has already ended
-	if(this.gameManager.gameover)
+	if(this.gameManager.disableControl)
 		return;
 	
 	var requiredId;
@@ -298,7 +296,7 @@ ActManager.prototype.learnAct = function(role, id)
 	if(act.learningCost > this.gameManager.getResource(role))
 	{
 		game.globals.audioManager.accessDenied();
-		window.alert("not enough resource!");
+		this.messager.createMessage("Not enough resource!");
 		return false;
 	}
 	//check prerequisites
@@ -308,7 +306,7 @@ ActManager.prototype.learnAct = function(role, id)
 		if(!this.getAct(role, act.prerequisites[p]).learnt)
 		{
 			game.globals.audioManager.accessDenied();
-			window.alert("prerequist not met: " + this.id2name(role, act.prerequisites[p]));
+			this.messager.createMessage("Prerequistes not met:\n" + this.id2name(role, act.prerequisites[p]));
 			return false;
 		}	
 	}
@@ -329,7 +327,7 @@ Checking managed here
 ActManager.prototype.applyAct = function(role, id, round)
 {
 	//catch all attempts to apply an act when the game has already ended
-	if(this.gameManager.gameover)
+	if(this.gameManager.disableControl)
 		return;
 	
 	var act = this.getAct(role, id);
@@ -338,38 +336,42 @@ ActManager.prototype.applyAct = function(role, id, round)
 	//check learnt
 	if(!act.learnt)
 	{
-		window.alert("You should learn it first!");
+		this.messager.createMessage("You should learn it first!");
 		return 0;
 	}
 	if(act.cost == 0)
 	{
-		window.alert("it's not supposed to be used");
+		this.messager.createMessage("It's not supposed to be used");
 		return 0;
 	}
 	//check resource
 	if(act.cost > this.gameManager.getResource(role))
 	{
 		game.globals.audioManager.accessDenied();
-		window.alert("not enough resource!");
+		this.messager.createMessage("Not enough resource!");
 		return 0;
 	}
 	//check self buff
 	for(b in act.needSelfBuffs)
 		if(!this.buffManager.hasBuff(act.needSelfBuffs[b], role))
-			if(role == this.playerRole)
+		{
+			if(this.doublePlayer || role == this.playerRole)
 			{
-				window.alert("Cannot act, self buff required: " + this.buffManager.id2name(act.needSelfBuffs[b]));
+				this.messager.createMessage("Cannot act. Self buff required: \n" + this.buffManager.id2name(act.needSelfBuffs[b]));
 				game.globals.audioManager.accessDenied();
-				return 0;
 			}
+			return 0;
+		}
 	for(b in act.noSelfBuffs)
 		if(this.buffManager.hasBuff(act.noSelfBuffs[b], role))
-			if(role == this.playerRole)
+		{
+			if(this.doublePlayer || role == this.playerRole)
 			{
 				game.globals.audioManager.accessDenied();
-				window.alert("Cannot act, hampered by self buff: " + this.buffManager.id2name(act.noSelfBuffs[b]));
-				return 0;
+				this.messager.createMessage("Cannot act. Hampered by self buff: \n" + this.buffManager.id2name(act.noSelfBuffs[b]));
 			}
+			return 0;
+		}
 	//animation
 	this.effectManager.createWord(act.name, role, 4000);
 			
@@ -413,9 +415,12 @@ ActManager.prototype.applyAct = function(role, id, round)
 		this.effectManager.createActEffect(0);
 	else if(!act.rivalBuffs.length && !act.cleanRivalBuffs.length)
 			this.effectManager.createActEffect(1);	//intruder successful strengthen animation
-		else if(!act.bonus)
-				this.effectManager.createActEffect(4);	//intruder  break defence animation
-			else this.effectManager.createActEffect(5, act.bonus);	//intruder compromise assets animation
+		else if(act.bonus)
+				this.effectManager.createActEffect(5, act.bonus);	//intruder compromise assets animation
+			else if(act.rivalBuffs && act.rivalBuffs[0] == this.buffManager.name2id("Denial of service attacked"))
+					this.effectManager.createActEffect(5, 0);	//dos category use compromise assets animation
+				else this.effectManager.createActEffect(4);	//intruder  break defence animation
+			
 //act successful
 	//enforce buffs
 	for(b in act.selfBuffs)
@@ -456,7 +461,7 @@ ActManager.prototype.applyAct = function(role, id, round)
 			//format: <role>:<act name>:<property>:<operant>:<amount>
 			if(/^[01]:[^:]*:[^:]*:["+""-""*""/""="]:[0-9]+\.?[0-9]*$/.test(modifierArray[m]) == false)
 			{
-				window.alert("modifier format wrong!");
+				this.messager.createMessage("modifier format wrong!");
 				break;
 			}
 			var args = modifierArray[m].split(":");
@@ -464,13 +469,13 @@ ActManager.prototype.applyAct = function(role, id, round)
 			id = this.name2id(role2, args[1]);
 			if(id == -1)		//act name
 			{
-				window.alert("modifier specifies wrong act name!");
+				this.messager.createMessage("modifier specifies wrong act name!");
 				break;
 			}
 			var property = args[2];
 			if(this.acts[role2][id][property] == undefined)	//property
 			{
-				window.alert("modifier specifies wrong property!");
+				this.messager.createMessage("modifier specifies wrong property!");
 				break;
 			}
 			switch(args[3])

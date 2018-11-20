@@ -1,5 +1,15 @@
 var MultimediaText = require("../modules/MultimediaText");
 
+/** 
+@classdesc A class managing the in-game scripts used to dynamically show dialogues, unlock acts, or lock on end turn button before player has done an action.
+The AI however, is managed by AIManager.
+@param {int} index - the scenario number
+@param {cyberspace} cyberspace - the reference to cyberspace state
+@param {ActManager} actManager - the reference to actManager
+@param {AiManager} aiManager - the reference to aiManager. Used only to invoke the attempt to unlock act pattern for the AiManager
+@param {Phaser.Group} dialogueGroup - the group to create the dialogues in
+@constructor
+*/
 function ScriptManager(index, cyberspace, actManager, aiManager, dialogueGroup)
 {
 	this.index = index;
@@ -22,7 +32,10 @@ function ScriptManager(index, cyberspace, actManager, aiManager, dialogueGroup)
 			//wrong round number
 			if(scr.round == NaN || scr.round <= 0)
 			{
-				window.alert("Warning! The script for round \""+scr.round+"\" is not understandable.");
+				if(index<0)
+					var errorMessage = "Error! Inside tutorial"+(0-parseInt(index))+"_cyber.json, under the element of \"script\", property \"round\" takes a non-positive value: \""+scr.round+"\".";
+				else var errorMessage = "Error! Inside scenario"+index+"_cyber.json, under the element of \"script\", property \"round\" takes a non-positive value: \""+scr.round+"\".";
+				game.state.start('error', true, false, errorMessage);
 			}
 			var object = new Object();
 			if(scr.dialogues)
@@ -33,7 +46,7 @@ function ScriptManager(index, cyberspace, actManager, aiManager, dialogueGroup)
 				object.shouldApply = scr.shouldApply;
 			this.scripts[scr.round] = object;
 		}
-		this.multimedia = new MultimediaText(450, 420, 1, this.dismissDialogue, this, dialogueGroup);
+		this.multimedia = new MultimediaText(450, 420, 1, dialogueGroup, this.dismissDialogue, this);
 	}
 }
 
@@ -99,8 +112,9 @@ ScriptManager.prototype.checkScript = function(round)
 				}
 			//update display
 			this.cyberspace.updateActs(0);
-			//try to activate some action patterns for the AI
-			this.aiManager.activatePatterns();
+			if(this.aiManager)
+				//try to activate some action patterns for the AI
+				this.aiManager.activatePatterns();
 		}
 	}
 };

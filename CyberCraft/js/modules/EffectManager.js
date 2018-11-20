@@ -7,7 +7,6 @@
 @param {int} rivalY - the y coordinates of the sprite of the rival
 @param {int} logX - the x coordinates of the the action log button
 @param {int} logY - the y coordinates of the the action log button
-@param 
 */
 function EffectManager(fatherGroup, X, Y, logX, logY, roundX, roundY)
 {
@@ -147,7 +146,8 @@ EffectManager.prototype.createActEffect = function(type)
 				movingTween = this.bullet();
 				movingTween.onComplete.add(this.explosion, this, 0);
 				var damage = arguments[1];
-				movingTween.onComplete.add(this.damaged, this, 0, damage);
+				if(damage)
+					movingTween.onComplete.add(this.damaged, this, 0, damage);
 			break;
 	}
 }
@@ -241,7 +241,7 @@ EffectManager.prototype.damaged = function(sprite, pointer, damage)
 {
 	var damageText = "-" + damage;
 	var damageSprite = game.add.text(this.X[1], this.Y[1], damageText, this.styleDamage, this.fatherGroup);
-	var damageTween = game.add.tween(damageSprite).to({x: "-20", y: "-60"}, 2500, "Elastic.easeOut", true, 0, 0, false);
+	var damageTween = game.add.tween(damageSprite).to({x: "-20", y: "-50"}, 2500, "Elastic.easeOut", true, 0, 0, false);
 	damageTween.onComplete.add(function(){damageSprite.destroy();}, this, 0);
 };
 

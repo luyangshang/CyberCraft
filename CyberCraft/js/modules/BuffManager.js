@@ -4,9 +4,10 @@ The real functionalities of the buffs are managed by acts manager.
 @param {int} scenarioIndex - the scenario number
 @constructor - it also sets the initial buffs
 */
-function BuffManager(scenarioIndex)
+function BuffManager(scenarioIndex, messager)
 {
 	this.scenarioIndex = scenarioIndex;
+	this.messager = messager;
 	if(scenarioIndex < 0)	//tutorials
 		this.cyber = game.globals.tutorialCybers[0-scenarioIndex];
 	else //scenarios
@@ -91,10 +92,13 @@ BuffManager.prototype.createStatic = function()
 			}
 		}
 		if(!found)
-		{	//warn for description, but not for other properties
-			window.alert("Warning! The buff \""+name+"\" activated for this scenariol (scenario " + this.scenarioIndex + ") misses description"
+		{	
+			var errorMessage = "Error! The buff \""+name+"\" selected for this scenario (scenario " + this.scenarioIndex + ") is not defined!";
+			game.state.start('error', true, false, errorMessage);
+			/*//warn for description, but not for other properties
+			window.alert("Warning! The buff \""+name+"\" activated for this scenario (scenario " + this.scenarioIndex + ") misses description"
 			);
-			this.buffDesc[id] = "";
+			this.buffDesc[id] = "";*/
 		}
 	}
 	//buffs defined in the cyber file
@@ -108,7 +112,7 @@ BuffManager.prototype.createStatic = function()
 			this.buffDesc[id] = this.cyber.buffs[cyb].desc;
 		else
 		{	//warn for description, but not for other properties
-			window.alert("Warning! The buff \""+name+"\" activated for this scenariol (scenario" + this.scenarioIndex + ") misses description"
+			this.messager.createMessage("Warning! The buff \""+name+"\" activated for this scenario (scenario" + this.scenarioIndex + ") misses description"
 			);
 			this.buffDesc[id] = "";
 		}
@@ -140,14 +144,14 @@ BuffManager.prototype.createInitialBuffs = function(initialBuffs, role)
 	for(ib in initialBuffs)
 	{
 		buffId = this.name2id(initialBuffs[ib].name);
-		if(buffId == undefined)
+		if(buffId == -1)
 		{
-			window.alert("Warning! An initial buff activate for this scenario is not defined in scenario" + this.scenarioIndex + "_cyber.json or common_acts.json! This buff is not initially enforced!\n Recheck scenario"+ this.scenarioIndex + "_cyber.json");
+			this.messager.createMessage("Warning! An initial buff activate for this scenario is not defined in scenario" + this.scenarioIndex + "_cyber.json or common_acts.json! This buff is not initially enforced!\n Recheck scenario"+ this.scenarioIndex + "_cyber.json");
 			continue;
 		}
 		if(initialBuffs[ib].length == 0 || initialBuffs[ib].length < -1)
 		{
-			window.alert("Warning! The initial buff "+ this.initialBuff.name + " has wrong length! \n this buff is not intially enforced!\n Recheck scenario" + this.scenarioIndex + "_cyber.json, choosing -1 for inifite length, and a positive integer for finite length");
+			this.messager.createMessage("Warning! The initial buff "+ this.initialBuff.name + " has wrong length! \n this buff is not intially enforced!\n Recheck scenario" + this.scenarioIndex + "_cyber.json, choosing -1 for inifite length, and a positive integer for finite length");
 			continue;
 		}
 		//give the initial buff
@@ -164,10 +168,12 @@ Add new buff if not yet exisit (0 length); overwrite buff length if the new buff
 */
 BuffManager.prototype.addBuff = function(buffId, length, role)
 {
+	//do nothing if the old buff have an infinite length
 	if(this.buffLengths[role][buffId] == -1)
 			return;
+	//do nothing if the old buff have an higher remaining length
 	if(this.buffLengths[role][buffId] < length || length == -1)
-			this.buffLengths[role][buffId] = length;
+		this.buffLengths[role][buffId] = length;
 };
 
 /**
@@ -250,6 +256,16 @@ BuffManager.prototype.decayBuff = function()
 				this.buffSpam[i] = 0;
 		}
 	}
+};
+
+/**
+Return the extra server capacity granted from the buff
+@param {int} id - the buff id
+@returns - the extra capacity brought by this buff, independent of whether this buff exist
+*/
+BuffManager.prototype.getCapacity = function(id)
+{
+	return this.buffCapacity[id];
 };
 
 /**

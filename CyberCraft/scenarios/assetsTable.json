@@ -164,10 +164,6 @@
 	},
 	
 	{
-		"key":	"actCapture",
-		"url":	"assets/images/actCapture.png"
-	},
-	{
 		"key":	"cyberspaceWithDescription",
 		"url":	"assets/images/cyberspace_with_description.png"
 	},
@@ -347,6 +343,10 @@
 	{
 		"key":	"zeroDayNotes",
 		"url":	"assets/images/notes/vulnerabilityLifeCycle.png"
+	},
+	{
+		"key":	"hackerWithTitleNotes",
+		"url":	"assets/images/notes/hackerWithTitle.png"
 	}
 ],
 "spritesheets":
@@ -461,8 +461,8 @@
 		"frameHeight":	82
 	},
 	{
-		"key":	"notesButton",
-		"url":	"assets/images/notesButton.png",
+		"key":	"doubleplayerButton",
+		"url":	"assets/images/doubleplayerButton.png",
 		"frameWidth":	255,
 		"frameHeight":	82
 	},
@@ -507,6 +507,12 @@
 		"url":	"assets/images/noButton.png",
 		"frameWidth":	255,
 		"frameHeight":	82
+	},
+	{
+		"key":	"gotItButton",
+		"url":	"assets/images/gotItButton.png",
+		"frameWidth":	198,
+		"frameHeight":	78
 	},
 	{
 		"key":	"endTurnButton",

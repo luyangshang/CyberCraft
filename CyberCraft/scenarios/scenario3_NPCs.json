@@ -26,13 +26,13 @@
 				"speech": "Multiple Factor of Authentication is an superb technique for the defence. ^It does not fight one form of attack only, but all of them. The intruder may break one factor of authenticate, but they will cry to see another one."
 			},
 			{
-				"speech": "Our income here is quite limited. You should find a way to get more resource. ^I suggests you to use something like Password wallet, in order to facilitate the login in process. Maybe the client will be happy and grant you a little gratuity."
+				"speech": "Our income here is quite limited. You should find a way to get more resource. ^I suggests you to use something like Password wallet, in order to facilitate the login in process. Maybe the client will be happy for it, and grant you a little gratuity."
 			},
 			{
 				"speech": "One-time-pad is fabulous and uncrackable! It just costs much. You can use it at the last rounds so that you can rest easy."
 			},
 			{
-				"speech": "Some security genius has fallen and has joined the terrorists. They might discover some new flaws in the system, and perform the Zero-day attack. ^In face of that, I can only say, may god bless you."
+				"speech": "The terrorists want not just a ordinary account to access to our plant. They want the administrator role! ^That means, when credential is divulged to them, they could perform privilege escalation, which jeopardizes us even more."
 			}
 		]
 	},

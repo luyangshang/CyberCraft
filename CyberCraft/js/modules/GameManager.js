@@ -2,11 +2,12 @@
 @classdesc A class managing characters and other game related data
 It takes the role of Model and Controller in the MVC framework. cyberspace takes the role of View. 
 @param {int} index - positive: the index of the scenarioCybers, negative: the inverse of the tutorialCybers
+@param {boolean} doublePlayer - true: double player mode(aiManager actually not used); false: single player mode(aiManager used)
 @param {BuffManager} buffManager - the reference to the buffManager
 @param {cyberspace} cyberspace - the cyberspace state
 @constructor
 */
-function GameManager(index, buffManager, cyberspace, aiManager, scriptManager, effectManager, logs)
+function GameManager(index, doublePlayer, buffManager, cyberspace, aiManager, scriptManager, effectManager, messager, logs)
 {
 	//constants
 	this.servingBonus = 10;
@@ -15,17 +16,20 @@ function GameManager(index, buffManager, cyberspace, aiManager, scriptManager, e
 	this.unservedPenalty = 0.5;
 	
 	this.index = index;
+	this.doublePlayer = doublePlayer;
 	this.buffManager = buffManager;
 	this.cyberspace = cyberspace;
 	this.aiManager = aiManager;
 	this.scriptManager = scriptManager;
 	this.effectManager = effectManager;
+	this.messager = messager;
 	this.logs = logs;
 	
 	if(index < 0)
 		var cyber = game.globals.tutorialCybers[0-parseInt(index)];
 	else var cyber = game.globals.scenarioCybers[index];
 	
+	//in single player mode, player's role; in double player mode, 1st player's role
 	//0 for intruder, 1 for defender
 	if(cyber.defensive)
 		this.playerRole = 1;
@@ -43,10 +47,11 @@ function GameManager(index, buffManager, cyberspace, aiManager, scriptManager, e
 	this.maxRounds = cyber.maxRounds;
 	this.assets = cyber.assets;
 	this.offensive = cyber.offensive;	
-	/*a flag that is set to true only at the last seconds 
+	/*a flag that is set to true only for disable the controls of players or AI (learning, applying of acts and ending of turn). 
+	This happens when the character is offline (1.5s before automatically end turn), or when the game has already ended (2.5s for ending animation)
 	between the moment one character wins and
 	the actual moment when the game state switches*/
-	this.gameover = false;
+	this.disableControl = false;
 }
 /**
 private function
@@ -112,8 +117,9 @@ GameManager.prototype.loseAssets = function(amount)
 	//deal with gameover
 	if(this.assets <= 0)
 	{	//intruder wins
-		this.cyberspace.changeControl(false);
-		this.gameover = true;
+		this.disableControl = true;
+		if(this.aiManager)
+			this.aiManager.stopAct();	//stop all pending AI operations
 		//last animation of "VICTORY" or "DEFEAT"
 		if(this.playerRole == 0)
 			//call this.effectManager.lastAnimation(true) after 550ms
@@ -136,7 +142,6 @@ GameManager.prototype.roundInit = function()
 	this.cyberspace.updateRound();
 	this.scriptManager.checkScript(this.currentRound);
 	
-	///TODO: animation?
 	//constant income
 	if(this.currentRound%2 == 0)
 	{	//intruder's round: intruder gets resource
@@ -166,54 +171,64 @@ GameManager.prototype.roundInit = function()
 		{
 			//served legitimated requests
 			var servedLegitimated = Math.floor(legitimateRequests*servingRatio);
-			
+			var unservedLegitimated = legitimateRequests-servedLegitimated;
 			//animation: one happy face for each served client
 			this.effectManager.faces(true, servedLegitimated);
 			//after 0.5 seconds, animation: one unhappy face for each unserved client
-			setTimeout(function(fun, context, param1, param2){fun.call(context, param1, param2);}, 500, this.effectManager.faces, this.effectManager, false, legitimateRequests-servedLegitimated);
+			setTimeout(function(fun, context, param1, param2){fun.call(context, param1, param2);}, 500, this.effectManager.faces, this.effectManager, false, unservedLegitimated);
 			
-			console.log("The server failed to serve "+(legitimateRequests-servedLegitimated)+" legitimated requests");
+			console.log("The server failed to serve "+(unservedLegitimated)+" legitimated requests");
 			//income = bonus - penalty
-			var serverIncome = servedLegitimated * this.servingBonus - (legitimateRequests-servedLegitimated) * this.servingBonus * this.unservedPenalty;
+			var serverIncome = servedLegitimated * this.servingBonus -unservedLegitimated * this.servingBonus * this.unservedPenalty;
 			if(serverIncome > 0)
 				this.obtainResource(1, serverIncome);
-			else this.obtainResource(1, 0-serverIncome);
+			else this.obtainResource(1, serverIncome);
 			console.log("Server net income is: "+serverIncome);
 			//a buff just to warn to the defender
 			var id = this.buffManager.name2id("503 Server Unavailable");
 			if(id == -1)
 			{
-				window.alert("Error! the buff \"503 Server Unavailable\" should always be activated!\n recheck scenarioX_cyber.json");
+				var errorMessage = "Error! the buff \"503 Server Unavailable\" should always be activated!\n recheck scenarioX_cyber.json!";
+				game.state.start('error', true, false, errorMessage);
 			}
-			else this.buffManager.addBuff(id, 1, 1);
-			///unhappy-face animation?
+			else	//enforce the buff "503 Server Unavailable"
+				this.buffManager.addBuff(id, 1, 1);
 		}
 		var upkeep = this.buffManager.totalUpkeep();
 		if(upkeep != 0)
 			this.consumeResource(1, upkeep);
 	}
 	
-	//deal with control
-	if(this.currentRound%2 == this.playerRole)
-	{	//player's role
-		//enforce end turn is offline
-		if(this.buffManager.offline(this.playerRole))
-			//calling setTimeout will lose all context. code like this will guarantee context
-			setTimeout(function(fun, context){fun.call(context);}, 2501, this.roundFinal, this);
-		else this.cyberspace.changeControl(true);
-	}
-	else
+	//show the list of acts for the current controller
+	this.cyberspace.updateActs(0);
+	
+	//offline management and controller management
+	if(!this.doublePlayer && this.currentRound%2 != this.playerRole)
 	{	//ai takes control
-		//enforce end turn is offline
+		//enforce end turn if offline
 		if(this.buffManager.offline(1-parseInt(this.playerRole)))
 		{
 			//calling setTimeout will lose all context. code like this will guarantee context
 			setTimeout(function(fun, context){fun.call(context);}, 1500, this.roundFinal, this);
 			return;
 		}
-		this.cyberspace.changeControl(false);
+		//not offline. activate AI
 		this.aiManager.control(this, this.currentRound);
-		//cannot end turn here. AI is gradually applying acts
+		/*shouldn't end turn here. AI is gradually applying acts.
+		AI will end turn itself when all acts are applied*/
+	}
+	else
+	{	//player takes control
+		//enforce end turn if offline
+		if(this.buffManager.offline(this.currentRound%2))
+		{
+			//no control when offline, including ending turn
+			this.disableControl = true;	
+			/*calling setTimeout will lose all context. code like this will guarantee the context
+			It's non-delayed equivalence: "this.disableControl=false; this.roundFinal();"	*/
+			setTimeout(function(fun, context, value){context.disableControl = value; fun.call(context);}, 1501, this.roundFinal, this, false);
+		}
+		else this.disableControl = false;
 	}
 };
 
@@ -224,16 +239,17 @@ Invokes on roundInit for next round
 GameManager.prototype.roundFinal = function()
 {
 	//catch all attempts to end the turn when the game has already ended.
-	if(this.gameover)
+	if(this.disableControl)
 		return;
 	
-	//check if a script prevents the turn ends (forces the player to do apply an act)
+	/*check if a script prevents the turn ends (forces the player to do apply an act). 
+	This check is done to the first player only. In fact, no such script is expected for double player mode.*/
 	if(this.currentRound%2 == this.playerRole)
 	{
 		var missingAct = this.notApplied(this.currentRound);
 		if(missingAct)
 		{
-			window.alert("You cannot end the turn. You should apply \""+missingAct+"\" !");
+			this.messager.createMessage("You cannot end the turn. You should apply \""+missingAct+"\" !");
 			return;	//nullify the end turn attempt
 		}
 	}
@@ -242,9 +258,8 @@ GameManager.prototype.roundFinal = function()
 	this.buffManager.decayBuff();
 	//check game over
 	if(this.currentRound == this.maxRounds)
-	{	//outlast.defender wins
-		this.cyberspace.changeControl(false);
-		this.gameover = true;
+	{	//outlast. defender wins
+		this.disableControl = true;
 		//last animation of "VICTORY" or "DEFEAT"
 		if(this.playerRole == 1)
 			//call this.effectManager.lastAnimation(true) after 550ms

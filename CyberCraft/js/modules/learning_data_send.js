@@ -1,11 +1,11 @@
 /* global alertify */
-
+var Messager = require("../modules/Messager");
 /**
  * This module handles the CORS request management to send learning data about player's performance to the
  * data gathering server.
  * @type {{createCORSRequest: module.exports.createCORSRequest, getTitle: module.exports.getTitle, makeCorsRequest: module.exports.makeCorsRequest}}
  */
-module.exports = {
+module.exports = {	
     /**
      * Create the XHR object and sets its "Content-Type" and "Content-Length" headers to make it
      * compatible with the CORS protocol.
@@ -20,13 +20,13 @@ module.exports = {
             // XHR for Chrome/Firefox/Opera/Safari.
             xhr.open(method, url, true);
             xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-            xhr.setRequestHeader("Content-length", datas.length);
+            //xhr.setRequestHeader("Content-length", datas.length);
         } else if (typeof XDomainRequest !== "undefined") {
             // XDomainRequest for IE.
             xhr = new XDomainRequest();
             xhr.open(method, url);
             xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-            xhr.setRequestHeader("Content-length", datas.length);
+			//xhr.setRequestHeader("Content-length", datas.length);
         } else {
             // CORS not supported.
             xhr = null;
@@ -57,7 +57,7 @@ module.exports = {
         var xhr = this.createCORSRequest('POST', url, datas);
         //Checks for CORS compatibility and throws an alert otherwise
         if (!xhr) {
-            alertify.alert('CORS not supported');
+            game.globals.messager.createMessage('CORS not supported');
             return;
         }
 
@@ -65,15 +65,14 @@ module.exports = {
         xhr.onreadystatechange = function() {
             if(xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                alertify.alert(response.message);
-                window.alert("Link to the second survey: https://goo.gl/FO94LC  (Save it with Ctrl+C and paste it in the address bar with Ctrl+V)");
+                game.globals.messager.createMessage(response.message);
+                //game.globals.messager.createMessage("Link to the second survey: https://goo.gl/FO94LC  (Save it with Ctrl+C and paste it in the address bar with Ctrl+V)");
             }
         };
 
         //Sets the callback to execute if the request fails
-        xhr.onerror = function() {
-            alertify.alert('Error while sending data! Please resend them using the button in the game menu.');
-        };
+        xhr.onerror = function(){game.globals.messager.createMessage('Error while sending data! Maybe resend another time using the button in the game menu.');};
+		
 
         //Actually sends the request
         xhr.send(datas);

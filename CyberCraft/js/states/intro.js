@@ -6,16 +6,15 @@ this state has text with typing like animation or image-text-mixed page
 @param {int} type - 0: intro, 1: outro, 2: credits
 @param {int} index - (optional) for intro and outro, the index of the scenario
 @param {boolean} win - (for outro only) if the player wins
-@param {Object} logs - (for outro only)an array of LogEntry, which record the offensive or defensive actions and their consequences in the last battle
-@param {int} role - (for outro only)the player's role in the battle. 0 for intruder, 1 for defender
-@param {int} endingRound - (for outro only) at which round the game finishes. useful for calculating the score when the intruder wins
-@param {int} assetsCompromised - (for outro only)the amount of assets lost. useful for calculating the score when the defender wins
+@param {RecordEntry} record - (for outro only) an object containing logs, role, endingRound and assetsCompromised
+@param {boolean} doublePlayer - (outro only) true: double player mode, false: single player mode
 */
 var intro = {
 	init: function(type)
 	{
 		this.styleCaption = {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#FFEE00", align: "center"};
-		this.styleScore = {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#5522FF", align: "center"};
+		this.styleScoreInt = {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#8800EE", align: "center"};
+		this.styleScoreDef = {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#2222FF", align: "center"};
 		
 		this.type = type;
 		
@@ -43,28 +42,32 @@ var intro = {
 			case 1: //outro
 				this.index = arguments[1];
 				this.win = arguments[2];
-				this.logs = arguments[3];
-				this.role = arguments[4];
-				this.endingRound = arguments[5];
-				this.assetsCompromised = arguments[6];
-				if(this.win)
-				{
-					if(this.index < 0)
-					this.texts = game.globals.tutorialOutros[0-parseInt(this.index)].split("^");
-					else
+				this.record = arguments[3];
+				this.doublePlayer = arguments[4];
+				if(!this.doublePlayer)
+				{	//single player mode
+					if(this.win)
 					{
-						var longtext = game.globals.scenarioOutros[this.index];
-						if(longtext)	//outro found
-							this.texts = longtext.split("^");
-						else
-						{	//outro absent
-							this.score = this.calculateScore();
-							game.state.start("review", true, false, this.win, this.score, this.logs, this.role, this.index);
+						if(this.index < 0)	//tutorial
+						this.texts = game.globals.tutorialOutros[0-parseInt(this.index)].split("^");
+						else	//formal scenario
+						{
+							var longtext = game.globals.scenarioOutros[this.index];
+							if(longtext)	//outro found
+								this.texts = longtext.split("^");
+							else			//outro absent	
+								this.texts = ["#text$380$300$Your victory!"];
 						}
 					}
+					else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? \n\nDon't lose your heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
+						else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those well defended? \nMaybe you attacked too timidly and missed too many chances before the rounds expired? \n\nDon't lose heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
 				}
-				else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? \n\nDon't lose your heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
-					else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those well defended? \nMaybe you attacked too timidly and missed too many chances before the rounds expired? \n\nDon't lose heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
+				else 
+				{	//double player mode
+					if(this.record.role == 0 && this.win || this.record.role ==1 && !this.win)
+						this.texts = ["#text$380$300$Intruder's Victory!"];
+					else this.texts = ["#text$380$300$Defender's Victory!"];
+				}
 				break;
 			case 2: //credit
 				this.texts = game.globals.credits.split("^");
@@ -74,16 +77,18 @@ var intro = {
 	
 	create: function(){
 		var group = game.add.group();
-		//background
-		var bg = game.add.image(game.world.centerX, game.world.centerY-600, "PNFrame", 0, group);
-		bg.anchor.setTo(0.5);
+		var buttonGroup = game.add.group();
+		var scrollGroup = game.add.group();
+		//main panel
+		var panel = game.add.image(game.world.centerX, game.world.centerY, "PNFrame", 0, group);
+		panel.anchor.setTo(0.5);
 		
-		this.multimedia = new MultimediaText(150, 150, 0);
-		this.scrollButtons = new ScrollButtons(950, 50, 500, this.updatePage, this, this.texts.length);
+		this.multimedia = new MultimediaText(150, 120, 0, buttonGroup);
+		this.scrollButtons = new ScrollButtons(950, 50, 500, this.updatePage, this, this.texts.length, scrollGroup);
 		
 		//click on the dynamic text to finish writing immediately
-		bg.inputEnabled = true;
-		bg.events.onInputDown.add(this.multimedia.finishWriting, this.multimedia, 0);
+		panel.inputEnabled = true;
+		panel.events.onInputDown.add(this.multimedia.finishWriting, this.multimedia, 0);
 		
 		//menu button, play button and review button
 		switch(this.type)
@@ -100,14 +105,14 @@ var intro = {
 				{
 					var sceName = game.globals.scenarioCybers[this.index].name;
 					var texts = "Scenario "+this.index+"\n"+sceName;
-					var playButton = game.add.button(game.world.centerX + 150 , 550-600, "playButton", this.play, this, 0, 0, 1, 0, group);
+					var playButton = game.add.button(game.world.centerX + 150 , 550, "playButton", this.play, this, 0, 0, 1, 0, buttonGroup);
 					playButton.anchor.setTo(0.5);
 				}
 				
-				var caption = game.add.text(game.world.centerX, 50-600, texts, this.styleCaption, group);
+				var caption = game.add.text(game.world.centerX, 50, texts, this.styleCaption, group);
 				caption.anchor.setTo(0.5);
 				//button
-				var menuButton = game.add.button(game.world.centerX - 150 , 550-600, "menuButton", this.menu, this, 0, 0, 1, 0, group);
+				var menuButton = game.add.button(game.world.centerX - 150 , 550, "menuButton", this.menu, this, 0, 0, 1, 0, buttonGroup);
 				menuButton.anchor.setTo(0.5);
 				break;
 			case 1: //outro
@@ -118,30 +123,53 @@ var intro = {
 					var sceName = game.globals.scenarioCybers[this.index].name;
 					var texts = "Scenario "+this.index+" outro\n"+sceName;
 					//button
-					var reviewButton = game.add.button(game.world.centerX , 550-600, "reviewButton", this.review, this, 0, 0, 1, 0, group);
+					var reviewButton = game.add.button(game.world.centerX , 550, "reviewButton", this.review, this, 0, 0, 1, 0, buttonGroup);
 					reviewButton.anchor.setTo(0.5);
 				}
-				var caption = game.add.text(game.world.centerX, 50-600, texts, this.styleCaption, group);
+				var caption = game.add.text(game.world.centerX, 50, texts, this.styleCaption, group);
 				caption.anchor.setTo(0.5);
-				this.score = this.calculateScore();
-				var scoreText = game.add.text(game.world.centerX + 120, 110-600, "Your score: "+this.score, this.styleScore, group);
-				scoreText.anchor.setTo(0.5);
-				//relaxed music
+				//score
+				if(!this.doublePlayer)
+				{	//single player
+					this.score = this.record.scores[this.record.role];
+					if(this.record.role == 0)
+						var scoreText = game.add.text(game.world.centerX + 120, 110, "Your score: "+this.score, this.styleScoreInt, group);
+					else var scoreText = game.add.text(game.world.centerX + 120, 110, "Your score: "+this.score, this.styleScoreDef, group);
+					scoreText.anchor.setTo(0.5);
+				}
+				else	//doublePlayer
+				{
+					var scoreTextInt = game.add.text(game.world.centerX + 120, 110, "Intruder's score: "+this.record.scores[0], this.styleScoreInt, group);
+					scoreTextInt.anchor.setTo(0.5);
+					var scoreTextDef = game.add.text(game.world.centerX + 120, 150, "Defender's score: "+this.record.scores[1], this.styleScoreDef, group);
+					scoreTextDef.anchor.setTo(0.5);
+				}
+				//relaxing music
 				game.globals.audioManager.outroMusic();
 				break;
 			case 2://credits
 				//caption
-				var caption = game.add.text(game.world.centerX, 50-600, "credits", this.styleCaption, group);
+				var caption = game.add.text(game.world.centerX, 50, "credits", this.styleCaption, group);
 				caption.anchor.setTo(0.5);
 				//button
-				var menuButton = game.add.button(game.world.centerX , 550-600, "menuButton", this.menu, this, 0, 0, 1, 0, group);
+				var menuButton = game.add.button(game.world.centerX , 550, "menuButton", this.menu, this, 0, 0, 1, 0, buttonGroup);
 				menuButton.anchor.setTo(0.5);
 				//relaxed music
 				game.globals.audioManager.outroMusic();
 				break;
 		}
-		//entering animation
+		//frame entering animation
+		group.y = group.y- 600;
 		var tween = game.add.tween(group).to({y: '+600'}, 2500, "Elastic.easeOut", true, 0, 0, false);
+		//button entering animation
+		buttonGroup.y = buttonGroup.y + 1000;
+		var buttonTween = game.add.tween(buttonGroup).to({y: '-1000'}, 1000, Phaser.Easing.Linear.None, true, 0, 0, false);
+		//stretch animation
+		scrollGroup.x = 950;
+		scrollGroup.y = 275;
+		scrollGroup.pivot = new Phaser.Point(950, 275);
+		scrollGroup.scale.setTo(1, 0.5);
+		var scrollTween = game.add.tween(scrollGroup.scale).to({x: 1, y: 1}, 2500, "Elastic.easeOut", true, 0, 0, false);
 		//create page context
 		tween.onComplete.add(function(){if(this.scrollButtons.currentPage == 0) this.updatePage(0);}, this, 0);
 		
@@ -154,6 +182,7 @@ var intro = {
 	
 	/**
 	Update the page, whether a text page (with typing animation) or an image page
+	Global input: this.texts
 	*/
 	updatePage: function(targetPage)
 	{arguments;
@@ -172,7 +201,7 @@ var intro = {
 				{//the button to start scenario 0
 					this.playButton = game.add.button(game.world.centerX + 200, 550, "playButton", this.tutorialFun, this);
 					this.playButton.anchor.setTo(0.5);
-					var playTween = game.add.tween(this.playButton.scale).to({x:1.3, y:1.3}, 2500, Phaser.Easing.Linear.None, false, 0, -1, true).start();
+					var playTween = game.add.tween(this.playButton.scale).to({x:1.3, y:1.3}, 3000, Phaser.Easing.Linear.None, false, 0, -1, true).start();
 				}
 		//tutorial outro: add button to review at the last page
 		if(this.type == 1 && this.index < 0)
@@ -181,7 +210,7 @@ var intro = {
 				{//the button to start scenario 0
 					this.reviewButton = game.add.button(game.world.centerX, 550, "reviewButton", this.review, this);
 					this.reviewButton.anchor.setTo(0.5);
-					var playTween = game.add.tween(this.reviewButton.scale).to({x:1.3, y:1.3}, 2500, Phaser.Easing.Linear.None, false, 0, -1, true).start();
+					var reviewTween = game.add.tween(this.reviewButton.scale).to({x:1.3, y:1.3}, 3000, Phaser.Easing.Linear.None, false, 0, -1, true).start();
 				}
 	},
 	
@@ -212,7 +241,7 @@ var intro = {
 		if(this.index == -1)	//the first tutorial is hall only
 			game.state.start("hall", true, false, -1);
 		else //other tutorials are cyberspace only
-			game.state.start("cyberspace", true, false, this.index);
+			game.state.start("cyberspace", true, false, this.index, false);
 	},
 	
 	/**
@@ -221,7 +250,7 @@ var intro = {
 	review: function()
 	{
 		//game.globals.audioManager.typingOff();///
-		game.state.start("review", true, false, this.win, this.score, this.logs, this.role, this.index);
+		game.state.start("review", true, false, this.index, this.win, this.record, this.doublePlayer);
 	},
 	
 	/**
@@ -232,41 +261,6 @@ var intro = {
 		if(key.keyCode == Phaser.Keyboard.PAGE_UP)
 			this.scrollButtons.scrollUp();
 		else this.scrollButtons.scrollDown();	
-	},
-	
-	/**
-	The function that calculate the score of the player based on the action log
-	@returns {int} - the score
-	*/
-	calculateScore: function()
-	{
-		var score = 0;
-		for(var l in this.logs)
-		{
-			if(this.logs[l].round%2 == 0)	//intruder's round
-				if(this.logs[l].success)
-				{
-					if(this.role == 0)
-						score +=100;	//intruder gains 100 points at each success at his round
-				}
-				else if(this.role == 1)
-						score += 100;	//defender gains 100 points at each failure at intruder's round
-		}
-		if(this.role == 0)
-		{
-			score -= this.endingRound*40;		//intruder loss 40 points for every round the defender survives
-			score += this.assetsCompromised*4;	//intruder gains 4 points for every damage dealt to the assets
-		}
-		else 
-		{
-			score += this.endingRound*40;		//defender gains 40 points for every round he survives
-			score -= this.assetsCompromised*4;	//defender loss 4 points for every damage dealt to the assets
-		}
-		/*nagative score is too much frustrating for the players, even if they did play badly.
-		nagative scores will be rised to zero, hoping to console them a little*/
-		if(score < 0)	
-			score = 0;
-		return score;
 	},
 	
 	/**

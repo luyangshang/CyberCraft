@@ -28,7 +28,7 @@ game.globals ={		//global data loaded from json and txt files
 	credits: null,
 	personalNotes: null,
 	audioManager: null,
-	savedata: [],
+	records: [],
 	playerName: null
 };
 
@@ -43,7 +43,7 @@ game.state.add("review", review);
 game.state.add("error", error);
 
 game.state.start("scaling");
-},{"./states/cyberspace.js":23,"./states/error.js":24,"./states/hall.js":25,"./states/intro.js":26,"./states/load.js":27,"./states/review.js":28,"./states/scaling.js":29,"./states/selection.js":30,"./states/startMenu.js":31}],2:[function(require,module,exports){
+},{"./states/cyberspace.js":25,"./states/error.js":26,"./states/hall.js":27,"./states/intro.js":28,"./states/load.js":29,"./states/review.js":30,"./states/scaling.js":31,"./states/selection.js":32,"./states/startMenu.js":33}],2:[function(require,module,exports){
 /**
 Control the action of the rival based on the AI set in the cyber file
 @param {int} index - the index number for the scenario. negative number for the tutorial.
@@ -124,19 +124,6 @@ AIManager.prototype.activatePatterns = function()
 					found = true;
 					break;
 				}
-				/*if(!Number.isInteger(this.ai[i].pattern[a]))	//still name string
-				{
-					id = this.actManager.name2id(this.role, this.ai[i].pattern[a]);
-					if(id != -1)
-					{
-						this.ai[i].patternap] = id;
-					}
-					else	//act still not defined
-					{
-						found = true;
-						break;
-					}
-				}*/
 			}
 			if(found == false)
 			{
@@ -158,8 +145,8 @@ AIManager.prototype.control = function(gameManager, round)
 	if(this.currentPlan == -1)
 	{
 		//calling setTimeout will lose all context. code like this will guarantee context
-		setTimeout(function(fun, context){fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
-		//this.gameManager.roundFinal();
+		setTimeout(function(fun, context){if(context)fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
+		//non-delayed equivalence: if(gameManager)this.gameManager.roundFinal();
 		return;
 	}
 	
@@ -169,8 +156,7 @@ AIManager.prototype.control = function(gameManager, round)
 		if(this.learnAct(this.ai[this.currentPlan].pattern[a]) == false)
 		{	//cannot learn them all
 			//calling setTimeout will lose all context. code like this will guarantee context
-			setTimeout(function(fun, context){fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
-			//this.gameManager.roundFinal();
+			setTimeout(function(fun, context){if(context)fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
 			return;
 		}
 	
@@ -184,22 +170,15 @@ AIManager.prototype.control = function(gameManager, round)
 		allResource += this.actManager.getAct(this.role, id).cost;
 	}
 	//if resource not enough for all acts in one shot, wait for the next round
-	if(gameManager.getResource(this.role) < allResource)
+	if(gameManager && gameManager.getResource(this.role) < allResource)
 	{
 		//calling setTimeout will lose all context. code like this will guarantee context
 		setTimeout(function(fun, context){fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
 		//this.gameManager.roundFinal();
 		return;
 	}
-	//resource also enough. ready to apply acts according to time interval
-	setTimeout(this.singleAct, this.operationDelay, this, this.ai[this.currentPlan].pattern, 0, round);
-	/*for(a in this.ai[this.currentPlan].pattern)
-	{
-		///need 1.5s idle between each act?
-		this.actManager.applyAct(this.role, this.ai[this.currentPlan].pattern[a], round);
-	}
-	//plan executed. ready for another plan
-	this.currentPlan = -1;*/
+	//resource also enough. ready to apply acts after each time interval
+	this.actTimer = setTimeout(this.singleAct, this.operationDelay, this, this.ai[this.currentPlan].pattern, 0, round);
 };
 /**
 Function invoked for each single act in the selected action pattern.
@@ -209,36 +188,51 @@ It will recursively call itself after each operatioDelay
 */
 AIManager.prototype.singleAct = function(context, pattern, i, round)
 {
-	try{
-		if(i >= pattern.length)
-		{//plan executed. get ready for another plan
-			context.currentPlan = -1;
-			context.gameManager.roundFinal();
-			return;
-		}
-		
-		context.actManager.applyAct(context.role, pattern[i], round);
-		setTimeout(context.singleAct, context.operationDelay, context, pattern, i+1, round);
-	}catch(e){console.log("Game already ended.");}
+	//return when game already ended (restarted or gameover)
+	if(!context.gameManager || context.gameManager.disableControl)
+		return;
+	if(i >= pattern.length)//all acts in the plan executed.
+	{ 	
+		//reset for another plan
+		context.currentPlan = -1;
+		//AI ends the turn
+		context.gameManager.roundFinal();
+		return;
+	}
+	
+	context.actManager.applyAct(context.role, pattern[i], round);
+	context.actTimer = setTimeout(context.singleAct, context.operationDelay, context, pattern, i+1, round);
 };
 /**
-Recursive function to lean an act. Recursively invoke the learning of the prerequist.
+Callback function to stop AI's attempt to perform further acts or end turn, when game restarted or gameover
+*/
+AIManager.prototype.stopAct = function()
+{
+	clearTimeout(this.actTimer);
+}
+
+/**
+Recursive function to lean an act. Recursively invoke the learning of the prerequisites.
 @returns {boolean} - true for it was learnt or it's successfully learnt, false for leaning failure (insufficient resource)
 */
 AIManager.prototype.learnAct = function(id)
 {
+	//return when game already ended (restarted or gameover)
+	if(!this.gameManager || this.gameManager.disableControl)
+		return;
+	
 	if(this.actManager.actLearnt(this.role, id))
 		return true;
 	//not learnt
 	var result;
-	//whether prerequists meet
-	for(var p in this.actManager.getAct(this.role, id).prerequists)
+	//whether prerequisites meet
+	for(var p in this.actManager.getAct(this.role, id).prerequisites)
 	{	
-		result = this.learnAct(this.actManager.getAct(this.role, id).prerequists[p]);
-		if(!result)	//prerequists can't be learnt
+		result = this.learnAct(this.actManager.getAct(this.role, id).prerequisites[p]);
+		if(!result)	//prerequisites can't be learnt
 			return;
 	}
-	//prerequists meet
+	//prerequisites meet
 	result = this.actManager.learnAct(this.role, id);
 	return result;
 };
@@ -270,7 +264,7 @@ AIManager.prototype.randomPlan = function()
 };
 
 /**
-Check if the action pattern (actually the last one of the acts) will enforce more buffs or clean any existing buffs on success
+Check if the action pattern (actually the last one of the acts) will enforce more buffs or clean any existing buffs on success. Note that, last straws also enforce buff like "Credential compromised"
 @param {Array} - an array of acts that is to be performed
 @returns {boolean} - true if the action pattern 
 */
@@ -350,17 +344,20 @@ var LogEntry = require("./LogEntry");
 @classdesc A class storing the acts activated in the scenario. It also managing the learning and the applying of the acts.
 N.B. All the relationship with other acts/buffs will use id, rather than the original name string.
 @param {int} index - the scenario number
+@param {boolean} doublePlayer - true: double player mode; false: single player mode
 @param {GameManager} gameManager - the reference to the character manager
 @param {BuffManager} buffManager - the reference to the buff manager
 @param {Object} logs - the reference to the attack/defense log. Actions will be applied by this manager, and logged into logs
 @param {int} playerRole - the role of the player. 0: intruder, 1: defender. This is used to see if the act is performed by the player or the AI, to avoid displaying warning message for the AI.
 @constructor
 */
-function ActManager(index, buffManager, effectManager, logs, playerRole)
+function ActManager(index, doublePlayer, buffManager, effectManager, messager, logs, playerRole)
 {
 	this.index = index;
+	this.doublePlayer = doublePlayer;
 	this.buffManager = buffManager;
 	this.effectManager = effectManager;
+	this.messager = messager;
 	this.logs = logs;
 	this.playerRole = playerRole;
 		
@@ -464,8 +461,8 @@ ActManager.prototype.createAct = function(actSource, role)
 	//set the act properties
 	if(actSource.name == undefined)
 	{
-		window.alert("Error! An act name is missing\n Recheck scenarioX_cyber.json");
-		return 1;
+		var errorMessage = "Error! An act name is missing\n Recheck scenarioX_cyber.json";
+		game.state.start('error', true, false, errorMessage);
 	}
 	name = actSource.name;
 	if(actSource.prerequisites != undefined)
@@ -484,8 +481,8 @@ ActManager.prototype.createAct = function(actSource, role)
 		noRivalBuffs = actSource.noRivalBuffs;
 	if(actSource.cost == undefined)
 	{
-		window.alert("Error! The act \""+name+"\" is missing cost\n Recheck scenarioX_cyber.json or common_acts.json");
-		return 1;
+		var errorMessage = "Error! The act \""+name+"\" misses cost\n Recheck scenarioX_cyber.json or common_acts.json";
+		game.state.start('error', true, false, errorMessage);
 	}
 	cost = actSource.cost;
 	if(actSource.successRate != undefined)
@@ -500,11 +497,6 @@ ActManager.prototype.createAct = function(actSource, role)
 		cleanRivalBuffs = actSource.cleanRivalBuffs;
 	if(actSource.buffLength != undefined && actSource.buffLength > 0)
 		buffLength = actSource.buffLength;
-	/*else if((actSource.selfBuffs!= undefined) || (actSource.rivalBuffs!= undefined))
-	{
-		window.alert("Error! The act \""+name+"\" is missing buff length\n Recheck scenarioX_cyber.json or common_acts.json");
-		return 1;
-	}*/
 	if(actSource.bonus != undefined && actSource.bonus > 0)
 		bonus = actSource.bonus;
 	if(actSource.spamRequests != undefined)
@@ -634,7 +626,7 @@ Checking managed here
 ActManager.prototype.learnAct = function(role, id)
 {
 	//catch all attempts to learn an act when the game has already ended
-	if(this.gameManager.gameover)
+	if(this.gameManager.disableControl)
 		return;
 	
 	var requiredId;
@@ -644,7 +636,7 @@ ActManager.prototype.learnAct = function(role, id)
 	if(act.learningCost > this.gameManager.getResource(role))
 	{
 		game.globals.audioManager.accessDenied();
-		window.alert("not enough resource!");
+		this.messager.createMessage("Not enough resource!");
 		return false;
 	}
 	//check prerequisites
@@ -654,7 +646,7 @@ ActManager.prototype.learnAct = function(role, id)
 		if(!this.getAct(role, act.prerequisites[p]).learnt)
 		{
 			game.globals.audioManager.accessDenied();
-			window.alert("prerequist not met: " + this.id2name(role, act.prerequisites[p]));
+			this.messager.createMessage("Prerequistes not met:\n" + this.id2name(role, act.prerequisites[p]));
 			return false;
 		}	
 	}
@@ -675,7 +667,7 @@ Checking managed here
 ActManager.prototype.applyAct = function(role, id, round)
 {
 	//catch all attempts to apply an act when the game has already ended
-	if(this.gameManager.gameover)
+	if(this.gameManager.disableControl)
 		return;
 	
 	var act = this.getAct(role, id);
@@ -684,38 +676,42 @@ ActManager.prototype.applyAct = function(role, id, round)
 	//check learnt
 	if(!act.learnt)
 	{
-		window.alert("You should learn it first!");
+		this.messager.createMessage("You should learn it first!");
 		return 0;
 	}
 	if(act.cost == 0)
 	{
-		window.alert("it's not supposed to be used");
+		this.messager.createMessage("It's not supposed to be used");
 		return 0;
 	}
 	//check resource
 	if(act.cost > this.gameManager.getResource(role))
 	{
 		game.globals.audioManager.accessDenied();
-		window.alert("not enough resource!");
+		this.messager.createMessage("Not enough resource!");
 		return 0;
 	}
 	//check self buff
 	for(b in act.needSelfBuffs)
 		if(!this.buffManager.hasBuff(act.needSelfBuffs[b], role))
-			if(role == this.playerRole)
+		{
+			if(this.doublePlayer || role == this.playerRole)
 			{
-				window.alert("Cannot act, self buff required: " + this.buffManager.id2name(act.needSelfBuffs[b]));
+				this.messager.createMessage("Cannot act. Self buff required: \n" + this.buffManager.id2name(act.needSelfBuffs[b]));
 				game.globals.audioManager.accessDenied();
-				return 0;
 			}
+			return 0;
+		}
 	for(b in act.noSelfBuffs)
 		if(this.buffManager.hasBuff(act.noSelfBuffs[b], role))
-			if(role == this.playerRole)
+		{
+			if(this.doublePlayer || role == this.playerRole)
 			{
 				game.globals.audioManager.accessDenied();
-				window.alert("Cannot act, hampered by self buff: " + this.buffManager.id2name(act.noSelfBuffs[b]));
-				return 0;
+				this.messager.createMessage("Cannot act. Hampered by self buff: \n" + this.buffManager.id2name(act.noSelfBuffs[b]));
 			}
+			return 0;
+		}
 	//animation
 	this.effectManager.createWord(act.name, role, 4000);
 			
@@ -759,9 +755,12 @@ ActManager.prototype.applyAct = function(role, id, round)
 		this.effectManager.createActEffect(0);
 	else if(!act.rivalBuffs.length && !act.cleanRivalBuffs.length)
 			this.effectManager.createActEffect(1);	//intruder successful strengthen animation
-		else if(!act.bonus)
-				this.effectManager.createActEffect(4);	//intruder  break defence animation
-			else this.effectManager.createActEffect(5, act.bonus);	//intruder compromise assets animation
+		else if(act.bonus)
+				this.effectManager.createActEffect(5, act.bonus);	//intruder compromise assets animation
+			else if(act.rivalBuffs && act.rivalBuffs[0] == this.buffManager.name2id("Denial of service attacked"))
+					this.effectManager.createActEffect(5, 0);	//dos category use compromise assets animation
+				else this.effectManager.createActEffect(4);	//intruder  break defence animation
+			
 //act successful
 	//enforce buffs
 	for(b in act.selfBuffs)
@@ -802,7 +801,7 @@ ActManager.prototype.applyAct = function(role, id, round)
 			//format: <role>:<act name>:<property>:<operant>:<amount>
 			if(/^[01]:[^:]*:[^:]*:["+""-""*""/""="]:[0-9]+\.?[0-9]*$/.test(modifierArray[m]) == false)
 			{
-				window.alert("modifier format wrong!");
+				this.messager.createMessage("modifier format wrong!");
 				break;
 			}
 			var args = modifierArray[m].split(":");
@@ -810,13 +809,13 @@ ActManager.prototype.applyAct = function(role, id, round)
 			id = this.name2id(role2, args[1]);
 			if(id == -1)		//act name
 			{
-				window.alert("modifier specifies wrong act name!");
+				this.messager.createMessage("modifier specifies wrong act name!");
 				break;
 			}
 			var property = args[2];
 			if(this.acts[role2][id][property] == undefined)	//property
 			{
-				window.alert("modifier specifies wrong property!");
+				this.messager.createMessage("modifier specifies wrong property!");
 				break;
 			}
 			switch(args[3])
@@ -1070,9 +1069,10 @@ The real functionalities of the buffs are managed by acts manager.
 @param {int} scenarioIndex - the scenario number
 @constructor - it also sets the initial buffs
 */
-function BuffManager(scenarioIndex)
+function BuffManager(scenarioIndex, messager)
 {
 	this.scenarioIndex = scenarioIndex;
+	this.messager = messager;
 	if(scenarioIndex < 0)	//tutorials
 		this.cyber = game.globals.tutorialCybers[0-scenarioIndex];
 	else //scenarios
@@ -1157,10 +1157,13 @@ BuffManager.prototype.createStatic = function()
 			}
 		}
 		if(!found)
-		{	//warn for description, but not for other properties
-			window.alert("Warning! The buff \""+name+"\" activated for this scenariol (scenario " + this.scenarioIndex + ") misses description"
+		{	
+			var errorMessage = "Error! The buff \""+name+"\" selected for this scenario (scenario " + this.scenarioIndex + ") is not defined!";
+			game.state.start('error', true, false, errorMessage);
+			/*//warn for description, but not for other properties
+			window.alert("Warning! The buff \""+name+"\" activated for this scenario (scenario " + this.scenarioIndex + ") misses description"
 			);
-			this.buffDesc[id] = "";
+			this.buffDesc[id] = "";*/
 		}
 	}
 	//buffs defined in the cyber file
@@ -1174,7 +1177,7 @@ BuffManager.prototype.createStatic = function()
 			this.buffDesc[id] = this.cyber.buffs[cyb].desc;
 		else
 		{	//warn for description, but not for other properties
-			window.alert("Warning! The buff \""+name+"\" activated for this scenariol (scenario" + this.scenarioIndex + ") misses description"
+			this.messager.createMessage("Warning! The buff \""+name+"\" activated for this scenario (scenario" + this.scenarioIndex + ") misses description"
 			);
 			this.buffDesc[id] = "";
 		}
@@ -1206,14 +1209,14 @@ BuffManager.prototype.createInitialBuffs = function(initialBuffs, role)
 	for(ib in initialBuffs)
 	{
 		buffId = this.name2id(initialBuffs[ib].name);
-		if(buffId == undefined)
+		if(buffId == -1)
 		{
-			window.alert("Warning! An initial buff activate for this scenario is not defined in scenario" + this.scenarioIndex + "_cyber.json or common_acts.json! This buff is not initially enforced!\n Recheck scenario"+ this.scenarioIndex + "_cyber.json");
+			this.messager.createMessage("Warning! An initial buff activate for this scenario is not defined in scenario" + this.scenarioIndex + "_cyber.json or common_acts.json! This buff is not initially enforced!\n Recheck scenario"+ this.scenarioIndex + "_cyber.json");
 			continue;
 		}
 		if(initialBuffs[ib].length == 0 || initialBuffs[ib].length < -1)
 		{
-			window.alert("Warning! The initial buff "+ this.initialBuff.name + " has wrong length! \n this buff is not intially enforced!\n Recheck scenario" + this.scenarioIndex + "_cyber.json, choosing -1 for inifite length, and a positive integer for finite length");
+			this.messager.createMessage("Warning! The initial buff "+ this.initialBuff.name + " has wrong length! \n this buff is not intially enforced!\n Recheck scenario" + this.scenarioIndex + "_cyber.json, choosing -1 for inifite length, and a positive integer for finite length");
 			continue;
 		}
 		//give the initial buff
@@ -1230,10 +1233,12 @@ Add new buff if not yet exisit (0 length); overwrite buff length if the new buff
 */
 BuffManager.prototype.addBuff = function(buffId, length, role)
 {
+	//do nothing if the old buff have an infinite length
 	if(this.buffLengths[role][buffId] == -1)
 			return;
+	//do nothing if the old buff have an higher remaining length
 	if(this.buffLengths[role][buffId] < length || length == -1)
-			this.buffLengths[role][buffId] = length;
+		this.buffLengths[role][buffId] = length;
 };
 
 /**
@@ -1316,6 +1321,16 @@ BuffManager.prototype.decayBuff = function()
 				this.buffSpam[i] = 0;
 		}
 	}
+};
+
+/**
+Return the extra server capacity granted from the buff
+@param {int} id - the buff id
+@returns - the extra capacity brought by this buff, independent of whether this buff exist
+*/
+BuffManager.prototype.getCapacity = function(id)
+{
+	return this.buffCapacity[id];
 };
 
 /**
@@ -1448,7 +1463,6 @@ module.exports = BuffManager;
 @param {int} rivalY - the y coordinates of the sprite of the rival
 @param {int} logX - the x coordinates of the the action log button
 @param {int} logY - the y coordinates of the the action log button
-@param 
 */
 function EffectManager(fatherGroup, X, Y, logX, logY, roundX, roundY)
 {
@@ -1588,7 +1602,8 @@ EffectManager.prototype.createActEffect = function(type)
 				movingTween = this.bullet();
 				movingTween.onComplete.add(this.explosion, this, 0);
 				var damage = arguments[1];
-				movingTween.onComplete.add(this.damaged, this, 0, damage);
+				if(damage)
+					movingTween.onComplete.add(this.damaged, this, 0, damage);
 			break;
 	}
 }
@@ -1682,7 +1697,7 @@ EffectManager.prototype.damaged = function(sprite, pointer, damage)
 {
 	var damageText = "-" + damage;
 	var damageSprite = game.add.text(this.X[1], this.Y[1], damageText, this.styleDamage, this.fatherGroup);
-	var damageTween = game.add.tween(damageSprite).to({x: "-20", y: "-60"}, 2500, "Elastic.easeOut", true, 0, 0, false);
+	var damageTween = game.add.tween(damageSprite).to({x: "-20", y: "-50"}, 2500, "Elastic.easeOut", true, 0, 0, false);
 	damageTween.onComplete.add(function(){damageSprite.destroy();}, this, 0);
 };
 
@@ -1715,11 +1730,12 @@ module.exports = EffectManager;
 @classdesc A class managing characters and other game related data
 It takes the role of Model and Controller in the MVC framework. cyberspace takes the role of View. 
 @param {int} index - positive: the index of the scenarioCybers, negative: the inverse of the tutorialCybers
+@param {boolean} doublePlayer - true: double player mode(aiManager actually not used); false: single player mode(aiManager used)
 @param {BuffManager} buffManager - the reference to the buffManager
 @param {cyberspace} cyberspace - the cyberspace state
 @constructor
 */
-function GameManager(index, buffManager, cyberspace, aiManager, scriptManager, effectManager, logs)
+function GameManager(index, doublePlayer, buffManager, cyberspace, aiManager, scriptManager, effectManager, messager, logs)
 {
 	//constants
 	this.servingBonus = 10;
@@ -1728,17 +1744,20 @@ function GameManager(index, buffManager, cyberspace, aiManager, scriptManager, e
 	this.unservedPenalty = 0.5;
 	
 	this.index = index;
+	this.doublePlayer = doublePlayer;
 	this.buffManager = buffManager;
 	this.cyberspace = cyberspace;
 	this.aiManager = aiManager;
 	this.scriptManager = scriptManager;
 	this.effectManager = effectManager;
+	this.messager = messager;
 	this.logs = logs;
 	
 	if(index < 0)
 		var cyber = game.globals.tutorialCybers[0-parseInt(index)];
 	else var cyber = game.globals.scenarioCybers[index];
 	
+	//in single player mode, player's role; in double player mode, 1st player's role
 	//0 for intruder, 1 for defender
 	if(cyber.defensive)
 		this.playerRole = 1;
@@ -1756,10 +1775,11 @@ function GameManager(index, buffManager, cyberspace, aiManager, scriptManager, e
 	this.maxRounds = cyber.maxRounds;
 	this.assets = cyber.assets;
 	this.offensive = cyber.offensive;	
-	/*a flag that is set to true only at the last seconds 
+	/*a flag that is set to true only for disable the controls of players or AI (learning, applying of acts and ending of turn). 
+	This happens when the character is offline (1.5s before automatically end turn), or when the game has already ended (2.5s for ending animation)
 	between the moment one character wins and
 	the actual moment when the game state switches*/
-	this.gameover = false;
+	this.disableControl = false;
 }
 /**
 private function
@@ -1825,8 +1845,9 @@ GameManager.prototype.loseAssets = function(amount)
 	//deal with gameover
 	if(this.assets <= 0)
 	{	//intruder wins
-		this.cyberspace.changeControl(false);
-		this.gameover = true;
+		this.disableControl = true;
+		if(this.aiManager)
+			this.aiManager.stopAct();	//stop all pending AI operations
 		//last animation of "VICTORY" or "DEFEAT"
 		if(this.playerRole == 0)
 			//call this.effectManager.lastAnimation(true) after 550ms
@@ -1849,7 +1870,6 @@ GameManager.prototype.roundInit = function()
 	this.cyberspace.updateRound();
 	this.scriptManager.checkScript(this.currentRound);
 	
-	///TODO: animation?
 	//constant income
 	if(this.currentRound%2 == 0)
 	{	//intruder's round: intruder gets resource
@@ -1879,54 +1899,64 @@ GameManager.prototype.roundInit = function()
 		{
 			//served legitimated requests
 			var servedLegitimated = Math.floor(legitimateRequests*servingRatio);
-			
+			var unservedLegitimated = legitimateRequests-servedLegitimated;
 			//animation: one happy face for each served client
 			this.effectManager.faces(true, servedLegitimated);
 			//after 0.5 seconds, animation: one unhappy face for each unserved client
-			setTimeout(function(fun, context, param1, param2){fun.call(context, param1, param2);}, 500, this.effectManager.faces, this.effectManager, false, legitimateRequests-servedLegitimated);
+			setTimeout(function(fun, context, param1, param2){fun.call(context, param1, param2);}, 500, this.effectManager.faces, this.effectManager, false, unservedLegitimated);
 			
-			console.log("The server failed to serve "+(legitimateRequests-servedLegitimated)+" legitimated requests");
+			console.log("The server failed to serve "+(unservedLegitimated)+" legitimated requests");
 			//income = bonus - penalty
-			var serverIncome = servedLegitimated * this.servingBonus - (legitimateRequests-servedLegitimated) * this.servingBonus * this.unservedPenalty;
+			var serverIncome = servedLegitimated * this.servingBonus -unservedLegitimated * this.servingBonus * this.unservedPenalty;
 			if(serverIncome > 0)
 				this.obtainResource(1, serverIncome);
-			else this.obtainResource(1, 0-serverIncome);
+			else this.obtainResource(1, serverIncome);
 			console.log("Server net income is: "+serverIncome);
 			//a buff just to warn to the defender
 			var id = this.buffManager.name2id("503 Server Unavailable");
 			if(id == -1)
 			{
-				window.alert("Error! the buff \"503 Server Unavailable\" should always be activated!\n recheck scenarioX_cyber.json");
+				var errorMessage = "Error! the buff \"503 Server Unavailable\" should always be activated!\n recheck scenarioX_cyber.json!";
+				game.state.start('error', true, false, errorMessage);
 			}
-			else this.buffManager.addBuff(id, 1, 1);
-			///unhappy-face animation?
+			else	//enforce the buff "503 Server Unavailable"
+				this.buffManager.addBuff(id, 1, 1);
 		}
 		var upkeep = this.buffManager.totalUpkeep();
 		if(upkeep != 0)
 			this.consumeResource(1, upkeep);
 	}
 	
-	//deal with control
-	if(this.currentRound%2 == this.playerRole)
-	{	//player's role
-		//enforce end turn is offline
-		if(this.buffManager.offline(this.playerRole))
-			//calling setTimeout will lose all context. code like this will guarantee context
-			setTimeout(function(fun, context){fun.call(context);}, 2501, this.roundFinal, this);
-		else this.cyberspace.changeControl(true);
-	}
-	else
+	//show the list of acts for the current controller
+	this.cyberspace.updateActs(0);
+	
+	//offline management and controller management
+	if(!this.doublePlayer && this.currentRound%2 != this.playerRole)
 	{	//ai takes control
-		//enforce end turn is offline
+		//enforce end turn if offline
 		if(this.buffManager.offline(1-parseInt(this.playerRole)))
 		{
 			//calling setTimeout will lose all context. code like this will guarantee context
 			setTimeout(function(fun, context){fun.call(context);}, 1500, this.roundFinal, this);
 			return;
 		}
-		this.cyberspace.changeControl(false);
+		//not offline. activate AI
 		this.aiManager.control(this, this.currentRound);
-		//cannot end turn here. AI is gradually applying acts
+		/*shouldn't end turn here. AI is gradually applying acts.
+		AI will end turn itself when all acts are applied*/
+	}
+	else
+	{	//player takes control
+		//enforce end turn if offline
+		if(this.buffManager.offline(this.currentRound%2))
+		{
+			//no control when offline, including ending turn
+			this.disableControl = true;	
+			/*calling setTimeout will lose all context. code like this will guarantee the context
+			It's non-delayed equivalence: "this.disableControl=false; this.roundFinal();"	*/
+			setTimeout(function(fun, context, value){context.disableControl = value; fun.call(context);}, 1501, this.roundFinal, this, false);
+		}
+		else this.disableControl = false;
 	}
 };
 
@@ -1937,16 +1967,17 @@ Invokes on roundInit for next round
 GameManager.prototype.roundFinal = function()
 {
 	//catch all attempts to end the turn when the game has already ended.
-	if(this.gameover)
+	if(this.disableControl)
 		return;
 	
-	//check if a script prevents the turn ends (forces the player to do apply an act)
+	/*check if a script prevents the turn ends (forces the player to do apply an act). 
+	This check is done to the first player only. In fact, no such script is expected for double player mode.*/
 	if(this.currentRound%2 == this.playerRole)
 	{
 		var missingAct = this.notApplied(this.currentRound);
 		if(missingAct)
 		{
-			window.alert("You cannot end the turn. You should apply \""+missingAct+"\" !");
+			this.messager.createMessage("You cannot end the turn. You should apply \""+missingAct+"\" !");
 			return;	//nullify the end turn attempt
 		}
 	}
@@ -1955,9 +1986,8 @@ GameManager.prototype.roundFinal = function()
 	this.buffManager.decayBuff();
 	//check game over
 	if(this.currentRound == this.maxRounds)
-	{	//outlast.defender wins
-		this.cyberspace.changeControl(false);
-		this.gameover = true;
+	{	//outlast. defender wins
+		this.disableControl = true;
 		//last animation of "VICTORY" or "DEFEAT"
 		if(this.playerRole == 1)
 			//call this.effectManager.lastAnimation(true) after 550ms
@@ -2047,13 +2077,13 @@ module.exports = HintBox;
 },{}],11:[function(require,module,exports){
 /**
 Note down the player's attempt to attack or defende. The information will be used in review section
-Defence is expected to be always successful.
+Defence is expected to be always successful in applying acts.
 @constructor
 */
-function LogEntry(round, actPattern)
+function LogEntry(round, act)
 {
-	this.round = round;					//round number
-	this.actPattern = actPattern;	//the attack pattern
+	this.round = round;		//round number
+	this.act = act;			//the act performed
 	this.noBuffHurdle = [];	//failed because of the absence of rival buff
 	this.buffHurdle = [];	//failed because of the presence of rival buff
 	this.unlucky = false;	//failed because of unluck
@@ -2100,36 +2130,41 @@ var HintBox = require("./HintBox");
 N.B. the management of a single log is managed by LogEntry
 @param {Array} logs - the array of the action log
 @param {int} role - the role of the player. To be displayed as a reminder. 0: intruder, 1: defender
-@param {Notes} notes - the reference ot personal notes. Used to open personal notes from logViewer
-@param {Phaser.Group} fatherGroup - (optional) the group where the whole logViewer is put in. useful for layering
+@param {boolean} doublePlayer - true: double player mode, false: single player mode
+@param {Notes} notes - the reference to personal notes. Used to open personal notes from logViewer
+@param {Messager} messager - the reference to a Messager instance, which is called at warning messages
+@param {Phaser.Group} fatherGroup - the group where the whole logViewer is put in. useful for layering
 @constructor
 */
-function LogViewer(logs, role, notes)
+function LogViewer(logs, role, doublePlayer, notes, messager, fatherGroup)
 {
 	//constants
 	this.styleHeadline = { font: "25px Courier New, monospace", fontWeight: "bold", fill: "#FFEE11", align: "center"};
 	this.style = { font: "20px Courier New, monospace", fill: "#00AA11", align: "center"};
+	this.styleIntruder = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#8800EE", align: "center"};
+	this.styleDefender = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#2222FF", align: "center"};
+	
 	this.styleFailed = { font: "20px Courier New, monospace", fill: "#FF8811", fontWeight: "bold", align: "center"};
 	this.logsPerPage = 6;
 	
 	this.logs = logs;
 	this.role = role;
+	this.doublePlayer = doublePlayer;
 	this.notes = notes;
+	this.messager = messager;
+	this.fatherGroup = fatherGroup;
 	
 	//layer 1: log entries
 	this.logGroup = game.add.group();
-		//each contains a log entry: frame+round+pattern+result
+		//each contains a log entry: frame+round+act+result
 	this.entryGroups = [];
 	//layer 2: popup details of one log entry
 	this.reasonGroup = game.add.group();
 	//layer 3: hintbox
 	this.hintBox = new HintBox("box");
 	
-	if(arguments[3])
-	{
-		arguments[3].add(this.logGroup);
-		arguments[3].add(this.reasonGroup);
-	}
+	fatherGroup.add(this.logGroup);
+	fatherGroup.add(this.reasonGroup);
 	
 	//shortcut key for scroll up and scroll down
 	var scrollUpKey = game.input.keyboard.addKey(Phaser.Keyboard.PAGE_UP);
@@ -2156,18 +2191,27 @@ LogViewer.prototype.display = function(lastPage)
 	var headline = game.add.text(game.world.centerX - 100, 100, "Action Logs", this.styleHeadline, this.logGroup);
 	headline.anchor.setTo(0.5);
 	//role
-	if(this.role)
-		roleText = "Your role: dedender";
-	else roleText = "your role: intruder";
-	var roleSprite = game.add.text(game.world.centerX + 120, 110, roleText, this.style, this.logGroup);
-	roleSprite.anchor.setTo(0.5);
+	if(!this.doublePlayer)
+	{
+		if(this.role == 1)
+		{
+			roleText = "Your role: dedender";
+			var roleSprite = game.add.text(game.world.centerX + 120, 110, roleText, this.styleDefender, this.logGroup);
+		}
+		else
+		{			
+			roleText = "your role: intruder";
+			var roleSprite = game.add.text(game.world.centerX + 120, 110, roleText, this.styleIntruder, this.logGroup);
+		}
+		roleSprite.anchor.setTo(0.5);
+	}
 	
 	//create the battle log
 		//caption line
 	var roundText = game.add.text(200, 150, "Round", this.style, this.logGroup);
 	roundText.anchor.setTo(0.5);
-	var patternText = game.add.text(450, 150, "Act pattern", this.style, this.logGroup);
-	patternText.anchor.setTo(0.5);
+	var actText = game.add.text(450, 150, "Act pattern", this.style, this.logGroup);
+	actText.anchor.setTo(0.5);
 	var resultText = game.add.text(700, 150, "Result", this.style, this.logGroup);
 	resultText.anchor.setTo(0.5);
 	//calculate the number of pages
@@ -2210,7 +2254,7 @@ LogViewer.prototype.updateLogs = function(targetPage)
 	var outerItem = Math.min(nextItem + this.logsPerPage, this.logs.length);
 	
 	//create new logs
-	var frameSprite, roundSprite, patternSprite, resultSprite;
+	var frameSprite, roundSprite, actSprite, resultSprite;
 	var y = 200;
 	for(i=0; nextItem < outerItem; nextItem++, i++, y+=50)
 	{
@@ -2229,16 +2273,16 @@ LogViewer.prototype.updateLogs = function(targetPage)
 		
 		//round
 		game.add.text(200, y, round, this.style, this.entryGroups[i]);
-		//pattern
-		var pattern = game.add.text(450, y, this.logs[nextItem].actPattern, this.style, this.entryGroups[i]);
+		//act
+		var actSprite = game.add.text(450, y, this.logs[nextItem].act, this.style, this.entryGroups[i]);
 			//hint box
-		this.hintBox.setHintBox(pattern, "Find in personal notes");
+		this.hintBox.setHintBox(actSprite, "Find in personal notes");
 			//link to open the corresponding entry in personal notes
-		pattern.inputEnabled = true;
-		pattern.events.onInputDown.add(this.seeNotesFun, this);
+		actSprite.inputEnabled = true;
+		actSprite.events.onInputDown.add(this.seeNotesFun, this);
 		//result
 		if(this.logs[nextItem].success)
-			resultSprite = game.add.text(700, y, "sccessful", this.style, this.entryGroups[i]);
+			resultSprite = game.add.text(700, y, "successful", this.style, this.entryGroups[i]);
 		else resultSprite = game.add.text(700, y, "failed", this.styleFailed, this.entryGroups[i]);
 		
 		this.entryGroups[i].callAll("anchor.setTo", "anchor", 0.5);
@@ -2257,7 +2301,7 @@ LogViewer.prototype.seeNotesFun = function(sprite, pointer)
 	this.notes.createNotes();
 	var id = this.notes.name2id(sprite.text);
 	if(id == -1)
-		window.alert("Sorry. This entry is not found in personal notes!");
+		this.messager.createMessage("Sorry. This entry is not found in personal notes!");
 	else this.notes.readNote(id);
 };
 
@@ -2281,7 +2325,7 @@ LogViewer.prototype.showReason = function(button, pointer)
 	if(entry.success)
 	{	//the act succeeds, no more resaon recorded
 		//caption
-		this.caption = game.add.text(game.world.centerX, 200, "\"" + entry.actPattern + "\" succeeded", this.styleHeadline, this.reasonGroup);
+		this.caption = game.add.text(game.world.centerX, 200, "\"" + entry.act + "\" succeeded", this.styleHeadline, this.reasonGroup);
 		game.add.text(game.world.centerX, game.world.centerY, "No definitive hurdle encountered", this.style, this.reasonGroup);
 		/*//click to close
 		this.reasonGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.deleteReason, this);*/
@@ -2289,7 +2333,7 @@ LogViewer.prototype.showReason = function(button, pointer)
 		return;
 	}
 	//the act failed. Display the reasons
-	this.caption = game.add.text(game.world.centerX, 200, "\"" + entry.actPattern + "\" failed", this.styleHeadline, this.reasonGroup);
+	this.caption = game.add.text(game.world.centerX, 200, "\"" + entry.act + "\" failed", this.styleHeadline, this.reasonGroup);
 	var y = 250;
 	//need rival buff
 	if(entry.noBuffHurdle.length)
@@ -2353,7 +2397,106 @@ LogViewer.prototype.closeLog = function()
 	this.scrollButtons.destroy();
 };
 module.exports = LogViewer;
-},{"../modules/ScrollButtons":18,"./HintBox":10,"./LogEntry":11}],13:[function(require,module,exports){
+},{"../modules/ScrollButtons":20,"./HintBox":10,"./LogEntry":11}],13:[function(require,module,exports){
+var HintBox = require("../modules/HintBox");
+/**
+@classdesc A class managing the popup messages
+@param {Phaser.Group} messageGroup - the group in which the messages are going to be displayed
+@param {HintBox} hintBox - the reference to hintBox of the context
+@constructor
+*/
+function Messager(messageGroup, hintBox)
+{
+	this.messageGroup = messageGroup;
+	this.hintBox = hintBox;
+	messageGroup.x = game.world.centerX;
+	messageGroup.y = game.world.centerY;
+	messageGroup.pivot = new Phaser.Point(game.world.centerX, game.world.centerY);
+	//this.context = context;
+	//constants
+	this.style = { font: "27px Courier New, monospace", fontWeight: "bold", fill: "#FF5011", align:"center", wordWrap: true, wordWrapWidth: 600};
+	this.styleLong = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#FF5011", align:"center", wordWrap: true, wordWrapWidth: 600};
+	
+	var pauseShadow = game.add.sprite(game.world.centerX, game.world.centerY, "black", 0, messageGroup);
+	pauseShadow.anchor.setTo(0.5);
+	pauseShadow.alpha = 0;
+	pauseShadow.inputEnabled = true;
+	
+	//message frame
+	var messageFrame = game.add.image(game.world.centerX, game.world.centerY, "dialogueBox", 0, messageGroup);
+	messageFrame.anchor.setTo(0.5);
+	//message text
+	this.messageText = game.add.text(game.world.centerX, game.world.centerY  - 35, "", this.style, this.messageGroup);
+	this.messageText.anchor.setTo(0.5);
+	//confirmButton
+	var confirmButton = game.add.button(game.world.centerX, game.world.centerY + 80, "gotItButton", this.exit, this, 0, 0, 1, 0, this.messageGroup);
+	confirmButton.anchor.setTo(0.5);
+	this.hintBox.setHintBox(confirmButton, "(Enter or SpaceBar)");
+	messageGroup.visible = false;
+	
+	this.messageQueue = [];	//a queue for messages to be displayed
+	//this.callbackQueue = [];	//a queue for the callback function of prompt messages. for alert messages, the values are null
+	//this.lastCallback = false;	//null if the last message is an alert message
+	//this.data;					//the data inputted by player
+	
+	//shortcut key for closing message - enter and space
+	var enterKey = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+	enterKey.onDown.add(this.exit, this);
+	var spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	spaceKey.onDown.add(this.exit, this);
+	game.input.keyboard.addKeyCapture(Phaser.Keyboard.SPACEBAR);
+}
+
+/**
+Create message that for the player. Similar to alert or prompt.
+The message is immediately displayed if there is no other messages;
+it's cached in queue if there are other messages.
+@param {string} texts - the message to be displayed
+@param {function} callback - callback function to be called when the player has entered data. If the message is alert message instead of prompt, this value is null. N.B. the context of the callback function is already given at the constructor
+*/
+Messager.prototype.createMessage = function(texts/*, callback*/)
+{
+	this.messageQueue.push(texts);
+	//this.callbackQueue.push(callback);
+	if(this.messageGroup.visible == false)
+		this.display();
+};
+/**
+Private function.
+Extract one message from the queue and display it
+*/
+Messager.prototype.display = function()
+{
+	var message = this.messageQueue.shift();
+	//var callback = this.callbackQueue.shift();
+	//this.lastCallback = callback;
+	this.messageText.setText(message);
+	if(message.length<50)	//auto adjust text size depending on text length
+		this.messageText.setStyle(this.style);
+	else this.messageText.setStyle(this.styleLong);
+	this.messageGroup.visible = true;
+	//popout animation
+	this.messageGroup.scale.setTo(0.01);
+	var tween = game.add.tween(this.messageGroup.scale).to({x: 1, y: 1}, 1000, "Elastic.easeOut", true, 0, 0, false);
+};
+
+/**
+Private function.
+Close the current message. May start a pending message
+*/
+Messager.prototype.exit = function()
+{
+	/*if(this.lastCallback)	//prompt message only
+		this.lastCallback(this.context, this.data);*/
+	this.messageGroup.visible = false;
+	this.hintBox.hide();
+	//go to display the next message
+	if(this.messageQueue.length)
+		this.display();
+};
+
+module.exports = Messager;
+},{"../modules/HintBox":10}],14:[function(require,module,exports){
 var dynamic_text = require("../modules/dynamic_text");
 
 /**
@@ -2365,20 +2508,23 @@ Each of the above interface will create one instance of this class
 @param {int} x -  the minimum x coordinate to create the sprite/sprites
 @param {int} y -  the minimum y coordinate to create the sprite/sprites
 @param {int} pattern - which multimedia pattern is requested. 0: intro/outro/credits/tutorial, 1: hall, 2: personal notes
+@param {Phaser.Group} fatherGroup - create the elements into this group, and the content will be placed in the right layer
 @param {function} callback - (optional) the callback function when the player click on the dialogue. (for dialogue only)
 @param {Object} callbackContext - (optional) the context of the callback function (for dialogue only)
-@param {Phaser.Group} fatherDialogueGroup - put the dialogueGroup in this group, and the content will be placed in the right layer
+
 @constructor
 */
-function MultimediaText(x, y, pattern)
+function MultimediaText(x, y, pattern, fatherGroup)
 {
 	this.x = x;
 	this.y = y;
 	this.pattern = pattern;
+	//add elements in fatherGroup to be presented in the right layer
+	this.fatherGroup = fatherGroup;
 	
 	//the two default sytles for texts together with image group
 	this.styles = { font: "20px Courier New, monospace", fill: "#00AA11", align: "left", wordWrap: true, wordWrapWidth: window.game.width - 310};
-	this.styleDialogue = { font: "20px Courier New, monospace", fill: "#0077FF", align: "left", wordWrap: true, wordWrapWidth: game.width - 520};
+	this.styleDialogue = { font: "20px Courier New, monospace", fill: "#FFF022", align: "left", wordWrap: true, wordWrapWidth: game.width - 520};
 	this.styleNotes = { font: "20px Segoe Print", align: "left", wordWrap: true, wordWrapWidth: window.game.width - 320};
 	this.styleName = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#00AA11", align: "left", }; 
 	
@@ -2399,13 +2545,8 @@ function MultimediaText(x, y, pattern)
 	if(pattern == 1)		//hall (dialogue)
 	{
 		this.dialogueGroup = game.add.group();
+		fatherGroup.add(this.dialogueGroup);
 	//initialize dynamic text
-		this.textSprite = game.add.text(x, y, "", this.styleDialogue, this.dialogueGroup);
-		this.finishSignal = new Phaser.Signal();	//signals when typing finishes
-		this.finishSignal.add(this.writeFinishedFunc, this);
-	
-		/*//when the player tap on the screen, immediately finish the typing animation
-		game.input.onTap.add(finishWriting, this);*/
 		
 	//dialogue frame, potrait and name of the speaker
 		//two arguments expected exclusively for dialogue
@@ -2414,8 +2555,8 @@ function MultimediaText(x, y, pattern)
 			window.alert("Error! more arguments as callback function when clicking on dialogue are expected!");
 			exit(4);
 		}
-		this.callbackFun = arguments[3];
-		this.callbackContext = arguments[4];
+		this.callbackFun = arguments[4];
+		this.callbackContext = arguments[5];
 
 		this.dialogueFrame = this.dialogueGroup.create(x-150, y-60, "dialogueBox");
 		this.nameSprite = game.add.text(x-130, y-30, "", this.styleName, this.dialogueGroup);		//the speaker name awaits
@@ -2427,16 +2568,16 @@ function MultimediaText(x, y, pattern)
 		//this.dialogueGroup.input.enableDrag(false, true);
 		this.dialogueFrame.events.onInputDown.add(this.tapOnDialogue, this);
 		this.dialogueGroup.visible = false;
-		//fatherDialogueGroup. To let dialogueGroup be presented in the right layer
-		if(arguments[5])
-			arguments[5].add(this.dialogueGroup);
-		this.textSprite.bringToTop();
+		//this.textSprite.bringToTop();
+		this.textSprite = game.add.text(x, y, "", this.styleDialogue, this.dialogueGroup);
+		this.finishSignal = new Phaser.Signal();	//signals when typing finishes
+		this.finishSignal.add(this.writeFinishedFunc, this);
 		return this;
 	}
 	if(pattern == 2)		//personal notes
 	{
 	//initialize pure text
-		this.textSprite = game.add.text(this.x, this.y, "", this.styleNotes);
+		this.textSprite = game.add.text(this.x, this.y, "", this.styleNotes, this.fatherGroup);
 	//initialize image
 	
 		return this;
@@ -2482,8 +2623,8 @@ MultimediaText.prototype.dynamicTextWithPortrait = function(pureText, portrait, 
 		//this.portraitSprite.anchor.setTo(0.5, 0.5);
 		
 		this.nameSprite.setText(name);
-		game.world.bringToTop(this.nameSprite);
-		game.world.bringToTop(this.textSprite);
+		//game.world.bringToTop(this.nameSprite);
+		//game.world.bringToTop(this.textSprite);
 		this.dynamicText(pureText);
 	}
 	else	//continue with old dialogue page (when changing page)
@@ -2532,6 +2673,7 @@ MultimediaText.prototype.imageText = function(textToParse, currentPage)
 	else {
 		//Creates the current page group
 		this.pageGroups[currentPage] = window.game.add.group();
+		this.fatherGroup.add(this.pageGroups[currentPage]);
 
 		//Puts all the commands on one line removing the line breaks
 		var commands = textToParse.split(/\r\n|\r|\n/).join("");
@@ -2570,7 +2712,7 @@ MultimediaText.prototype.imageText = function(textToParse, currentPage)
 					//If the word wrap width has been specified the text style is overwritten
 					if (args[4]) {
 						if(this.pattern == 2)
-							var style = this.styleNotes;
+							var style = Object.assign({}, this.styleNotes);
 						else var style = Object.assign({}, this.styles);
 						style.wordWrapWidth = window.game.width - args[4];
 
@@ -2669,7 +2811,7 @@ MultimediaText.prototype.clean = function()
 	game.globals.audioManager.typingOff();
 }
 module.exports = MultimediaText;
-},{"../modules/dynamic_text":19}],14:[function(require,module,exports){
+},{"../modules/dynamic_text":21}],15:[function(require,module,exports){
 /**
 @classdesc A class manages the NPCs in the hall state
 One instance constructed for each hall
@@ -2734,8 +2876,8 @@ function NPCManager(index)
 				targetId = this.name2id(string);
 				if(targetId == -1)
 				{
-					window.alert("Error! in the scenario file scenario" + index + "_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!");
-					exit(3);
+					var errorMessage = "Error! In the file scenario" + index + "_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!";
+					game.state.start('error', true, false, errorMessage);
 				}
 				else
 				{
@@ -2839,7 +2981,7 @@ NPCManager.prototype.updateSpeech = function(id)
 	return state - 1;
 };
 module.exports = NPCManager;
-},{}],15:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
 var PersonalNotes = require("../modules/PersonalNotes");
 var ScrollButtons = require("../modules/ScrollButtons");
 var MultimediaText = require("../modules/multimediaText");
@@ -2847,39 +2989,57 @@ var HintBox = require("../modules/HintBox");
 
 /**
 The class that manages the interface of personal notes. A new instance is created every time the personal notes is refered to.
-@param {Object} context - the context where the personal note is to be displayed in
+@param {Phaser.Group} fatherGroup - the group to created notes in
 @constructor
 */
-function Notes()
-{
+function Notes(fatherGroup)
+{	
 	//constants
 	this.namesPerPage = 10;	//maximum number of names that can be shown without scrolling
 	this.styleLabel = { font: "12px Segoe Print", fontWeight: "bold", align: "center"};
+	this.styleAlsoSee = { font: "15px Segoe Print", fontWeight: "bold", align: "center"};
 	this.styleTitle = { font: "17px Segoe Print", fontWeight: "bold", align: "center"};
 	this.styleLink = { font: "15px Segoe Print", fontWeight: "bold", fill: "#3300FF", align: "center"};
 	//this.style = { font: "16px Courier New, monospace", fontWeight: "bold", fill: "#00FF11", align: "left", wordWrap: true, wordWrapWidth: window.game.width - 95};
 	//this.style = { font: '24px Arial', fill: '#fff'};
+	this.fatherGroup = arguments[0];
+	this.fatherGroup.visible = false;
 	
 	this.hintBox = new HintBox("box");
 	this.noteNames =[];		//array of strings
 	this.descTexts = [];	//array of strings. Assigned at each time a name is clicked
-	//this.noteDescs = [];
 	this.nameSprites = [];	//sprites
-	this.nameGroup;			//sprite group
-	//this.description;		//sprite
+	this.descGroup;		//sprite
 
-	//this.descNPages;	//the number of pages of the description
-	//this.descCurrentPage;
-
-	this.multimedia = new MultimediaText(230, 50, 2);	//to manage the the image-text-mixed page
-	this.theDesc;		//a pointer to the current pure text description or the image-text-mixed description
-	
 	this.personalNotes = game.globals.personalNotes;
 	this.noteNames = this.personalNotes.getNames();	//retrieve the names
 	//the number of pages of the names
 	this.nameNPage = Math.ceil(this.noteNames.length/this.namesPerPage);
-	/*if(this.noteNames.length%this.namesPerPage)
-		this.nameNPage++;*/
+	
+	//general frame
+	this.PNFrame = game.add.sprite(1000, 0, "notes", 0, this.fatherGroup);
+	this.PNFrame.anchor.setTo(1,0);
+	/*intercept all clicking events before they reach those buttons covered by this image*/
+	this.PNFrame.inputEnabled = true;
+	//name panel
+	this.nameGroup = game.add.group();
+	this.fatherGroup.add(this.nameGroup);
+		//scroll buttons for the name list
+	this.nameScroll = new ScrollButtons(200, 50, 570, this.updateNamePage, this, this.nameNPage, this.nameGroup);
+		
+	//description panel
+	this.descGroup = game.add.group();
+	this.fatherGroup.add(this.descGroup);
+	//scroll buttons for the description
+		//number of pages of the description is initialized as 0. It will be updated by readNote function
+	this.descScroll = new ScrollButtons(955, 100, 500, this.updateDescPage, this, 0, this.descGroup);	
+	this.descriptionTitle = game.add.text(550, 30, "", this.styleTitle, this.descGroup);
+	this.descriptionTitle.anchor.setTo(0.5);
+	this.multimedia = new MultimediaText(230, 50, 2, this.descGroup);	//to manage the the image-text-mixed page
+	this.theDesc;		//a pointer to the current pure text description or the image-text-mixed description
+
+	this.internalGroup = game.add.group();
+	this.fatherGroup.add(this.internalGroup);
 	
 	//shortcut key for personal notes
 	var escKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
@@ -2894,37 +3054,15 @@ Formally create the personal notes, after the player have clicked on "personal n
 */
 Notes.prototype.createNotes = function()
 {
+	if(this.fatherGroup.visible == true)
+		return;	//avoid diplaying two personal notes
+	this.fatherGroup.visible = true;
 	game.globals.audioManager.lowVolume(true);
-	/*//the biggest group containing everything is the personal notes
-	this.notesGroup = game.add.group();*/
-	//general frame
-	this.PNFrame = game.add.sprite(1000, 0, "notes");
-	this.PNFrame.anchor.setTo(1,0);
-	/*intercept all clicking events before they reach those buttons covered by this image*/
-	this.PNFrame.inputEnabled = true;
-	//name panel
-	this.nameGroup = game.add.group();
-		//scroll buttons for the name list
-	this.nameScroll = new ScrollButtons(200, 50, 570, this.updateNamePage, this, this.nameNPage);
-	/*this.notesGroup.add(this.nameScroll);*/
-		
-	//description panel
-		//scroll buttons for the description
-	//number of pages of the description is initialized as 0. It will be updated by readNote function
-	this.descScroll = new ScrollButtons(955, 100, 500, this.updateDescPage, this, 0);	
-	/*this.notesGroup.add(this.descScroll);*/
-	this.descriptionTitle = game.add.text(550, 30, "", this.styleTitle);
-	this.descriptionTitle.anchor.setTo(0.5);
 	
 	//exit button
-	this.exitButton = game.add.button(game.world.width-30, 30, "cross", this.exitNotes, this, 0, 0, 1, 0);
+	this.exitButton = game.add.button(game.world.width-30, 30, "cross", this.exitNotes, this, 0, 0, 1, 0, this.fatherGroup);
 	this.hintBox.setHintBox(this.exitButton, "Close (ESC)       ");
 	this.exitButton.anchor.setTo(0.5);
-	//this.exitButton = game.add.button(game.world._width-10, 10, "cross", exitNotes, context);
-	/*this.notesGroup.add(this.exitButton);*/
-	this.internalGroup = game.add.group();
-	//Lowers the music volume
-    //window.game.globals.music.setVolume(window.game.globals.music.lowVolume);
 	
 	this.updateNamePage(0);	//name starts at the first page
 	/*description starts at the introduction of personal notes
@@ -3015,14 +3153,13 @@ Notes.prototype.readNote = function(id)
 	if(internalLinks && internalLinks.length)
 	{
 		var length = internalLinks.length;
-		game.add.text(230, 550, "Also see:", this.styleLabel, this.internalGroup);
+		game.add.text(230, 550, "Also see:", this.styleAlsoSee, this.internalGroup);
 		for(var i = 0; i < length; i++)
 		{
 			var internalText = game.add.text(300, 590-(length -i)*25, internalLinks[i], this.styleLink, this.internalGroup);
 			internalText.inputEnabled = true;
 			var newId = this.name2id(internalLinks[i]);
-			if(newId != -1)
-				internalText.events.onInputDown.add(this.internal, this, 0, newId);
+			internalText.events.onInputDown.add(this.internal, this, 0, newId);
 			this.hintBox.setHintBox(internalText, "Click to jump to");
 		}
 	}
@@ -3039,14 +3176,14 @@ Notes.prototype.readNote = function(id)
 	{
 		if(urls[0])
 		{
-			this.externalButton1 = game.add.button(770, 550, "link", this.external, this, 0, 0, 1, 0);
+			this.externalButton1 = game.add.button(770, 550, "link", this.external, this, 0, 0, 1, 0, this.fatherGroup);
 			this.externalButton1.anchor.setTo(0.5);
 			this.externalButton1.url = urls[0];
 			this.hintBox.setHintBox(this.externalButton1, "View external link");
 		}
 		if(urls[1])
 		{
-			this.externalButton2 = game.add.button(620, 550, "link", this.external, this, 0, 0, 1, 0);
+			this.externalButton2 = game.add.button(620, 550, "link", this.external, this, 0, 0, 1, 0, this.fatherGroup);
 			this.externalButton2.anchor.setTo(0.5);
 			this.externalButton2.url = urls[1];
 			this.hintBox.setHintBox(this.externalButton2, "View external link");
@@ -3061,6 +3198,11 @@ Invoked when a internal link is clicked. Will change to the designated entry in 
 */
 Notes.prototype.internal = function(sprite, pointer, id)
 {
+	if(id == -1)
+	{
+		game.globals.messager.createMessage("Sorry. This entry is not found in personal notes!");
+		return;
+	}
 	this.hintBox.hide();
 	this.readNote(id);
 };
@@ -3096,7 +3238,8 @@ Therefore, a check is necessary
 */
 Notes.prototype.escFun = function()
 {
-	if(this.nameGroup && this.nameGroup.length)
+	if(this.fatherGroup.visible == true)
+	//if(this.exitButton && this.notes.exitButton.alive == true/*this.nameGroup && this.nameGroup.length*/)
 		this.exitNotes();
 };
 /**
@@ -3114,14 +3257,17 @@ Notes.prototype.scrollFun = function(key)
 
 /**
 Close the personal note, and return to where it was
-The lower level sprites are restored
+The lower layer sprites are revealed
 */
 Notes.prototype.exitNotes = function()
 {
 	this.hintBox.hide();
+	this.fatherGroup.visible = false;
+	this.exitButton.destroy();
+	/*this.fatherGroup.removeAll(true);
 	this.nameGroup.destroy();
 	//this.description.destroy();
-	this.exitButton.destroy();
+	
 	this.PNFrame.destroy();
 	this.nameScroll.destroy();
 	delete this.nameScroll;
@@ -3133,12 +3279,12 @@ Notes.prototype.exitNotes = function()
 	if(this.externalButton1)
 		this.externalButton1.destroy();
 	if(this.externalButton2)
-		this.externalButton2.destroy();
+		this.externalButton2.destroy();*/
 	//restore the music volume
 	game.globals.audioManager.lowVolume(false);
 };
 module.exports = Notes;
-},{"../modules/HintBox":10,"../modules/PersonalNotes":16,"../modules/ScrollButtons":18,"../modules/multimediaText":22}],16:[function(require,module,exports){
+},{"../modules/HintBox":10,"../modules/PersonalNotes":17,"../modules/ScrollButtons":20,"../modules/multimediaText":24}],17:[function(require,module,exports){
 /**
 @classdesc A class storing the personal notes. created at load state in game.globals
 @param {Object} parsedNotes - the personal notes object read from the file after json parsing
@@ -3289,9 +3435,76 @@ PersonalNotes.prototype.getUrls = function(id)
 	return this.urls[id];
 };
 module.exports = PersonalNotes;
-},{}],17:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
+var LogEntry = require("../modules/LogEntry");
+
+/**
+A value class storing the player's record. It is created at one completion of a scenario. scores are calculated at its construction. New record with higher player's score will overwrite the old one.
+@param {Array} logs - an array of LogEntry, which record the offensive or defensive actions and their consequences in the last battle
+@param {int} role - the player's role in the battle. 0 for intruder, 1 for defender
+@param {int} endingRound - at which round the game finishes. useful for calculating the score when the intruder wins
+@param {int} assetsCompromised - the amount of assets lost. useful for calculating the score when the defender wins
+@constructor
+*/
+function RecordEntry(logs, role, endingRound, assetsCompromised)
+{
+	this.logs = logs;
+	this.role = role;
+	this.endingRound = endingRound;
+	this.assetsCompromised = assetsCompromised;
+	this.scores = [0, 0];	//an array of the form [intruder's score, defender's score]. used only at double player mode
+	this.calculateScores();
+	this.score = this.scores[role];	//used by single player mode
+}
+/**
+The function that calculate the scores of the two characters based on the action log
+*/
+RecordEntry.prototype.calculateScores = function()
+{
+	for(var l in this.logs)
+	{
+		if(this.logs[l].round%2 == 0)	//intruder's round
+			if(this.logs[l].success)
+			//{
+				//if(this.role == 0)
+					this.scores[0] +=100;	//intruder gains 100 points at each success at his round
+			//}
+			else //if(this.role == 1)
+					this.scores[1] += 100;	//defender gains 100 points at each failure at intruder's round
+	}
+	//if(this.role == 0)
+	//{
+		this.scores[0] -= this.endingRound*40;		//intruder loss 40 points for every round the defender survives
+		this.scores[0] += this.assetsCompromised*4;	//intruder gains 4 points for every damage dealt to the assets
+	//}
+	//else 
+	//{
+		this.scores[1] += this.endingRound*40;		//defender gains 40 points for every round he survives
+		this.scores[1] -= this.assetsCompromised*4;	//defender loss 4 points for every damage dealt to the assets
+	//}
+	/*nagative score is too much frustrating for the players, even if they did play badly.
+	nagative scores will be raised to zero, hoping to console them a little*/
+	if(this.scores[0] < 0)	
+		this.scores[0] = 0;
+	if(this.scores[1] < 0)	
+		this.scores[1] = 0;
+};
+
+module.exports = RecordEntry;
+
+},{"../modules/LogEntry":11}],19:[function(require,module,exports){
 var MultimediaText = require("../modules/MultimediaText");
 
+/** 
+@classdesc A class managing the in-game scripts used to dynamically show dialogues, unlock acts, or lock on end turn button before player has done an action.
+The AI however, is managed by AIManager.
+@param {int} index - the scenario number
+@param {cyberspace} cyberspace - the reference to cyberspace state
+@param {ActManager} actManager - the reference to actManager
+@param {AiManager} aiManager - the reference to aiManager. Used only to invoke the attempt to unlock act pattern for the AiManager
+@param {Phaser.Group} dialogueGroup - the group to create the dialogues in
+@constructor
+*/
 function ScriptManager(index, cyberspace, actManager, aiManager, dialogueGroup)
 {
 	this.index = index;
@@ -3314,7 +3527,10 @@ function ScriptManager(index, cyberspace, actManager, aiManager, dialogueGroup)
 			//wrong round number
 			if(scr.round == NaN || scr.round <= 0)
 			{
-				window.alert("Warning! The script for round \""+scr.round+"\" is not understandable.");
+				if(index<0)
+					var errorMessage = "Error! Inside tutorial"+(0-parseInt(index))+"_cyber.json, under the element of \"script\", property \"round\" takes a non-positive value: \""+scr.round+"\".";
+				else var errorMessage = "Error! Inside scenario"+index+"_cyber.json, under the element of \"script\", property \"round\" takes a non-positive value: \""+scr.round+"\".";
+				game.state.start('error', true, false, errorMessage);
 			}
 			var object = new Object();
 			if(scr.dialogues)
@@ -3325,7 +3541,7 @@ function ScriptManager(index, cyberspace, actManager, aiManager, dialogueGroup)
 				object.shouldApply = scr.shouldApply;
 			this.scripts[scr.round] = object;
 		}
-		this.multimedia = new MultimediaText(450, 420, 1, this.dismissDialogue, this, dialogueGroup);
+		this.multimedia = new MultimediaText(450, 420, 1, dialogueGroup, this.dismissDialogue, this);
 	}
 }
 
@@ -3391,8 +3607,9 @@ ScriptManager.prototype.checkScript = function(round)
 				}
 			//update display
 			this.cyberspace.updateActs(0);
-			//try to activate some action patterns for the AI
-			this.aiManager.activatePatterns();
+			if(this.aiManager)
+				//try to activate some action patterns for the AI
+				this.aiManager.activatePatterns();
 		}
 	}
 };
@@ -3451,7 +3668,7 @@ ScriptManager.prototype.shouldApply = function(round)
 
 module.exports = ScriptManager;
 
-},{"../modules/MultimediaText":13}],18:[function(require,module,exports){
+},{"../modules/MultimediaText":14}],20:[function(require,module,exports){
 /**
 @classdesc The class that manages the construction of scroll arrows, as well as the scrolling.
 It updates the current page number, and call the real page update function from the caller.
@@ -3461,19 +3678,22 @@ It updates the current page number, and call the real page update function from 
 @param {function} updateFunction - the update function to call when the scroll up or scroll down arrow is clicked
 @param {Object} context - the context of updateFunction
 @param {int} NPage - the number of page
-@param {Phaser.Group} group - (optional) the group this button is to join. Useful for hiding or deleting with a whole group, and useful for aligning it to the right layer.
+@param {Phaser.Group} group - the group this button is to join. Useful for hiding or deleting with a whole group, and useful for aligning it to the right layer.
 @constructor
 */
-function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages)
+function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages, fatherGroup)
 {
 	this.updateFunction = updateFunction;
 	this.context = context;
 	this.NPages = NPages;
-	
+	this.fatherGroup = fatherGroup;
+	//constants
 	this.style = { font: "15px Segoe UI black", fontWeight: "bold", fill: "#FF3300", align: "right"};
 	
 	this.currentPage = 0;
 	this.scrollGroup = game.add.group();
+	//add to the parent group, which is passed as parameter
+	fatherGroup.add(this.scrollGroup);
 	this.upArrow = game.add.button(maxX, minY+20, "arrowUp", this.scrollUp, this, 0, 0, 0, 0, this.scrollGroup);
 	this.upArrow.anchor.setTo(1, 1);
 	this.upTween = game.add.tween(this.upArrow.scale).to({y:1.5}, 500,
@@ -3493,10 +3713,6 @@ function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages)
 	//text to indicate the current and maximum page
 	this.pageIndicator = game.add.text(maxX, (minY+maxY)/2, parseInt(this.currentPage+1) + "/" + this.NPages, this.style, this.scrollGroup);
 	this.pageIndicator.anchor.setTo(1, 0.5);
-	
-	if(arguments[6])
-		//add to the parent group, which is passed as parameter
-		arguments[6].add(this.scrollGroup);
 }
 /**
 (Used by the description of personal notes or by acts when new acts are added by the script)
@@ -3578,7 +3794,7 @@ ScrollButtons.prototype.destroy = function()
 	this.scrollGroup.destroy();
 };
 module.exports = ScrollButtons;
-},{}],19:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 /**
  * Module used to write text in real time in order to simulate keyboard typing.
  * @type {{write_one: module.exports.write_one}}
@@ -3621,15 +3837,15 @@ module.exports = {
         return timer;
     }
 };
-},{}],20:[function(require,module,exports){
+},{}],22:[function(require,module,exports){
 /* global alertify */
-
+var Messager = require("../modules/Messager");
 /**
  * This module handles the CORS request management to send learning data about player's performance to the
  * data gathering server.
  * @type {{createCORSRequest: module.exports.createCORSRequest, getTitle: module.exports.getTitle, makeCorsRequest: module.exports.makeCorsRequest}}
  */
-module.exports = {
+module.exports = {	
     /**
      * Create the XHR object and sets its "Content-Type" and "Content-Length" headers to make it
      * compatible with the CORS protocol.
@@ -3644,13 +3860,13 @@ module.exports = {
             // XHR for Chrome/Firefox/Opera/Safari.
             xhr.open(method, url, true);
             xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-            xhr.setRequestHeader("Content-length", datas.length);
+            //xhr.setRequestHeader("Content-length", datas.length);
         } else if (typeof XDomainRequest !== "undefined") {
             // XDomainRequest for IE.
             xhr = new XDomainRequest();
             xhr.open(method, url);
             xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-            xhr.setRequestHeader("Content-length", datas.length);
+			//xhr.setRequestHeader("Content-length", datas.length);
         } else {
             // CORS not supported.
             xhr = null;
@@ -3681,7 +3897,7 @@ module.exports = {
         var xhr = this.createCORSRequest('POST', url, datas);
         //Checks for CORS compatibility and throws an alert otherwise
         if (!xhr) {
-            alertify.alert('CORS not supported');
+            game.globals.messager.createMessage('CORS not supported');
             return;
         }
 
@@ -3689,21 +3905,20 @@ module.exports = {
         xhr.onreadystatechange = function() {
             if(xhr.readyState === 4 && xhr.status === 200) {
                 var response = JSON.parse(xhr.responseText);
-                alertify.alert(response.message);
-                window.alert("Link to the second survey: https://goo.gl/FO94LC  (Save it with Ctrl+C and paste it in the address bar with Ctrl+V)");
+                game.globals.messager.createMessage(response.message);
+                //game.globals.messager.createMessage("Link to the second survey: https://goo.gl/FO94LC  (Save it with Ctrl+C and paste it in the address bar with Ctrl+V)");
             }
         };
 
         //Sets the callback to execute if the request fails
-        xhr.onerror = function() {
-            alertify.alert('Error while sending data! Please resend them using the button in the game menu.');
-        };
+        xhr.onerror = function(){game.globals.messager.createMessage('Error while sending data! Maybe resend another time using the button in the game menu.');};
+		
 
         //Actually sends the request
         xhr.send(datas);
     }
 };
-},{}],21:[function(require,module,exports){
+},{"../modules/Messager":13}],23:[function(require,module,exports){
 /* global alertify */
 
 /**
@@ -3718,9 +3933,9 @@ module.exports = {
      */
     loadSaveData: function() {
         if (this.checkCompatibility()) {
-            var savedata = JSON.parse(localStorage.getItem('savedata'));
-            if (savedata) {
-                game.globals.savedata = savedata;
+            var records = JSON.parse(localStorage.getItem('records'));
+            if (records) {
+                game.globals.records = records;
             }
         }
     },
@@ -3728,21 +3943,21 @@ module.exports = {
     /**
      * Saves data in the local storage if no data for the current level exist or if the current score is higher than the saved one.
      * @param {int} index - The index of the scenario that is currently being saved
-     * @param {Object} stats - Object containing notices replies statistics and level score
-     * @param {int} shieldsNumber - Shields earned in the level
-     * @param {Array} logs - List of the log entries representing the player replies to all the notices
+		@param {Record}	
      */
-    saveSaveData: function(index, score, logs) {
-        //Create savedata if not existent or overwrite it if saved score is lower than the new one
-        if (!game.globals.savedata[index] || game.globals.savedata[index].score < score) 
+    saveSaveData: function(index, record) {
+        //Create records if not existent or overwrite it if saved player's score is lower than the new one
+        if (!game.globals.records[index] || game.globals.records[index].score < record.score)
 		{
-			game.globals.savedata[index] = {};
-            game.globals.savedata[index].score = score;
-            game.globals.savedata[index].logs = logs;
-
+			game.globals.records[index] = {logs: record.logs,
+											role: record.role,
+											endingRound: record.endingRound,
+											assetsCompromised: record.assetsCompromised,
+											score: record.score
+											};
             //Saves the data to the Web Storage if it is supported by the current browser
             if (this.checkCompatibility()) {
-                localStorage.setItem('savedata', JSON.stringify(game.globals.savedata));
+                localStorage.setItem('records', JSON.stringify(game.globals.records));
             }
         }
     },
@@ -3752,11 +3967,11 @@ module.exports = {
      * @returns {boolean} True if data have been removed, false otherwise.
      */
     removeSaveData: function() {
-        if(game.globals.savedata.length !== 0) {
-			game.globals.savedata = [];
+        if(game.globals.records.length !== 0) {
+			game.globals.records = [];
             delete game.globals.playerName;
             if (this.checkCompatibility()) {
-                localStorage.removeItem('savedata');
+                localStorage.removeItem('records');
                 localStorage.removeItem('playerName');
 				localStorage.removeItem('learningData');
             }
@@ -3802,22 +4017,25 @@ module.exports = {
         }
         // prompt dialog
         var context = this;
-        alertify.prompt("Insert your name as NAME.SURNAME.Any4DigitNumber   (e.g. MARIO.ROSSI.1234)", function (e, str) 
+        var promptDialogue = alertify.prompt("Insert your name as NAME.SURNAME.Any4DigitNumber   (e.g. MARIO.ROSSI.1234)", function (e, str) 
 		{	// str is the input text
             if (e) {
                 // user clicked "ok"
                 if (/^([a-zA-Z]{2,40}\.[a-zA-Z]{2,40}\.[0-9]{4})$/.test(str)) { //Correct name
                     game.globals.playerName = str;
                     localStorage.setItem("playerName", str);
+					//alertify.success("Name saved!");
                     alertify.alert("Name saved!");
                     nameSignal.dispatch(true);
                 }
                 else { //Wrong name
                     alertify.alert("Name not valid! Please input your name");
+					//alertify.success("Name not valid! Please input your name");
                     context.promptForName(nameSignal);
                 }
             }
 			else { //Name not inserted
+				//alertify.error("You must insert a name!");
                 alertify.alert("You must insert a name!");
                 context.promptForName(nameSignal);
             }
@@ -3825,9 +4043,9 @@ module.exports = {
     }
 };
 
-},{}],22:[function(require,module,exports){
-arguments[4][13][0].apply(exports,arguments)
-},{"../modules/dynamic_text":19,"dup":13}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
+arguments[4][14][0].apply(exports,arguments)
+},{"../modules/dynamic_text":21,"dup":14}],25:[function(require,module,exports){
 var ScrollButtons = require("../modules/ScrollButtons");
 var GameManager = require("../modules/GameManager");
 var ActManager = require("../modules/ActManager");
@@ -3835,9 +4053,11 @@ var BuffManager = require("../modules/BuffManager");
 var AIManager = require("../modules/AIManager");
 var ScriptManager = require("../modules/ScriptManager");
 var EffectManager = require("../modules/EffectManager");
+var Messager = require("../modules/Messager");
 var Notes = require("../modules/Notes");
 var LogViewer = require("../modules/LogViewer");
 var HintBox = require("../modules/HintBox");
+var RecordEntry = require("../modules/RecordEntry");
 /**
 The cyber battle state. It's a turn-base fight. The turn ranges in (1,maxRound], with odd number being defender's round, even number being intruder's round. The game ends with server's assets all compromised (intruder wins) or with the maxRound reached (defender wins).
 It takes the role of View in the MVC framework. GameManager takes the role of Model and Controller.
@@ -3845,9 +4065,11 @@ It takes the role of View in the MVC framework. GameManager takes the role of Mo
 var cyberspace = {
 	/**
 	@param {int} index - negative number for tutorials, 0 or positive number for scenarios
+	@param {boolean} doublePlayer - true: double player mode, false: single player mode
 	*/
-	init: function(index)
+	init: function(index, doublePlayer)
 	{
+		this.doublePlayer = doublePlayer;
 		//constants
 		this.actsPerPage = 5;
 		this.buffsPerPage = 5;
@@ -3866,7 +4088,7 @@ var cyberspace = {
 		else this.cyber = game.globals.scenarioCybers[index];
 		this.index = index;
 		
-		//the player's role
+		//in single player mode, player's role; in double player mode, 1st player's role
 		if(this.cyber.defensive)
 			this.role = 1;
 		else this.role = 0;
@@ -3884,10 +4106,13 @@ var cyberspace = {
 	//layer 4: the group for action logs
 		this.logGroup = game.add.group();
 	//layer 5
-		this.pauseGroup = game.add.group();
+		this.notesGroup = game.add.group();
 	//layer 6
+		this.pauseGroup = game.add.group();
+	//layer 7
 		this.confirmGroup = game.add.group();
-		
+	//layer 8
+		this.messageGroup = game.add.group();
 		//create the managers and personal notes
 		if(this.cyber.defensive)
 		{
@@ -3902,19 +4127,23 @@ var cyberspace = {
 		
 		this.hintBox = new HintBox("box");
 		//personal notes  and the managers
-		this.notes = new Notes(this);
+		this.notes = new Notes(this.notesGroup);
+		this.messager = new Messager(this.messageGroup, this.hintBox);
+		game.globals.messager = this.messager;
 		
-		this.logViewer = new LogViewer(this.logs, this.role, this.notes, this.logGroup);
+		this.logViewer = new LogViewer(this.logs, this.role, this.doublePlayer, this.notes, this.messager, this.logGroup);
 		this.effectManager = new EffectManager(this.logGroup, X, Y, 200, 50, 50, 110);
-		this.buffManager = new BuffManager(index);
-		this.actManager = new ActManager(index, this.buffManager, this.effectManager, this.logs, this.role);
-		this.aiManager = new AIManager(index, this.actManager, this.buffManager, 1-this.role);
+		this.buffManager = new BuffManager(index, this.messager);
+		this.actManager = new ActManager(index, this.doublePlayer, this.buffManager, this.effectManager, this.messager, this.logs, this.role);
+		if(!this.doublePlayer)	//no aiManager if double player
+			this.aiManager = new AIManager(index, this.actManager, this.buffManager, 1-this.role);
 		this.scriptManager = new ScriptManager(index, this, this.actManager, this.aiManager, this.dialogueGroup);
-		
-		this.gameManager = new GameManager(index, this.buffManager, this,this.aiManager, this.scriptManager, this.effectManager, this.logs);
-		
+		this.gameManager = new GameManager(index, this.doublePlayer, this.buffManager, this, this.aiManager, this.scriptManager, this.effectManager, this.messager, this.logs);
 		//give actManger the reference to GameManager
 		this.actManager.setGameManager(this.gameManager);
+		
+		this.currentRound;	//a copy synchronized with gameManager
+		this.controllerRole;
 	},
 	
 	create: function(){
@@ -3943,13 +4172,13 @@ var cyberspace = {
 		this.nameSprites[1].anchor.setTo(0.5);
 		//create resource
 		this.resourceSprites = [,];
-		this.resourceSprites[this.role] = game.add.text(210, 550, "", this.styleResource, this.panelGroup);
-		this.resourceSprites[1-this.role] = game.add.text(740, 50, "", this.styleResource, this.panelGroup);
+		this.resourceSprites[this.role] = game.add.text(220, 550, "", this.styleResource, this.panelGroup);
+		this.resourceSprites[1-this.role] = game.add.text(730, 50, "", this.styleResource, this.panelGroup);
 		this.updateResource(0);
 		this.updateResource(1);
 		this.resourceSprites[0].anchor.setTo(0.5);
 		this.resourceSprites[1].anchor.setTo(0.5);
-		//create assert sprite
+		//create asset sprite
 		var x, y;
 		if(this.role) {x = 130; y = 455;}
 		else {x = 850; y = 145;}
@@ -4026,7 +4255,8 @@ var cyberspace = {
 		this.popupGroup.visible = false;
 		
 	//layer 4: the group for action logs
-	//layer 5: pause group: restart cyber battle + back to menu + resume button
+	//layer 5: the group for notes
+	//layer 6: pause group: restart cyber battle + back to menu + resume button
 		//to display clicking events for all lower level buttons
 		this.pauseShadow = game.add.sprite(game.world.centerX, game.world.centerY, "black", 0, this.pauseGroup);
 		this.pauseShadow.alpha = 0.5;
@@ -4055,7 +4285,7 @@ var cyberspace = {
 		this.pauseGroup.callAll("anchor.setTo", "anchor", 0.5);
 		this.pauseGroup.visible = false;
 		
-	//layer 6: the group for "are you sure to quit?"
+	//layer 7: the group for "are you sure to quit?"
 		//mask lower clicks
 		this.mask = game.add.sprite(game.world.centerX, game.world.centerY, "black", 0, this.confirmGroup);
 		this.mask.alpha = 0.7;
@@ -4067,6 +4297,7 @@ var cyberspace = {
 		
 		this.confirmGroup.callAll("anchor.setTo", "anchor", 0.5);
 		this.confirmGroup.visible = false;
+	//layer 8: the group for messages
 		
 		this.setKeys();
 		
@@ -4100,7 +4331,9 @@ var cyberspace = {
 	},
 /* ------------------- update functions starts ----------------------*/	
 	/**
-	Callback functions to scroll the pages of the acts to the right page
+	Callback functions to scroll the pages of the acts to the right page.
+	Also called at round change, with parameter 0, to refresh the whole list of acts, including scroll buttons
+	@param {int} targetPage - the page to scroll to
 	*/
 	updateActs: function(targetPage)
 	{
@@ -4110,9 +4343,8 @@ var cyberspace = {
 		this.actSprites = [];
 		this.actTweens = [];
 		
-		/*due to the possibility of add acts by script, array of actNames and the number of pages can change dynamically. Therefore, actScroll are dynamically set here.*/
-		var unlockedActs = this.actManager.getUnlockedActs(this.role);
-		//this.actNames = this.actManager.getActNames(this.role);
+		/*due to the possibility of adding acts by script, or changing the controller in double player mode, the array of actNames and the number of pages can change dynamically. Therefore, actScroll is dynamically set here.*/
+		var unlockedActs = this.actManager.getUnlockedActs(this.controllerRole);
 		var NPages = Math.ceil(unlockedActs.length / this.actsPerPage);
 		this.actScroll.setNPages(NPages);
 		this.actScroll.setCurrentPage(targetPage);
@@ -4125,9 +4357,9 @@ var cyberspace = {
 		{
 			id = unlockedActs[nextItem];
 			//create learnt and unlearnt acts with different color
-			if(this.actManager.actLearnt(this.role, id))
-				this.actSprites[i] = game.add.text(450, 260 + 50 * i, this.actManager.getAct(this.role, id).name, this.style, this.actsGroup);	//green for learnt acts
-			else this.actSprites[i] = game.add.text(450, 260 + 50 * i, this.actManager.getAct(this.role, id).name, this.styleUnlearnt, this.actsGroup);	//blue for act not learnt
+			if(this.actManager.actLearnt(this.controllerRole, id))
+				this.actSprites[i] = game.add.text(450, 260 + 50 * i, this.actManager.getAct(this.controllerRole, id).name, this.style, this.actsGroup);	//green for learnt acts
+			else this.actSprites[i] = game.add.text(450, 260 + 50 * i, this.actManager.getAct(this.controllerRole, id).name, this.styleUnlearnt, this.actsGroup);	//blue for act not learnt
 		
 			this.actSprites[i].inputEnabled = true;
 			this.actSprites[i].events.onInputDown.add(this.showAct, this, 0, id, i);
@@ -4180,29 +4412,32 @@ var cyberspace = {
 	},
 	/**
 	Callback function invoked at new round initiation to update the displayed value
+	Also synchronizes this.currentRound with gameManager, and then update this.controllerRole
 	*/
 	updateRound: function()
 	{
-		var round = this.gameManager.getRound();
-		var roundText = "Round: " + round + " / " + this.gameManager.maxRounds;
+		this.currentRound = this.gameManager.getRound();
+		this.controllerRole = this.currentRound%2;	//0 if intruder is controlling, 1 if defender is controlling
+		var roundText = "Round: " + this.currentRound + " / " + this.gameManager.maxRounds;
 		this.roundSprite.setText(roundText);
-		var role = round % 2;
-		this.effectManager.createRoundSpark("Round:\n"+round, role, 400);
+		var role = this.currentRound % 2;
+		this.effectManager.createRoundSpark("Round:\n"+ this.currentRound, role, 400);
 	},
 	/**
 	Activate or deactivate player's learning and applying functionality, base on whether it's the player's role
 	@param {boolean} playerRound - true: player's round, false: rival's round
 	*/
-	changeControl: function(playerRound)
+	/*changeControl: function(playerRound)
 	{
 		this.playerRound = playerRound;
-	},
+	},*/
 /* -------------------- update functions ends -----------------------*/		
 	
 /* ---- act/buffs/buff/attack log popup screen functions starts -----*/	
 	/**
 	When the player clicked on an act.
 	Show the act detail, together with learn/apply and seeNote button
+	However, for single player mode, at AI's round, the learn/apply button is disabled
 	@param {Phaser.Sprite} sprite - the sprite that invokes this
 	@param {Phaser.Pointer} pointer - the mouse pointer object
 	@param {int} id - act id
@@ -4217,7 +4452,7 @@ var cyberspace = {
 		this.variableGroup.removeAll(true);
 		this.popupGroup.visible = true;
 
-		var act = this.actManager.getAct(this.role, id);
+		var act = this.actManager.getAct(this.controllerRole, id);
 		//caption
 		this.caption.setText(act.name);
 		//seeNotes button
@@ -4234,20 +4469,28 @@ var cyberspace = {
 			{
 				preText = "prerequisites for learning: ";
 				for(p in act.prerequisites)
-					preText += this.actManager.id2name(this.role, act.prerequisites[p]) + ", ";
+					preText += this.actManager.id2name(this.controllerRole, act.prerequisites[p]) + ", ";
 				preText = preText.slice(0, -2);	//delete tail
 				this.preSprite = game.add.text(150, 150, preText, this.styleResource, this.variableGroup);
 			}
 			
-			//learning cost
-			this.learningCostSprite = game.add.text(750, 530, "Learning cost: " + act.learningCost, this.styleResource, this.variableGroup);
-			this.learningCostSprite.anchor.setTo(0.5);
-			//a button to learn
-			this.learnButton = game.add.button(500, 530, "learnButton", this.learnAct, this, 0, 0, 1, 0, this.variableGroup);
-			this.hintBox.setHintBox(this.learnButton, "Learn the act (E)");
-			this.learnButton.id = id;
-			this.learnButton.i = i;
-			this.learnButton.anchor.setTo(0.5);
+			if(!this.doublePlayer && this.role != this.controllerRole)
+			{	//single player mode and at AI's round
+				this.learningCostSprite = game.add.text(500, 530, "It's an act belonging to AI", this.styleDamage, this.variableGroup);
+			}
+			else
+			{
+				//learning cost
+				this.learningCostSprite = game.add.text(750, 530, "Learning cost: " + act.learningCost, this.styleResource, this.variableGroup);
+				this.learningCostSprite.anchor.setTo(0.5);
+				//a button to learn
+				this.learnButton = game.add.button(500, 530, "learnButton", this.learnAct, this, 0, 0, 1, 0, this.variableGroup);
+				this.hintBox.setHintBox(this.learnButton, "Learn the act (E)");
+				this.learnButton.ownerRole = this.controllerRole;
+				this.learnButton.id = id;
+				this.learnButton.i = i;
+				this.learnButton.anchor.setTo(0.5);
+			}
 			//nullify the pointer so as not to fool the "A" key
 			this.applyButton = undefined;
 		}
@@ -4372,22 +4615,30 @@ var cyberspace = {
 			if(act.spamRequests)
 				this.spamSprite = game.add.text(150, y, "Generate spam request: " + act.spamRequests , this.styleDamage, this.variableGroup);
 			
-			//cost
-			if(act.cost)
-			{
-				this.costSprite = game.add.text(550, 530, "Cost: " + act.cost, this.styleResource, this.variableGroup);
-				this.costSprite.anchor.setTo(0.5);
-				//a button to apply
-				this.applyButton = game.add.button(750, 530, "applyButton", this.applyAct, this, 0, 0, 1, 0, this.variableGroup);
-				this.hintBox.setHintBox(this.applyButton, "Apply the act (A)");
-				this.applyButton.id = id;
-				this.applyButton.anchor.setTo(0.5);
+			if(!this.doublePlayer && this.role != this.controllerRole)
+			{	//single player mode and at AI's round
+				this.costSprite = game.add.text(500, 530, "It's an act belonging to AI", this.styleDamage, this.variableGroup);
 			}
 			else
-			{				
-				this.costSprite = game.add.text(500, 530, "It's not to be used", this.styleResource, this.variableGroup);
-				//nullify the pointer so as not to fool the "A" key
-				this.applyButton = undefined;
+			{
+				//cost
+				if(act.cost)
+				{
+					this.costSprite = game.add.text(550, 530, "Cost: " + act.cost, this.styleResource, this.variableGroup);
+					this.costSprite.anchor.setTo(0.5);
+					//a button to apply
+					this.applyButton = game.add.button(750, 530, "applyButton", this.applyAct, this, 0, 0, 1, 0, this.variableGroup);
+					this.hintBox.setHintBox(this.applyButton, "Apply the act (A)");
+					this.applyButton.ownerRole = this.controllerRole;
+					this.applyButton.id = id;
+					this.applyButton.anchor.setTo(0.5);
+				}
+				else
+				{				
+					this.costSprite = game.add.text(500, 530, "It's not to be used", this.styleResource, this.variableGroup);
+					//nullify the pointer so as not to fool the "A" key
+					this.applyButton = undefined;
+				}
 			}
 			//nullify the pointer so as not to fool the "E" key
 			this.learnButton = undefined;
@@ -4400,45 +4651,59 @@ var cyberspace = {
 	},
 	/**
 	When the player clicks on the apply button (learning form)
+	It verifies if the current controller matches the act owner
 	@param {Phaser.Button} button - the button that invokes this
 	@param {Phaser.Pointer} pointer - the mouse pointer object
 	*/
 	learnAct: function(button, pointer)
-	{
-		if(!this.playerRound)
+	{	
+		//check controller
+		if(this.controllerRole != button.ownerRole)
 			return;
-		
+		//check if disabled
+		if(this.gameManager.disableControl)
+			return;
+			
 		this.hintBox.hide();
 		//act id
 		var id = button.id;
 		//act index in the current page
 		var i = button.i;
 		//var id = this.actManager.name2id(actName);
-		if(this.actManager.learnAct(this.role, id))
+		if(this.actManager.learnAct(this.controllerRole, id))
 		{			
 			//update act color
-			this.actSprites[i].setStyle(this.style);
-			if(this.actManager.getAct(this.role, id).cost)
+			if(this.actManager.id2name(button.ownerRole, button.id) == this.actSprites[i].text)
+				//for fear that the player has scrolled the page after opening act detail
+				this.actSprites[i].setStyle(this.style);
+			if(this.actManager.getAct(this.controllerRole, id).cost)
 				/*refresh act popup screen by mimicing a click
 			1st parameter sprite and 2nd parameter pointer is not used by showAct.
 			So altough the values are not actually right, it doesn't matter */
 				this.showAct(button, pointer, id, i);
-			else this.popupGroup.visible = false;
+			else //close act detail if the act is not to be used
+				this.popupGroup.visible = false;
 		}
 	},
 	/**
 	When the player clicks on the apply button (applying form)
+	It verifies if the current controller matches the act owner
 	@param {Phaser.Button} button - the button that invokes this
 	@param {Phaser.Pointer} pointer - the mouse pointer object
 	*/
 	applyAct: function(button, pointer)
 	{
-		if(!this.playerRound)
+		//check controller
+		if(this.controllerRole != button.ownerRole)
+			return;
+		//check if disabled
+		if(this.gameManager.disableControl)
 			return;
 		
 		this.hintBox.hide();
 		var id = button.id;
-		var result = this.actManager.applyAct(this.role, id, this.gameManager.getRound());
+		var result = this.actManager.applyAct(this.controllerRole, id, this.currentRound);
+		//close act detail
 		this.popupGroup.visible = false;
 	},
 	
@@ -4495,7 +4760,7 @@ var cyberspace = {
 			//buff length
 			lengthText = this.buffs[id];
 			//adjust buff frame. Intruder enforced buff use the other image frame
-			if(lengthText != -1 && (this.gameManager.getRound() + lengthText)%2 == 0)
+			if(lengthText != -1 && (this.currentRound + lengthText)%2 == 0)
 				frameSprite.setFrames(1, 1, 1, 1);
 			if(lengthText == -1)
 				lengthText = "Infinite";
@@ -4551,7 +4816,9 @@ var cyberspace = {
 			texts = "Gain: " + (0-parseInt(num));
 			var upkeepSprite = game.add.text(150, 200, texts, this.styleDamage, this.variableGroup);
 		}
-		
+		//buff capacity (additional server capacity)
+		if(num = this.buffManager.getCapacity(id))
+			var capacitySprite = game.add.text(150, 300, "Extra capacity: " + num, this.styleAssets, this.variableGroup);
 		//buff spam requests
 		if(num = this.buffManager.getSpam(id))
 			var spamSprite = game.add.text(150, 250, "Spam requests: " + num, this.styleDamage, this.variableGroup);
@@ -4575,7 +4842,7 @@ var cyberspace = {
 		this.notes.createNotes();
 		var id = this.notes.name2id(entryName);
 		if(id == -1)
-			window.alert("Sorry. This entry is not found in personal notes!");
+			this.messager.createMessage("Sorry. This entry is not found in personal notes!");
 		else this.notes.readNote(id);
 	},
 	/**
@@ -4629,7 +4896,12 @@ var cyberspace = {
 	*/
 	restartFun: function()
 	{
-		this.state.start("intro", true, false, 0, this.index);
+		if(this.aiManager)
+			this.aiManager.stopAct();	//stop all pending AI operations
+		if(!this.doublePlayer)
+			this.state.start("intro", true, false, 0, this.index, false);
+		else //restart double player mode
+			this.state.start("cyberspace", true, false, this.index, true);
 	},
 	/**
 	The real function that switch to the start menu
@@ -4691,9 +4963,12 @@ var cyberspace = {
 	*/
 	escFun:	function()
 	{
-		//close the opened windows
+		if(this.messageGroup.visible == true)
+			return;
+		//when personal notes is opened, it may race with personal notes for esc key.
 		if(this.notes.exitButton && this.notes.exitButton.alive == false)
 		{	//just been destroyed, but the pointer still remain for a while
+			this.notesGroup;
 			delete this.notes.exitButton;
 			return;
 		}
@@ -4733,7 +5008,10 @@ var cyberspace = {
 	scrollFun: function(key)
 	{
 		//disable scroll buttons when some windows opened
-		if(this.confirmGroup.visible == true || this.pauseGroup.visible == true || this.logGroup.getAt(0).length || this.popupGroup.visible == true)
+		if(this.messageGroup.visible == true || this.confirmGroup.visible == true || this.notesGroup.visible == true || this.pauseGroup.visible == true ||  this.popupGroup.visible == true)
+			return;
+		//this is not the intended handler
+		if(this.logGroup.getAt(0).length || this.notesGroup.visible == true)
 			return;
 		//buffs window open, scroll the buffs
 		if(this.buffsGroup.visible == true)
@@ -4743,17 +5021,17 @@ var cyberspace = {
 			else this.buffScroll.scrollDown();
 			return;
 		}
-		//no window open, scroll the acts
-		if(key.keyCode == Phaser.Keyboard.PAGE_UP)
-			this.actScroll.scrollUp();
-		else this.actScroll.scrollDown();
+		else//no window open, scroll the acts
+			if(key.keyCode == Phaser.Keyboard.PAGE_UP)
+				this.actScroll.scrollUp();
+			else this.actScroll.scrollDown();
 	},
 	/**
 	When the player presses the key "N". Open the personal notes with or without target entry
 	*/
 	notesFun: function()
 	{
-		if(this.confirmGroup.visible == true || this.pauseGroup.visible == true || this.notes.exitButton)
+	if(this.messageGroup.visible == true || this.confirmGroup.visible == true || this.notesGroup.visible == true/*this.notes.exitButton*/|| this.pauseGroup.visible == true)
 			return;
 		//open notes with specified entry
 		if(this.popupGroup.visible == true)
@@ -4769,11 +5047,13 @@ var cyberspace = {
 	*/
 	learnFun: function()
 	{
-		if(this.confirmGroup.visible == true || this.pauseGroup.visible == true || this.logGroup.getAt(0).length)
+		if(this.messageGroup.visible == true || this.confirmGroup.visible == true || this.notesGroup.visible == true || this.pauseGroup.visible == true || this.logGroup.getAt(0).length)
+			//disable this key when there are other important layers above
 			return;
 		if(this.popupGroup.visible == true)
 		{
 			if(this.learnButton != undefined)
+				//shortcut key mimics clicking event
 				this.learnAct(this.learnButton, null);
 		}
 	},
@@ -4782,11 +5062,13 @@ var cyberspace = {
 	*/
 	applyFun: function()
 	{
-		if(this.confirmGroup.visible == true || this.pauseGroup.visible == true || this.logGroup.getAt(0).length)
+		if(this.messageGroup.visible == true || this.confirmGroup.visible == true || this.notesGroup.visible == true || this.pauseGroup.visible == true || this.logGroup.getAt(0).length)
+			//disable this key when there are other important layers above
 			return;
 		if(this.popupGroup.visible == true)
 		{
 			if(this.applyButton != undefined)
+				//shortcut key mimics clicking event
 				this.applyAct(this.applyButton, null);
 		}
 	},
@@ -4797,7 +5079,8 @@ var cyberspace = {
 	*/
 	nextRound: function()
 	{
-		if(!this.playerRound)
+		if(!this.doublePlayer && this.controllerRole != this.role)
+			//avoid the player to end turn for the AI
 			return;
 		this.gameManager.roundFinal();
 	},
@@ -4810,7 +5093,10 @@ var cyberspace = {
 	*/
 	gameoverFun: function(win)
 	{
-		game.state.start("intro", true, false, 1, this.index, win, this.logs, this.role, this.gameManager.getRound(), parseInt(this.cyber.assets - this.gameManager.getAssets()));
+		//create recordEntry
+		var record = new RecordEntry(this.logs, this.role, this.currentRound, parseInt(this.cyber.assets - this.gameManager.getAssets()));
+		
+		game.state.start("intro", true, false, 1, this.index, win, record, this.doublePlayer);
 	},
 	
 	/**
@@ -4830,7 +5116,7 @@ var cyberspace = {
 	},
 };
 module.exports = cyberspace;
-},{"../modules/AIManager":2,"../modules/ActManager":4,"../modules/BuffManager":7,"../modules/EffectManager":8,"../modules/GameManager":9,"../modules/HintBox":10,"../modules/LogViewer":12,"../modules/Notes":15,"../modules/ScriptManager":17,"../modules/ScrollButtons":18}],24:[function(require,module,exports){
+},{"../modules/AIManager":2,"../modules/ActManager":4,"../modules/BuffManager":7,"../modules/EffectManager":8,"../modules/GameManager":9,"../modules/HintBox":10,"../modules/LogViewer":12,"../modules/Messager":13,"../modules/Notes":16,"../modules/RecordEntry":18,"../modules/ScriptManager":19,"../modules/ScrollButtons":20}],26:[function(require,module,exports){
 /**
  * State that manages an error screen which shows a message. Used if the client browser does not provide some needed
  * functionality.
@@ -4852,7 +5138,7 @@ var error = {
      */
     create: function() {
         //Creates the error message text
-        this.style = {font: "30px Courier New, monospace", fill: "#b50101", align: "center", wordWrap: true,
+        this.style = {font: "30px Courier New, monospace", fill: "#b50101", fontWeight: "bold", align: "center", wordWrap: true,
             wordWrapWidth: window.game.width - 80};
         this.error_text = window.game.add.text(window.game.world.centerX, window.game.world.centerY - 75, "", this.style);
         this.error_text.anchor.set(0.5, 0.5);
@@ -4872,7 +5158,7 @@ var error = {
     }
 };
 module.exports = error;
-},{}],25:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 var NPCManager = require("../modules/NPCManager");
 var MultimediaText = require("../modules/MultimediaText");
 var Notes = require("../modules/Notes");
@@ -4890,33 +5176,41 @@ var hall = {
 	init: function(index)
 	{
 		this.index = index;
-		this.notes = new Notes(this);
 		this.npcManager = new NPCManager(index);
 	},
 	
 	create: function()
 	{
-		this.hintBox = new HintBox("box");
 		this.createMap();
-		this.gateSprite = game.add.button(950, 96, "gate", function(){game.state.start("startMenu", true, false);}, this, 1, 0, 3, 0);
-		this.gateSprite.anchor.setTo(0.5);
-		this.notesButton = game.add.button(50, 40, "book", this.notes.createNotes, this.notes, 0, 0, 1, 0);
-		this.hintBox.setHintBox(this.notesButton, "   Open personal notes (N)");
-		this.notesButton.anchor.setTo(0.5);
-        this.createNPCs();
+		//this.groundGroup = game.add.group();
+		this.npcGroup = game.add.group();
+		this.dialogueGroup = game.add.group();
+		this.notesGroup = game.add.group();
+		this.createNPCs();
 		this.createDialogue();
 		
-		//if need a talk at the start
-		this.talkTo(null, null, 0);
+		this.hintBox = new HintBox("box");
+		
+		this.gateSprite = game.add.button(950, 96, "gate", function(){game.state.start("startMenu", true, false);}, this, 1, 0, 3, 0, this.npcGroup);
+		this.gateSprite.anchor.setTo(0.5);
+		this.notesButton = game.add.button(50, 40, "book", this.createNotes, this, 0, 0, 1, 0, this.npcGroup);
+		this.hintBox.setHintBox(this.notesButton, "   Open personal notes (N)");
+		this.notesButton.anchor.setTo(0.5);
+		
+		
+		this.notes = new Notes(this.notesGroup);
 		
 		//shortcut key for personal notes
 		var notesKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
-		notesKey.onDown.add(this.notes.createNotes, this.notes);
+		notesKey.onDown.add(this.createNotes, this);
 		
 		//BGM
 		if(this.index < 0 || game.globals.scenarioCybers[this.index].defensive)	//tutorial 1
 			game.globals.audioManager.defenderHallMusic();
 		else game.globals.audioManager.intruderHallMusic();
+		
+		//if need a talk at the start
+		this.talkTo(null, null, 0);
 	},
 
 	/**
@@ -4926,14 +5220,14 @@ var hall = {
 		if(this.index%2 == 0)
 		{	//intruder's hall
 			var hallName = "hallMapIntruder";
-			this.map = window.game.add.tilemap(hallName, 32, 32);
+			this.map = game.add.tilemap(hallName, 32, 32);
 			//imports the tileset image in the map object
 			this.map.addTilesetImage('ceramics_32x32aigei_com', 'ceramics_32x32aigei_com');
 		}
 		else
 		{	//defender's hall	
 			var hallName = "hallMapDefender";
-			this.map = window.game.add.tilemap(hallName, 32, 32);
+			this.map = game.add.tilemap(hallName, 32, 32);
 			//Imports the tileset image in the map object
 			//The first parameter is the tileset name as specified in Tiled, the second is the key to the asset
 			this.map.addTilesetImage('floor_tile', 'floor_tile');
@@ -4950,7 +5244,7 @@ var hall = {
     createNPCs: function() {
 		//store all the NPCs in this scenario. The index is the npc id
 		var npcs = this.npcManager.NPCs;
-		this.npcGroup = game.add.group();
+		
 		var npc;
 		//this.multimedia = new MultimediaText();
 		for(var n in npcs)
@@ -4974,6 +5268,17 @@ var hall = {
 	},
 	
 	/**
+	Try to open personal notes when player click on notesButton or when pressing "N" key
+	Check if there is a mask (yes/no question) before opening personal notes
+	*/
+	createNotes: function(button, pointer)
+	{
+		if(this.mask && this.mask.alive == true)
+			return;
+		this.notes.createNotes();
+	},
+	
+	/**
 	A recursive function that calls itself (after a random delay) to constantly play the turning animation of NPC sprite
 	@param {Phaser.Sprite} sprite - the NPC sprite whose animation is been set
 	*/
@@ -4994,7 +5299,7 @@ var hall = {
 	*/
 	createDialogue: function()
 	{
-		this.multimedia = new MultimediaText(250, 470, 1, this.dismissDialogue, this);
+		this.multimedia = new MultimediaText(250, 470, 1, this.dialogueGroup, this.dismissDialogue, this, );
 	},
 	
 	/**
@@ -5086,12 +5391,14 @@ var hall = {
 	shutdown: function()
 	{
 		delete this.npcManager;
+		delete this.groundGroup;
 		delete this.npcGroup;
+		delete this.notesGroup;
 		delete this.multimedia;
 	}
 };
 module.exports = hall;
-},{"../modules/HintBox":10,"../modules/MultimediaText":13,"../modules/NPCManager":14,"../modules/Notes":15}],26:[function(require,module,exports){
+},{"../modules/HintBox":10,"../modules/MultimediaText":14,"../modules/NPCManager":15,"../modules/Notes":16}],28:[function(require,module,exports){
 var MultimediaText = require("../modules/MultimediaText");
 var ScrollButtons = require("../modules/ScrollButtons");
 /**
@@ -5100,16 +5407,15 @@ this state has text with typing like animation or image-text-mixed page
 @param {int} type - 0: intro, 1: outro, 2: credits
 @param {int} index - (optional) for intro and outro, the index of the scenario
 @param {boolean} win - (for outro only) if the player wins
-@param {Object} logs - (for outro only)an array of LogEntry, which record the offensive or defensive actions and their consequences in the last battle
-@param {int} role - (for outro only)the player's role in the battle. 0 for intruder, 1 for defender
-@param {int} endingRound - (for outro only) at which round the game finishes. useful for calculating the score when the intruder wins
-@param {int} assetsCompromised - (for outro only)the amount of assets lost. useful for calculating the score when the defender wins
+@param {RecordEntry} record - (for outro only) an object containing logs, role, endingRound and assetsCompromised
+@param {boolean} doublePlayer - (outro only) true: double player mode, false: single player mode
 */
 var intro = {
 	init: function(type)
 	{
 		this.styleCaption = {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#FFEE00", align: "center"};
-		this.styleScore = {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#5522FF", align: "center"};
+		this.styleScoreInt = {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#8800EE", align: "center"};
+		this.styleScoreDef = {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#2222FF", align: "center"};
 		
 		this.type = type;
 		
@@ -5137,28 +5443,32 @@ var intro = {
 			case 1: //outro
 				this.index = arguments[1];
 				this.win = arguments[2];
-				this.logs = arguments[3];
-				this.role = arguments[4];
-				this.endingRound = arguments[5];
-				this.assetsCompromised = arguments[6];
-				if(this.win)
-				{
-					if(this.index < 0)
-					this.texts = game.globals.tutorialOutros[0-parseInt(this.index)].split("^");
-					else
+				this.record = arguments[3];
+				this.doublePlayer = arguments[4];
+				if(!this.doublePlayer)
+				{	//single player mode
+					if(this.win)
 					{
-						var longtext = game.globals.scenarioOutros[this.index];
-						if(longtext)	//outro found
-							this.texts = longtext.split("^");
-						else
-						{	//outro absent
-							this.score = this.calculateScore();
-							game.state.start("review", true, false, this.win, this.score, this.logs, this.role, this.index);
+						if(this.index < 0)	//tutorial
+						this.texts = game.globals.tutorialOutros[0-parseInt(this.index)].split("^");
+						else	//formal scenario
+						{
+							var longtext = game.globals.scenarioOutros[this.index];
+							if(longtext)	//outro found
+								this.texts = longtext.split("^");
+							else			//outro absent	
+								this.texts = ["#text$380$300$Your victory!"];
 						}
 					}
+					else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? \n\nDon't lose your heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
+						else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those well defended? \nMaybe you attacked too timidly and missed too many chances before the rounds expired? \n\nDon't lose heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
 				}
-				else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? \n\nDon't lose your heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
-					else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those well defended? \nMaybe you attacked too timidly and missed too many chances before the rounds expired? \n\nDon't lose heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
+				else 
+				{	//double player mode
+					if(this.record.role == 0 && this.win || this.record.role ==1 && !this.win)
+						this.texts = ["#text$380$300$Intruder's Victory!"];
+					else this.texts = ["#text$380$300$Defender's Victory!"];
+				}
 				break;
 			case 2: //credit
 				this.texts = game.globals.credits.split("^");
@@ -5168,16 +5478,18 @@ var intro = {
 	
 	create: function(){
 		var group = game.add.group();
-		//background
-		var bg = game.add.image(game.world.centerX, game.world.centerY-600, "PNFrame", 0, group);
-		bg.anchor.setTo(0.5);
+		var buttonGroup = game.add.group();
+		var scrollGroup = game.add.group();
+		//main panel
+		var panel = game.add.image(game.world.centerX, game.world.centerY, "PNFrame", 0, group);
+		panel.anchor.setTo(0.5);
 		
-		this.multimedia = new MultimediaText(150, 150, 0);
-		this.scrollButtons = new ScrollButtons(950, 50, 500, this.updatePage, this, this.texts.length);
+		this.multimedia = new MultimediaText(150, 120, 0, buttonGroup);
+		this.scrollButtons = new ScrollButtons(950, 50, 500, this.updatePage, this, this.texts.length, scrollGroup);
 		
 		//click on the dynamic text to finish writing immediately
-		bg.inputEnabled = true;
-		bg.events.onInputDown.add(this.multimedia.finishWriting, this.multimedia, 0);
+		panel.inputEnabled = true;
+		panel.events.onInputDown.add(this.multimedia.finishWriting, this.multimedia, 0);
 		
 		//menu button, play button and review button
 		switch(this.type)
@@ -5194,14 +5506,14 @@ var intro = {
 				{
 					var sceName = game.globals.scenarioCybers[this.index].name;
 					var texts = "Scenario "+this.index+"\n"+sceName;
-					var playButton = game.add.button(game.world.centerX + 150 , 550-600, "playButton", this.play, this, 0, 0, 1, 0, group);
+					var playButton = game.add.button(game.world.centerX + 150 , 550, "playButton", this.play, this, 0, 0, 1, 0, buttonGroup);
 					playButton.anchor.setTo(0.5);
 				}
 				
-				var caption = game.add.text(game.world.centerX, 50-600, texts, this.styleCaption, group);
+				var caption = game.add.text(game.world.centerX, 50, texts, this.styleCaption, group);
 				caption.anchor.setTo(0.5);
 				//button
-				var menuButton = game.add.button(game.world.centerX - 150 , 550-600, "menuButton", this.menu, this, 0, 0, 1, 0, group);
+				var menuButton = game.add.button(game.world.centerX - 150 , 550, "menuButton", this.menu, this, 0, 0, 1, 0, buttonGroup);
 				menuButton.anchor.setTo(0.5);
 				break;
 			case 1: //outro
@@ -5212,30 +5524,53 @@ var intro = {
 					var sceName = game.globals.scenarioCybers[this.index].name;
 					var texts = "Scenario "+this.index+" outro\n"+sceName;
 					//button
-					var reviewButton = game.add.button(game.world.centerX , 550-600, "reviewButton", this.review, this, 0, 0, 1, 0, group);
+					var reviewButton = game.add.button(game.world.centerX , 550, "reviewButton", this.review, this, 0, 0, 1, 0, buttonGroup);
 					reviewButton.anchor.setTo(0.5);
 				}
-				var caption = game.add.text(game.world.centerX, 50-600, texts, this.styleCaption, group);
+				var caption = game.add.text(game.world.centerX, 50, texts, this.styleCaption, group);
 				caption.anchor.setTo(0.5);
-				this.score = this.calculateScore();
-				var scoreText = game.add.text(game.world.centerX + 120, 110-600, "Your score: "+this.score, this.styleScore, group);
-				scoreText.anchor.setTo(0.5);
-				//relaxed music
+				//score
+				if(!this.doublePlayer)
+				{	//single player
+					this.score = this.record.scores[this.record.role];
+					if(this.record.role == 0)
+						var scoreText = game.add.text(game.world.centerX + 120, 110, "Your score: "+this.score, this.styleScoreInt, group);
+					else var scoreText = game.add.text(game.world.centerX + 120, 110, "Your score: "+this.score, this.styleScoreDef, group);
+					scoreText.anchor.setTo(0.5);
+				}
+				else	//doublePlayer
+				{
+					var scoreTextInt = game.add.text(game.world.centerX + 120, 110, "Intruder's score: "+this.record.scores[0], this.styleScoreInt, group);
+					scoreTextInt.anchor.setTo(0.5);
+					var scoreTextDef = game.add.text(game.world.centerX + 120, 150, "Defender's score: "+this.record.scores[1], this.styleScoreDef, group);
+					scoreTextDef.anchor.setTo(0.5);
+				}
+				//relaxing music
 				game.globals.audioManager.outroMusic();
 				break;
 			case 2://credits
 				//caption
-				var caption = game.add.text(game.world.centerX, 50-600, "credits", this.styleCaption, group);
+				var caption = game.add.text(game.world.centerX, 50, "credits", this.styleCaption, group);
 				caption.anchor.setTo(0.5);
 				//button
-				var menuButton = game.add.button(game.world.centerX , 550-600, "menuButton", this.menu, this, 0, 0, 1, 0, group);
+				var menuButton = game.add.button(game.world.centerX , 550, "menuButton", this.menu, this, 0, 0, 1, 0, buttonGroup);
 				menuButton.anchor.setTo(0.5);
 				//relaxed music
 				game.globals.audioManager.outroMusic();
 				break;
 		}
-		//entering animation
+		//frame entering animation
+		group.y = group.y- 600;
 		var tween = game.add.tween(group).to({y: '+600'}, 2500, "Elastic.easeOut", true, 0, 0, false);
+		//button entering animation
+		buttonGroup.y = buttonGroup.y + 1000;
+		var buttonTween = game.add.tween(buttonGroup).to({y: '-1000'}, 1000, Phaser.Easing.Linear.None, true, 0, 0, false);
+		//stretch animation
+		scrollGroup.x = 950;
+		scrollGroup.y = 275;
+		scrollGroup.pivot = new Phaser.Point(950, 275);
+		scrollGroup.scale.setTo(1, 0.5);
+		var scrollTween = game.add.tween(scrollGroup.scale).to({x: 1, y: 1}, 2500, "Elastic.easeOut", true, 0, 0, false);
 		//create page context
 		tween.onComplete.add(function(){if(this.scrollButtons.currentPage == 0) this.updatePage(0);}, this, 0);
 		
@@ -5248,6 +5583,7 @@ var intro = {
 	
 	/**
 	Update the page, whether a text page (with typing animation) or an image page
+	Global input: this.texts
 	*/
 	updatePage: function(targetPage)
 	{arguments;
@@ -5266,7 +5602,7 @@ var intro = {
 				{//the button to start scenario 0
 					this.playButton = game.add.button(game.world.centerX + 200, 550, "playButton", this.tutorialFun, this);
 					this.playButton.anchor.setTo(0.5);
-					var playTween = game.add.tween(this.playButton.scale).to({x:1.3, y:1.3}, 2500, Phaser.Easing.Linear.None, false, 0, -1, true).start();
+					var playTween = game.add.tween(this.playButton.scale).to({x:1.3, y:1.3}, 3000, Phaser.Easing.Linear.None, false, 0, -1, true).start();
 				}
 		//tutorial outro: add button to review at the last page
 		if(this.type == 1 && this.index < 0)
@@ -5275,7 +5611,7 @@ var intro = {
 				{//the button to start scenario 0
 					this.reviewButton = game.add.button(game.world.centerX, 550, "reviewButton", this.review, this);
 					this.reviewButton.anchor.setTo(0.5);
-					var playTween = game.add.tween(this.reviewButton.scale).to({x:1.3, y:1.3}, 2500, Phaser.Easing.Linear.None, false, 0, -1, true).start();
+					var reviewTween = game.add.tween(this.reviewButton.scale).to({x:1.3, y:1.3}, 3000, Phaser.Easing.Linear.None, false, 0, -1, true).start();
 				}
 	},
 	
@@ -5306,7 +5642,7 @@ var intro = {
 		if(this.index == -1)	//the first tutorial is hall only
 			game.state.start("hall", true, false, -1);
 		else //other tutorials are cyberspace only
-			game.state.start("cyberspace", true, false, this.index);
+			game.state.start("cyberspace", true, false, this.index, false);
 	},
 	
 	/**
@@ -5315,7 +5651,7 @@ var intro = {
 	review: function()
 	{
 		//game.globals.audioManager.typingOff();///
-		game.state.start("review", true, false, this.win, this.score, this.logs, this.role, this.index);
+		game.state.start("review", true, false, this.index, this.win, this.record, this.doublePlayer);
 	},
 	
 	/**
@@ -5329,41 +5665,6 @@ var intro = {
 	},
 	
 	/**
-	The function that calculate the score of the player based on the action log
-	@returns {int} - the score
-	*/
-	calculateScore: function()
-	{
-		var score = 0;
-		for(var l in this.logs)
-		{
-			if(this.logs[l].round%2 == 0)	//intruder's round
-				if(this.logs[l].success)
-				{
-					if(this.role == 0)
-						score +=100;	//intruder gains 100 points at each success at his round
-				}
-				else if(this.role == 1)
-						score += 100;	//defender gains 100 points at each failure at intruder's round
-		}
-		if(this.role == 0)
-		{
-			score -= this.endingRound*40;		//intruder loss 40 points for every round the defender survives
-			score += this.assetsCompromised*4;	//intruder gains 4 points for every damage dealt to the assets
-		}
-		else 
-		{
-			score += this.endingRound*40;		//defender gains 40 points for every round he survives
-			score -= this.assetsCompromised*4;	//defender loss 4 points for every damage dealt to the assets
-		}
-		/*nagative score is too much frustrating for the players, even if they did play badly.
-		nagative scores will be rised to zero, hoping to console them a little*/
-		if(score < 0)	
-			score = 0;
-		return score;
-	},
-	
-	/**
 	shutdown function is called when exiting this state.
 	*/
 	shutdown: function()
@@ -5374,7 +5675,7 @@ var intro = {
 	}
 };
 module.exports = intro;
-},{"../modules/MultimediaText":13,"../modules/ScrollButtons":18}],27:[function(require,module,exports){
+},{"../modules/MultimediaText":14,"../modules/ScrollButtons":20}],29:[function(require,module,exports){
 var AjaxFileReader = require('../modules/AjaxFileReader')();
 var loadSave =  require("../modules/loadSave");
 var PersonalNotes = require("../modules/PersonalNotes");
@@ -5715,13 +6016,13 @@ var load = {
     }
 };
 module.exports = load;
-},{"../modules/AjaxFileReader":5,"../modules/AudioManager":6,"../modules/PersonalNotes":16,"../modules/loadSave":21}],28:[function(require,module,exports){
+},{"../modules/AjaxFileReader":5,"../modules/AudioManager":6,"../modules/PersonalNotes":17,"../modules/loadSave":23}],30:[function(require,module,exports){
 var HintBox = require("../modules/HintBox");
 var LogViewer = require("../modules/LogViewer");
 var Notes = require("../modules/Notes");
+var Messager = require("../modules/Messager");
 var loadSave = require("../modules/loadSave");
 var CORSSender = require("../modules/learning_data_send");
-var HintBox = require("../modules/HintBox");
 
 /**
 The review state after the cyber battle. It shows the offensive and defensive behaviors as well as their consequences during that battle.
@@ -5729,79 +6030,126 @@ The review state after the cyber battle. It shows the offensive and defensive be
 */
 var review = {
 	/**
-	@param {boolean} win - if the player wins
-	@param {int} score - score for the player
-	@param {Array} logs - the attack/defend log
-	@param {int} role - the role of the player: 0: intruder, 1: defender
 	@param {int} index - the index of the scenario/tutorial
+	@param {boolean} win - if the player wins
+	@param {RecordEntry} record - an object containing logs, role, endingRound and assetsCompromised
+	@param {int} doublePlayer - true: double player mode, false: single player mode
 	*/
-	init: function(win, score, logs, role, index)
+	init: function(index, win, record, doublePlayer)
 	{
-		//this.scenarioIndex = scenarioIndex;
-		this.win = win;
-		this.score = score;
-		this.logs = logs;
-		this.role = role;
 		this.index = index;
+		this.win = win;
+		this.record = record;
+		this.doublePlayer = doublePlayer;
 		
 		if(index >= 0 && !game.globals.scenarioCybers[index+1])
 			this.lastLevel = true;
-	},	
-	
-	create: function(){
-		//this.hintbox = new HintBox(boxKey);
 		
-		var background = game.add.image(0, 0, "tron");
-		background.width = game.world.width;
-		background.height = game.world.height;
-		background.alpha = 0.4;
+		this.bgGroup = game.add.group();
+		this.logGroup = game.add.group();
+		this.notesGroup = game.add.group();
+		this.notes = new Notes(this.notesGroup);
+		this.messageGroup = game.add.group();
 		
 		this.hintBox = new HintBox("box");
-		this.notes = new Notes(this);
-		this.logViewer = new LogViewer(this.logs, this.role, this.notes);
-		this.logGroup = this.logViewer.display(false);
+		this.messager = new Messager(this.messageGroup, this.hintBox);
+		game.globals.messager = this.messager;
+		this.logViewer = new LogViewer(this.record.logs, this.role, this.doublePlayer, this.notes, this.messager, this.logGroup);
+	},	
+	
+	create: function(){		
+		var background = game.add.image(0, 0, "tron", 0, this.bgGroup);
+		background.width = game.world.width;
+		background.height = game.world.height;
+		background.alpha = 0.6;
+		
+		this.logViewer.display(false);
 		this.logViewer.noExit();
-		/*hintBox.setHintBox(logButton, this, "see detail log");*/
     
-		this.buttonGroup = game.add.group();
+		/*this.buttonGroup = game.add.group();*/
+		
 		//menu button
-		this.menuButton = game.add.button(game.world.centerX - 150 , 550, "menuButton", function(){game.state.start("startMenu");}, this, 0, 0, 1, 0, this.buttonGroup);
+		this.menuButton = game.add.button(game.world.centerX - 150 , 550, "menuButton", function(){game.state.start("startMenu");}, this, 0, 0, 1, 0, this.logGroup);
 		this.menuButton.anchor.setTo(0.5);
 		//personal notes button
-		this.notesButton = game.add.button(game.world.centerX + 50, 550, "book", this.notes.createNotes, this.notes, 0, 0, 1, 0, this.buttonGroup);
+		this.notesButton = game.add.button(game.world.centerX + 50, 550, "book", this.notes.createNotes, this.notes, 0, 0, 1, 0, this.logGroup);
 		this.hintBox.setHintBox(this.notesButton, "Open personal notes (N)");
 		this.notesButton.anchor.setTo(0.5);
 		//shortcut key for personal notes
 		var notesKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
 		notesKey.onDown.add(this.notes.createNotes, this.notes);
 		
-		//restart button if not win
-		if(!this.win)
+		if(!this.doublePlayer)
 		{
-			this.restartButton = game.add.button(game.world.centerX +250, 550, "restartButton", function(){this.state.start("intro", true, false, 0, this.index);}, this, 0, 0, 1, 0, this.buttonGroup);
-			this.restartButton.anchor.setTo(0.5);
-		}
-		else if(this.index >= 0)	//win: try to save data
-		{
-			loadSave.saveSaveData(this.index, this.score, this.logs);
-			alertify.alert("Progress saved!");
-			if(!game.globals.scenarioCybers[this.index+1])	//send the learning data
+			//restart button if not win
+			if(!this.win)
 			{
-				var learningData = {username: game.globals.playerName, 				levelsData: game.globals.savedata};
-				localStorage.setItem("learningData", JSON.stringify(learningData));
-				CORSSender.makeCorsRequest(JSON.stringify(learningData));
+				this.restartButton = game.add.button(game.world.centerX +250, 550, "restartButton", function(){this.state.start("intro", true, false, 0, this.index);}, this, 0, 0, 1, 0, this.logGroup);
+				this.restartButton.anchor.setTo(0.5);
+			}
+			else if(this.index >= 0)	//win: try to save data
+			{
+				loadSave.saveSaveData(this.index, this.record);
+				this.messager.createMessage("Progress saved!");
+				if(!game.globals.scenarioCybers[this.index+1] || !game.globals.scenarioCybers[this.index+2])	//when finishing one of the last two scenarios
+				{	//create and send the learning data
+					var learningData = {};
+					//add playerName as username
+					learningData.username = game.globals.playerName;
+					learningData.records = [];
+					
+					//copy, but also abbreviate ER and AC, converting NobuffHurdle and buffHurdle into strings, and add index
+					for(r in game.globals.records)
+					{
+						var record = game.globals.records[r];
+						
+						if(record == null)
+							/*unfinished scenario found. e.g. one of the last two scenarios is not yet finished*/
+							return;
+						//convert noBuffHurdle and buffHurdle in logs into strings
+						var newLogs = [];
+						for(var l in record.logs)
+						{
+							newLogs[l] = {	round: record.logs[l].round,
+										act: record.logs[l].act,
+										noBuffHurdle: String(record.logs[l].noBuffHurdle),
+										buffHurdle: String(record.logs[l].buffHurdle),
+										unlucky: record.logs[l].unlucky,
+										success: record.logs[l].success
+							};
+						}
+						learningData.records[r] = {	logs: newLogs,
+													role: record.role,
+													ER: record.endingRound,
+													AC: record.assetsCompromised,
+													score: record.score,
+													index: r
+						}
+					}
+					localStorage.setItem("learningData", JSON.stringify(learningData));
+					game.globals.messager = this.messager;
+					CORSSender.makeCorsRequest(JSON.stringify(learningData));
+				}
 			}
 		}
 	},
-	
+	/**
+	A function called at the ending phase of this state, when the game switch to another state. One can recycle or nullify some elements of this state, so that there will be no problem when returning to the state.
+	*/
 	shutdown: function()
 	{
-		delete hintBox;
-		delete logViewer;
+		delete this.notes;
+		delete this.hintBox;
+		delete this.messager;
+		delete this.logViewer;
+		this.bgGroup.destroy();
+		this.logGroup.destroy();
+		this.notesGroup.destroy();
+		this.messageGroup.destroy();
 	}	
 };
 module.exports = review;
-},{"../modules/HintBox":10,"../modules/LogViewer":12,"../modules/Notes":15,"../modules/learning_data_send":20,"../modules/loadSave":21}],29:[function(require,module,exports){
+},{"../modules/HintBox":10,"../modules/LogViewer":12,"../modules/Messager":13,"../modules/Notes":16,"../modules/learning_data_send":22,"../modules/loadSave":23}],31:[function(require,module,exports){
 /**
 The first state where the game is scaled to fix the screen size
 In preparation for load state, load screen assets is also loaded here, 
@@ -5871,41 +6219,51 @@ var scaling = {
 	}
 };
 module.exports = scaling;
-},{}],30:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 var ScrollButtons = require("../modules/ScrollButtons");
 var loadSave =  require("../modules/loadSave");
 
 var selection = {
 	/**
 	Distinguish between tutorial selection and scenario selection
-	@param {boolean} type - 0 for tutorial selection, 1 for scenario selection
+	@param {boolean} type - 0 for tutorial selection, 1 for single player scenario selection, 2 for double player scenario selection
 	*/
 	init: function(type)
 	{	this.type = type;
 		
 		//constants
 		this.scePerPage = 6; //maximum number of scenarios in each page
-		this.style = { font: "21px Segoe UI Black", fill: "#3333FF", fontWeight: "bold", align: "center", wordWrap: true, wordWrapWidth: game.width - 95};
-		this.styleScore = { font: "19px Segoe UI Black", fill: "#BBFF00", align: "center"};
+		this.style = { font: "22px Segoe UI Black", fill: "#00EEFF", fontWeight: "bold", align: "center", wordWrap: true, wordWrapWidth: 280};
+		this.styleScore = { font: "19px Segoe UI Black", fill: "#99FF00", align: "center"};
 		
+		this.group = game.add.group();
 		this.scenarioButtons = [];
 		//texts on the button
 		this.scenarioTexts = [];
 	},
 	
 	create: function(){
-		if(!this.type)
+		if(this.type == 0)
 			this.NPages = 1;
-		else this.NPages = Math.ceil(game.globals.scenarioCybers.length / this.scePerPage);
-		this.scrollButtons = new ScrollButtons(950, 50, 500, this.toPage, this, this.NPages);
+		else if(this.type == 1)
+				this.NPages = Math.ceil(game.globals.scenarioCybers.length / this.scePerPage);
+			else	//double player mode considers only those scenarios with doublePlayer == true
+			{
+				this.NDoubleScenarios = 0;	//number of scenarios supporting double player mode
+				for(cyb in game.globals.scenarioCybers)
+					if(game.globals.scenarioCybers[cyb].doublePlayer)
+						this.NDoubleScenarios++;
+				this.NPages = Math.ceil(this.NDoubleScenarios / this.scePerPage);
+			}		
+		this.scrollButtons = new ScrollButtons(950, 50, 500, this.toPage, this, this.NPages, this.group);
 		//caption
-		if(!this.type)
+		if(this.type == 0)
 			var texts = "Tutorial Selection";
 		else var texts = "Scenario Selection";
 		var caption = game.add.text(game.world.centerX, 50, texts, {font: "28px Courier New, monospace", fontWeight: "bold", fill: "#FFEE00", align: "center"});
 		caption.anchor.setTo(0.5);
 		//back to menu button
-		this.menuButton = game.add.button(game.world.centerX , 550, "menuButton", this.back2Menu, this);
+		this.menuButton = game.add.button(game.world.centerX , 550, "menuButton", this.back2Menu, this, 0, 0, 1, 0, this.group);
 		this.menuButton.anchor.setTo(0.5);
 		
 		//display the first page
@@ -5948,58 +6306,87 @@ var selection = {
 		this.scoreSprites = [];
 		this.lockingMasks = [];
 		
-		if(!this.type)
+		if(this.type == 0)	//tutorial selection
 			var itemsThisPage = 3;
-		else //if left items are more than one page, set to secenarios per page; it left items less than one page, set to the number of items left
+		else if(this.type == 1)//if left items are more than one page, set to secenarios per page; it left items less than one page, set to the number of items left
 			var itemsThisPage = Math.min(game.globals.scenarioCybers.length - currentPage*this.scePerPage, this.scePerPage);
+			else var itemsThisPage = Math.min(this.NDoubleScenarios - currentPage*this.scePerPage, this.scePerPage);
 		var x,y;
 		var SB;	//alias of scenarioButtons[i], just to speed up
+		//used by double player mode, this index is the actual index of the scenario
+		var scenarioIndex = 0;
 		for(i=0; i< itemsThisPage; i++)
 		{
 			x = 200 + 300 * (i % 3);
 			y = 180 + 200 * Math.floor(i / 3);
 			var index = currentPage * this.scePerPage + i;	//displayed index
-			if(!this.type)
+			
+			if(this.type == 0)	//tutorials
 			{				
-				index++;
-				SB = game.add.button(x, y, "computerSmall1", this.selectOne, this, 0, 0, 0, 0);
+				SB = game.add.button(x, y, "computerSmall1", this.selectOne, this, 0, 0, 0, 0, this.group);
+				//store the index in the button sprite
+				SB.index = index+1;
 			}
-			else SB = game.add.button(x, y, "computerSmall2", this.selectOne, this, 0, 0, 0, 0);
+			else if(this.type == 1)	//single player scenarios
+				{
+					SB = game.add.button(x, y, "computerSmall2", this.selectOne, this, 0, 0, 0, 0, this.group);
+					//store the index in the button sprite
+					SB.index = index;
+				}
+				else	//double player scenarios
+				{
+					//find the next scenario allowing double player
+					while(!game.globals.scenarioCybers[scenarioIndex].doublePlayer)
+						scenarioIndex++;
+					SB = game.add.button(x, y, "computerSmall2", this.selectOne, this, 0, 0, 0, 0, this.group);
+					//store the index in the button sprite
+					SB.index = scenarioIndex;
+				}
 			SB.anchor.setTo(0.6, 0.4);
 			SB.events.onInputOver.add(this.enlarge, this, 0, i);
 			SB.events.onInputOut.add(this.normal, this, 0, i);
-			//store the scenarioIndex in the button sprite
-			SB.index = index;
+			
 			this.scenarioButtons[i] = SB;
 			//create texts over the button
-			if(!this.type)
+			if(this.type == 0)	//tutorials
 			{
-				this.scenarioTexts[i] = game.add.text(x, y+20, "Tutorial "+index+"\n"/*+game.globals.scenarioCybers[index].name*/, this.style);
+				this.scenarioTexts[i] = game.add.text(x, y, "Tutorial "+index+"\n", this.style, this.group);
 				switch(index)
-				{
-					case 1: this.scenarioTexts[i].text += "Hall\n";
+				{	//set tutorial name
+					case 0: this.scenarioTexts[i].text += "Hall\n";
 							break;
-					case 2: this.scenarioTexts[i].text += "Defender\n";
+					case 1: this.scenarioTexts[i].text += "Defender\n";
 							break;
-					case 3: this.scenarioTexts[i].text += "Intruder\n";
+					case 2: this.scenarioTexts[i].text += "Intruder\n";
 							break;
 				}
+				this.scenarioTexts[i].anchor.setTo(0.43, 0.35);
 			}
-			else this.scenarioTexts[i] = game.add.text(x, y, "Scenario "+index+"\n"+game.globals.scenarioCybers[index].name, this.style);
-			this.scenarioTexts[i].anchor.setTo(0.5);
-			//lock some of the scenarios
-			if(this.type)
-			{
-				if(game.globals.savedata && game.globals.savedata[index])
+			else if(this.type == 1)	//single player
 				{
-					var score = game.globals.savedata[index].score;
-					this.scoreSprites[i] = game.add.text(x, y, "Highest Score: "+score, this.styleScore);
+					this.scenarioTexts[i] = game.add.text(x, y, "Scenario "+index+"\n"+game.globals.scenarioCybers[index].name, this.style, this.group);
+					this.scenarioTexts[i].anchor.setTo(0.6, 0.5);
+				}
+				else //double player (type == 2)
+				{
+					this.scenarioTexts[i] = game.add.text(x, y, "Scenario "+scenarioIndex+"\n"+game.globals.scenarioCybers[scenarioIndex].name, this.style, this.group);
+					this.scenarioTexts[i].anchor.setTo(0.6, 0.5);
+					
+					scenarioIndex++;	//increment for the next iteration
+				}
+			//lock some of the scenarios
+			if(this.type == 1)	//single player scenario only
+			{
+				if(game.globals.records && game.globals.records[index])
+				{	//highest score
+					var score = game.globals.records[index].score;
+					this.scoreSprites[i] = game.add.text(x, y, "Highest Score: "+score, this.styleScore, this.group);
 					this.scoreSprites[i].anchor.setTo(0.5, -1.5);
 				}
 				else if(index >= 2)
-					if(!game.globals.savedata || (!game.globals.savedata[index- index%2 - 2] || !game.globals.savedata[index - index%2 -1]))
-					{
-						this.lockingMasks[i] = game.add.button(x, y, "lock", game.globals.audioManager.accessDenied, game.globals.audioManager);
+					if(!game.globals.records || (!game.globals.records[index- index%2 - 2] || !game.globals.records[index - index%2 -1]))
+					{	//scenario lock
+						this.lockingMasks[i] = game.add.button(x, y, "lock", game.globals.audioManager.accessDenied, game.globals.audioManager, 0, 0, 0, 0, this.group);
 						this.lockingMasks[i].anchor.setTo(0.6, 0.4);
 						this.lockingMasks[i].width = SB.width;
 						this.lockingMasks[i].height = SB.height;
@@ -6043,9 +6430,11 @@ var selection = {
 	selectOne: function(button, pointer)
 	{
 		game.globals.audioManager.accessGranted();
-		if(!this.type)
+		if(this.type == 0)
 			game.state.start("intro", true, false, 0, 0-parseInt(button.index));	//tutorial
-		else game.state.start("intro", true, false, 0, button.index);				//scenario
+		else if(this.type == 1)
+				game.state.start("intro", true, false, 0, button.index);			//single player
+			else game.state.start("cyberspace", true, false, button.index, true);	//double player
 	},
 	
 	/**
@@ -6057,10 +6446,11 @@ var selection = {
 	}
 };
 module.exports = selection;
-},{"../modules/ScrollButtons":18,"../modules/loadSave":21}],31:[function(require,module,exports){
+},{"../modules/ScrollButtons":20,"../modules/loadSave":23}],33:[function(require,module,exports){
 var loadSave =  require("../modules/loadSave");
 var Notes = require("../modules/Notes");
 var HintBox = require("../modules/HintBox");
+var Messager = require("../modules/Messager");
 var lds = require("../modules/learning_data_send");
 /**
 The state of start menu
@@ -6068,38 +6458,52 @@ The state of start menu
 var startMenu = {
 	
 	create: function(){
-		this.notes = new Notes(this);		
-		this.hintBox = new HintBox("box");
+		this.mainGroup = game.add.group();
+		this.notesGroup = game.add.group();
+		this.messageGroup = game.add.group();
 		
-		var face = game.add.image(game.world.centerX+200, game.world.centerY+70, "combinedFace");
+		this.notes = new Notes(this.notesGroup);		
+		this.hintBox = new HintBox("box");
+		this.messager = new Messager(this.messageGroup, this.hintBox);
+		game.globals.messager = this.messager;
+		
+		var face = game.add.image(game.world.centerX+200, game.world.centerY+70, "combinedFace", 0, this.mainGroup);
 		face.anchor.setTo(0.5);
 		face.width = 420;
 		face.height = 420;
-		var logo = game.add.image(game.world.centerX, 100, "logo");
+		var logo = game.add.image(game.world.centerX, 100, "logo", 0, this.mainGroup);
 		logo.anchor.setTo(0.5);
 		//major buttons
-		this.tutorialButton = game.add.button(game.world.centerX-320 , game.world.centerY-140, "tutorialButton", this.selection, this, 0, 0, 1, 0);
-		this.tutorialButton.scenario = false;
-		this.scenarioButton = game.add.button(game.world.centerX-320 , game.world.centerY-50, "playButton", this.selection, this, 0, 0, 1, 0);
-		this.scenarioButton.scenario = true;
-		this.notesButton = game.add.button(game.world.centerX-320 , game.world.centerY+40, "notesButton", this.notes.createNotes, this.notes, 0, 0, 1, 0);
-		this.creditsButton = game.add.button(game.world.centerX-320 , game.world.centerY+130, "creditsButton", this.credits, this, 0, 0, 1, 0);
+		this.tutorialButton = game.add.button(game.world.centerX-330 , game.world.centerY-140, "tutorialButton", this.selection, this, 0, 0, 1, 0, this.mainGroup);
+		this.tutorialButton.type = 0;
+		this.scenarioButton = game.add.button(game.world.centerX-330 , game.world.centerY-55, "playButton", this.selection, this, 0, 0, 1, 0, this.mainGroup);
+		this.scenarioButton.type = 1;
+		this.doubleplayerButton = game.add.button(game.world.centerX-330 , game.world.centerY+30, "doubleplayerButton", this.selection, this, 0, 0, 1, 0, this.mainGroup);
+		this.doubleplayerButton.type = 2;
+		this.creditsButton = game.add.button(game.world.centerX-330 , game.world.centerY+115, "creditsButton", this.credits, this, 0, 0, 1, 0, this.mainGroup);
 		
 		//Delete save data button
-        this.saveButton = game.add.button(250, 540, 'saveButton', this.delSaveData, this);
+        this.saveButton = game.add.button(200, 540, 'saveButton', this.delSaveData, this, 0, 0, 0, 0, this.mainGroup);
 		this.saveButton.anchor.setTo(0.5);
-		this.hintBox.setHintBox(this.saveButton, "Delete game data");
-		
+		this.hintBox.setHintBox(this.saveButton, "Delete ALL the game data");
+		//notes button
+		this.notesButton = game.add.button(300, 540, "book", this.notesFun, this, 0, 0, 1, 0, this.mainGroup);
+		this.notesButton.anchor.setTo(0.5);
+		this.hintBox.setHintBox(this.notesButton, "Open personal notes (N)");
 		//Checks if learningData have or should have been sent so to add the sendLearningData button
         //to allow the resending of the data in case an error has occurred
         if (localStorage.getItem("learningData"))
 		{
             //Resend learning data button
-            this.resendDataButton = game.add.button(360, 540, 'sendButton', this.resendData, this);
+            this.resendDataButton = game.add.button(400, 540, 'sendButton', this.resendData, this, 0, 0, 0, 0, this.mainGroup);
 			this.resendDataButton.anchor.setTo(0.5);
             this.hintBox.setHintBox(this.resendDataButton, "Send learning data");
         }		
+		
 		game.globals.audioManager.mainMusic();
+		//shortcut key for personal notes
+		var notesKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
+		notesKey.onDown.add(this.notes.createNotes, this.notes);
 	},
 	/*
 	tutorial: function()
@@ -6113,13 +6517,24 @@ var startMenu = {
 	*/
 	selection: function(button, pointer)
 	{
-		if(!button.scenario)
+		//0 for tutorial, 1 for single player, 2 for double player
+		game.state.start("selection", true, false, button.type);
+		/*if(!button.scenario)
 			game.state.start("selection", true, false, false);
-		else game.state.start("selection", true, false, true);
+		else game.state.start("selection", true, false, true);*/
 	},
 	
 	credits: function(){
 		game.state.start("intro", true, false, 2);
+	},
+	
+	/**
+	When notesButton is clicked
+	*/
+	notesFun: function()
+	{
+		this.hintBox.hide();
+		this.notes.createNotes();
 	},
 	
 	/**
@@ -6130,7 +6545,7 @@ var startMenu = {
 		this.hintBox.hide();
         if (loadSave.removeSaveData())
 		{
-			alertify.alert("Saved data successfully deleted!");
+			this.messager.createMessage("Saved data successfully deleted!");
 			game.state.start("load");
 		}
     },
@@ -6141,7 +6556,16 @@ var startMenu = {
     resendData: function () {
 		this.hintBox.hide();
         lds.makeCorsRequest(localStorage.getItem("learningData"));
-    }
+    },
+	
+	/**
+	shutdown function is called when exiting this state.
+	*/
+	shutdown: function()
+	{
+		this.mainGroup.destroy();
+		this.notesGroup.destroy();
+	}
 };
 module.exports = startMenu;
-},{"../modules/HintBox":10,"../modules/Notes":15,"../modules/learning_data_send":20,"../modules/loadSave":21}]},{},[1]);
+},{"../modules/HintBox":10,"../modules/Messager":13,"../modules/Notes":16,"../modules/learning_data_send":22,"../modules/loadSave":23}]},{},[1]);

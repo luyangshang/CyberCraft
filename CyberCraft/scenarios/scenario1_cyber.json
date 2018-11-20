@@ -8,6 +8,7 @@
 "maxRounds":				16,
 "assets":					150,
 "defensive":				true,
+"doublePlayer":				false,
 "characterName":
 [
 	"Unknown character",
@@ -28,11 +29,11 @@
 	[
 		{
 			"name":				"Sniffing attack",
-			"prerequisites":		["Promiscuous mode"],
+			"prerequisites":	["Promiscuous mode"],
 			"learningCost":		10,
-			"desc":				"obtain rival's username and password, secret key, as well as other data, if the rival's network communication is not encrypted or hashed.",
-			"needRivalBuffs":	["MITM"],
-			"noRivalBuffs":		["Shared secret", "Credential compromised"],
+			"desc":				"Finishing move. \nObtain rival's username and password, secret key, as well as other data, if the rival's network communication is not encrypted or hashed.",
+			"needRivalBuffs":	["Shared channel"],
+			"noRivalBuffs":		["Key exchange", "Credential compromised"],
 			"cost":				10,
 			"rivalBuffs":		["Credential compromised"],
 			"buffLength":		2,
@@ -40,11 +41,11 @@
 		},
 		{
 			"name":				"MITM",
-			"desc":				"Performe a Man-In-The-Midele attack. If no authentication of any kind, give the buff \"MITM\".",
+			"desc":				"A Man-In-The-Midele attack will gurantee the victim's messages to pass through the attacker. It could fail in face of authentication mechanisms.",
 			"noRivalBuffs":		["MQV", "RSA key exchange", "Quantum cryptography"],
 			"cost":				15,
 			"rivalBuffs":		["MITM"],
-			"cleanRivalBuffs":	["Shared secret"],
+			"cleanRivalBuffs":	["Key exchange"],
 			"buffLength":		2
 		},
 		{
@@ -52,12 +53,13 @@
 			"desc":				"Crack DH, MQV and RSA key exchange, but not Quantum cryptography",
 			"noRivalBuffs":		["Quantum cryptography"],
 			"cost":				50,
-			"cleanRivalBuffs":	["Shared secret", "MQV", "RSA key exchange"],
+			"cleanRivalBuffs":	["Key exchange", "MQV", "RSA key exchange"],
 			"unlocked":			false
 		},
 		{
 			"name":				"Replay attack",
-			"desc":				"replay the last message, effective even if encrypted. Countered by the use of nonce, timestamp, and relieved by sequence number",
+			"desc":				"Finishing move. \nReplay the last message, effective even if encrypted. Countered by the use of nonce, timestamp, and relieved by sequence number",
+			"needRivalBuffs":	["Shared channel"],
 			"noRivalBuffs":		["Nonce", "Credential compromised"],
 			"cost":				5,
 			"rivalBuffs":		["Credential compromised"],
@@ -66,39 +68,46 @@
 		},
 		{
 			"name":				"Spam email",
-			"desc":				"Send spam email to overload the rival's mailbox.",
-			"cost":				25,
+			"desc":				"DoS category. \nSend spam email to overload the rival's mailbox.",
+			"cost":				20,
 			"rivalBuffs":		["Denial of service attacked"],
 			"buffLength":		2,
 			"spamRequests":		5
+		},
+		{
+			"name":				"Buy botnet machines",
+			"prerequisites":	["Spam email"],
+			"desc":				"buy 2 botnet machines to increase the strength of your spam emails",
+			"cost":				35,
+			"modifier":			"0:Spam email:spamRequests:+:2"
 		}
 	],
 	[
 		{
 			"name":				"DH",
-			"prerequisites":		["Symmetric cryptography"],
+			"prerequisites":	["Symmetric cryptography"],
 			"desc":				"One method to exchange share secret between two parties, so that the message can be encrypted. Defend from sniffing attack, but will be fooled by MITM attack.",
 			"cost":				15,
-			"selfBuffs":		["Shared secret"],
+			"selfBuffs":		["Key exchange"],
 			"buffLength":		6
 		},
 		{
 			"name":				"MQV",
-			"prerequisites":		["DH"],
+			"prerequisites":	["DH"],
 			"desc":				"The scured DH. Resistent to MITM attack, but requires PKI.",
 			"needSelfBuffs":	["PKI"],
 			"cost":				20,
-			"selfBuffs":		["Shared secret", "MQV"],
+			"selfBuffs":		["Key exchange", "MQV"],
 			"cleanSelfBuffs":	["RSA key exchange"],
 			"buffLength":		6
 		},
 		{
 			"name":				"RSA key exchange",
-			"prerequisites":		["Asymmetric cryptography", "PKI"],
+			"prerequisites":	["Asymmetric cryptography", "PKI"],
 			"desc":				"Another method for key exchange, based RSA. Resistent to MITM, but requires PKI",
 			"needSelfBuffs":	["PKI"],
 			"cost":				20,
-			"selfBuffs":		["Shared secret", "RSA key exchange"],
+			"selfBuffs":		["Key exchange", "RSA key exchange"],
 			"cleanSelfBuffs":	["MQV"],
 			"buffLength":		6
 		},
@@ -120,7 +129,7 @@
 			"name":				"Quantum cryptography",
 			"desc":				"Use quantum mechanics for the key distribution. The key distribution itself is Unbreakable.",
 			"cost":				40,
-			"selfBuffs":		["Shared secret", "Quantum cryptography"],
+			"selfBuffs":		["Key exchange", "Quantum cryptography"],
 			"cleanSelfBuffs":	["RSA key exchange", "MQV"],
 			"buffLength":		6,
 			"unlocked":			false
@@ -129,13 +138,13 @@
 ],
 "commonBuffs":
 [
-	"503 Server Unavailable", "Denial of service attacked", "MITM", "Credential compromised", "PKI"
+	"503 Server Unavailable", "Denial of service attacked", "Shared channel", "MITM", "Credential compromised", "PKI"
 ],
 "buffs":
 [
 	{	
-		"name":		"Shared secret",
-		"desc":		"The server and it client have built a secure connection, with a encryption key shared by both sides, and unknown by others. Sniffing is not possible."
+		"name":		"Key exchange",
+		"desc":		"The server and its client have built a secure connection, with an encryption key shared by both sides, and unknown by others. Sniffing is not possible."
 	},
 	{
 		"name":		"MQV",
@@ -162,8 +171,18 @@
 ],
 "initialBuffs":
 [
-	[],
-	[]
+	[
+		{
+			"name":		"Shared channel",
+			"length":	-1
+		}
+	],
+	[
+		{
+			"name":		"Shared channel",
+			"length":	-1
+		}
+	]
 ],
 "AI":
 [
@@ -181,11 +200,11 @@
 	},
 	{
 		"pattern":	["MITM", "Sniffing attack"],
-		"chance":	0.25
+		"chance":	0.22
 	},
 	{
 		"pattern":	["Sniffing attack"],
-		"chance":	0.3
+		"chance":	0.22
 	}
 ],
 "scripts":

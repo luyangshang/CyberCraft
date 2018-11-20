@@ -41,10 +41,10 @@
 		"speeches":
 		[	
 			{
-				"speech": "ArtificialCore may give out some Tips for its telecommutors on network security. This will make some of your attack fail. ^Check the buffs on the rival(optionally the \"R\" key), before you launch your attack. If one attack is hampered, try some other attacks. The action log will also note down if your attack succeeds. ^The good news is, the employees forgets about the tips after sometime, when they will fall for your trick again."
+				"speech": "ArtificialCore may give out some Tips for its telecommutors on network security. This will make some of your attack fail. ^The good news is, the employees forgets about the tips after sometime, that's the time when they will fall for your trick again."
 			},
 			{
-				"speech": "Your Rogue DNS server may not work for all the situations. Maybe you can try \"DNS cache poisoning\" instead, confusing a big area."
+				"speech": "The path starting from \"Deauth attack\" is long. The defender may have set some blocks in the way. Your Rogue DNS server may not work for all the situations. Maybe you can use \"DNS cache poisoning\" instead, to poison a large area."
 			}
 		]
 	},
@@ -57,7 +57,7 @@
 		"speeches":
 		[	
 			{
-				"speech": "You are going to go near the victim and connect to the same wireless network. ^In this situation, DEAUTH attack is quite useful. ^It can kick the victim offline, which means the victim cannot perform any other actions during that time. ^Meanwhile, reconnection attempt makes it easier for the victim to fall into our Rogue Access Point. ^All in all, I suggest you perform a combo of \"Deauth attack + Rogue access point + Rogue DHCP server + Rogue DNS server + XSS\". The first ones gradually trap the victim into our fake server, while the last one send us the victim's precious cookie."
+				"speech": "You are going to go near the victim and connect to the same wireless network. ^In this situation, DEAUTH attack is quite useful. ^It can kick the victim offline, which means the victim cannot perform any other actions during that time. ^Meanwhile, at the following attempt to reconnection to the wireless network, the victim is quite likely to fall into our Rogue Access Point. ^Then, you can trap the victim deeper and deeper, until you launch a XSS attack to steal the victim's precious cookie. ^In short words, I suggest you perform a combo of \"Deauth attack + Rogue access point + Rogue DHCP server + Rogue DNS server + XSS\". ^As a matter of fact, those attacks in the middle are actually one form of \"MITM\" attack."
 			}
 		]
 	}

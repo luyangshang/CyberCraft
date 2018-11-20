@@ -6,36 +6,41 @@ var HintBox = require("./HintBox");
 N.B. the management of a single log is managed by LogEntry
 @param {Array} logs - the array of the action log
 @param {int} role - the role of the player. To be displayed as a reminder. 0: intruder, 1: defender
-@param {Notes} notes - the reference ot personal notes. Used to open personal notes from logViewer
-@param {Phaser.Group} fatherGroup - (optional) the group where the whole logViewer is put in. useful for layering
+@param {boolean} doublePlayer - true: double player mode, false: single player mode
+@param {Notes} notes - the reference to personal notes. Used to open personal notes from logViewer
+@param {Messager} messager - the reference to a Messager instance, which is called at warning messages
+@param {Phaser.Group} fatherGroup - the group where the whole logViewer is put in. useful for layering
 @constructor
 */
-function LogViewer(logs, role, notes)
+function LogViewer(logs, role, doublePlayer, notes, messager, fatherGroup)
 {
 	//constants
 	this.styleHeadline = { font: "25px Courier New, monospace", fontWeight: "bold", fill: "#FFEE11", align: "center"};
 	this.style = { font: "20px Courier New, monospace", fill: "#00AA11", align: "center"};
+	this.styleIntruder = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#8800EE", align: "center"};
+	this.styleDefender = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#2222FF", align: "center"};
+	
 	this.styleFailed = { font: "20px Courier New, monospace", fill: "#FF8811", fontWeight: "bold", align: "center"};
 	this.logsPerPage = 6;
 	
 	this.logs = logs;
 	this.role = role;
+	this.doublePlayer = doublePlayer;
 	this.notes = notes;
+	this.messager = messager;
+	this.fatherGroup = fatherGroup;
 	
 	//layer 1: log entries
 	this.logGroup = game.add.group();
-		//each contains a log entry: frame+round+pattern+result
+		//each contains a log entry: frame+round+act+result
 	this.entryGroups = [];
 	//layer 2: popup details of one log entry
 	this.reasonGroup = game.add.group();
 	//layer 3: hintbox
 	this.hintBox = new HintBox("box");
 	
-	if(arguments[3])
-	{
-		arguments[3].add(this.logGroup);
-		arguments[3].add(this.reasonGroup);
-	}
+	fatherGroup.add(this.logGroup);
+	fatherGroup.add(this.reasonGroup);
 	
 	//shortcut key for scroll up and scroll down
 	var scrollUpKey = game.input.keyboard.addKey(Phaser.Keyboard.PAGE_UP);
@@ -62,18 +67,27 @@ LogViewer.prototype.display = function(lastPage)
 	var headline = game.add.text(game.world.centerX - 100, 100, "Action Logs", this.styleHeadline, this.logGroup);
 	headline.anchor.setTo(0.5);
 	//role
-	if(this.role)
-		roleText = "Your role: dedender";
-	else roleText = "your role: intruder";
-	var roleSprite = game.add.text(game.world.centerX + 120, 110, roleText, this.style, this.logGroup);
-	roleSprite.anchor.setTo(0.5);
+	if(!this.doublePlayer)
+	{
+		if(this.role == 1)
+		{
+			roleText = "Your role: dedender";
+			var roleSprite = game.add.text(game.world.centerX + 120, 110, roleText, this.styleDefender, this.logGroup);
+		}
+		else
+		{			
+			roleText = "your role: intruder";
+			var roleSprite = game.add.text(game.world.centerX + 120, 110, roleText, this.styleIntruder, this.logGroup);
+		}
+		roleSprite.anchor.setTo(0.5);
+	}
 	
 	//create the battle log
 		//caption line
 	var roundText = game.add.text(200, 150, "Round", this.style, this.logGroup);
 	roundText.anchor.setTo(0.5);
-	var patternText = game.add.text(450, 150, "Act pattern", this.style, this.logGroup);
-	patternText.anchor.setTo(0.5);
+	var actText = game.add.text(450, 150, "Act pattern", this.style, this.logGroup);
+	actText.anchor.setTo(0.5);
 	var resultText = game.add.text(700, 150, "Result", this.style, this.logGroup);
 	resultText.anchor.setTo(0.5);
 	//calculate the number of pages
@@ -116,7 +130,7 @@ LogViewer.prototype.updateLogs = function(targetPage)
 	var outerItem = Math.min(nextItem + this.logsPerPage, this.logs.length);
 	
 	//create new logs
-	var frameSprite, roundSprite, patternSprite, resultSprite;
+	var frameSprite, roundSprite, actSprite, resultSprite;
 	var y = 200;
 	for(i=0; nextItem < outerItem; nextItem++, i++, y+=50)
 	{
@@ -135,16 +149,16 @@ LogViewer.prototype.updateLogs = function(targetPage)
 		
 		//round
 		game.add.text(200, y, round, this.style, this.entryGroups[i]);
-		//pattern
-		var pattern = game.add.text(450, y, this.logs[nextItem].actPattern, this.style, this.entryGroups[i]);
+		//act
+		var actSprite = game.add.text(450, y, this.logs[nextItem].act, this.style, this.entryGroups[i]);
 			//hint box
-		this.hintBox.setHintBox(pattern, "Find in personal notes");
+		this.hintBox.setHintBox(actSprite, "Find in personal notes");
 			//link to open the corresponding entry in personal notes
-		pattern.inputEnabled = true;
-		pattern.events.onInputDown.add(this.seeNotesFun, this);
+		actSprite.inputEnabled = true;
+		actSprite.events.onInputDown.add(this.seeNotesFun, this);
 		//result
 		if(this.logs[nextItem].success)
-			resultSprite = game.add.text(700, y, "sccessful", this.style, this.entryGroups[i]);
+			resultSprite = game.add.text(700, y, "successful", this.style, this.entryGroups[i]);
 		else resultSprite = game.add.text(700, y, "failed", this.styleFailed, this.entryGroups[i]);
 		
 		this.entryGroups[i].callAll("anchor.setTo", "anchor", 0.5);
@@ -163,7 +177,7 @@ LogViewer.prototype.seeNotesFun = function(sprite, pointer)
 	this.notes.createNotes();
 	var id = this.notes.name2id(sprite.text);
 	if(id == -1)
-		window.alert("Sorry. This entry is not found in personal notes!");
+		this.messager.createMessage("Sorry. This entry is not found in personal notes!");
 	else this.notes.readNote(id);
 };
 
@@ -187,7 +201,7 @@ LogViewer.prototype.showReason = function(button, pointer)
 	if(entry.success)
 	{	//the act succeeds, no more resaon recorded
 		//caption
-		this.caption = game.add.text(game.world.centerX, 200, "\"" + entry.actPattern + "\" succeeded", this.styleHeadline, this.reasonGroup);
+		this.caption = game.add.text(game.world.centerX, 200, "\"" + entry.act + "\" succeeded", this.styleHeadline, this.reasonGroup);
 		game.add.text(game.world.centerX, game.world.centerY, "No definitive hurdle encountered", this.style, this.reasonGroup);
 		/*//click to close
 		this.reasonGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.deleteReason, this);*/
@@ -195,7 +209,7 @@ LogViewer.prototype.showReason = function(button, pointer)
 		return;
 	}
 	//the act failed. Display the reasons
-	this.caption = game.add.text(game.world.centerX, 200, "\"" + entry.actPattern + "\" failed", this.styleHeadline, this.reasonGroup);
+	this.caption = game.add.text(game.world.centerX, 200, "\"" + entry.act + "\" failed", this.styleHeadline, this.reasonGroup);
 	var y = 250;
 	//need rival buff
 	if(entry.noBuffHurdle.length)

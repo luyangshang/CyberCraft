@@ -8,6 +8,7 @@
 "maxRounds":				16,
 "assets":					200,
 "defensive":				false,
+"doublePlayer":				true,
 "characterName":
 [
 	"Christopher",
@@ -21,7 +22,7 @@
 "startingSound":	"intruderMustBeDestroyed",
 "commonActs": 
 [
-	["Promiscuous mode"],
+	["MITM", "Promiscuous mode"],
 	["Hash algorithm"]
 ],
 "acts": 
@@ -31,7 +32,7 @@
 			"name":				"Sniffing attack",
 			"prerequisites":	["Promiscuous mode"],
 			"learningCost":		5,
-			"desc":				"Obtain rival's username and password, as well as other data, if the rival's network communication is not encrypted or hashed.",
+			"desc":				"Finishing move. \nObtain rival's username and password, as well as other data, if the rival's network communication is not encrypted or hashed.",
 			"needRivalBuffs":	["MITM"],
 			"noRivalBuffs":		["Password hashed", "OTP", "Credential compromised"],
 			"cost":				5,
@@ -41,10 +42,10 @@
 		},
 		{
 			"name": 			"Brute-force attack",
-			"desc":				"Brute force attack can be used for cracking hash. However, here it's used for trying on password: repeatively try all possible combinations of passwords.",
+			"desc":				"Finishing move. \nBrute force attack can be used for cracking hash. However, here it's used for trying on password: repeatively try all possible combinations of passwords.",
 			"noRivalBuffs":		["Password error limit", "Password error delay", "OTP", "Credential compromised"],
 			"cost":				20,
-			"successRate":		0.2,
+			"successRate":		0.4,
 			"rivalBuffs":		["Credential compromised"],
 			"buffLength":		2,
 			"bonus":			50
@@ -64,7 +65,7 @@
 			"name": 			"Buy rainbow table",
 			"prerequisites":	["Dictionary attack"],
 			"learningCost":		20,
-			"desc":				"Use the rainbow table to assist the dictionary attack on long password. Increase the success  rate of Dictionary attack.",
+			"desc":				"Improvement. \nUse the rainbow table to assist the dictionary attack on long password. Increase the success  rate of Dictionary attack.",
 			"noSelfBuffs":		["Rainbow table"],
 			"cost":				20,
 			"selfBuffs":		["Rainbow table"],
@@ -72,7 +73,8 @@
 		},
 		{
 			"name":				"Replay attack",
-			"desc":				"replay the last message, effective even if encrypted. Countered by the use of nonce, timestamp (kerberos has timestamp), MID and relieve by sequence number",
+			"desc":				"Finishing move. \nReplay the last message, effective even if encrypted. Countered by the use of nonce, timestamp (kerberos has timestamp), MID and relieve by sequence number",
+			"needRivalBuffs":	["MITM"],
 			"noRivalBuffs":		["Timestamp", "Kerberos", "OTP", "Credential compromised"],
 			"cost":				5,
 			"rivalBuffs":		["Credential compromised"],
@@ -81,16 +83,16 @@
 		},
 		{
 			"name":				"Password DoS",
-			"desc":				"Delibrately insert wrong passwords to lock an account. Can be applied only if the rival has buff \"Password error limit\"",
+			"desc":				"DoS category. \nDelibrately insert wrong passwords to lock an account. Can be applied only if the rival has buff \"Password error limit\"",
 			"needRivalBuffs":	["Password error limit"],
 			"cost":				5,
 			"rivalBuffs":		["Denial of service attacked"],
 			"buffLength":		2,
-			"spamRequests":		6
+			"spamRequests":		7
 		},
 		{
 			"name":				"Privilege escalation",
-			"desc":				"Escalate the privilege after having cracked an account. Deals additional damages at the same round.",
+			"desc":				"Additional finishing move. \nEscalate the privilege after having cracked an account. Deals additional damages at the same round.",
 			"needRivalBuffs":	["Credential compromised"],
 			"noRivalBuffs":		["Privilege escalation"],
 			"cost":				30,
@@ -111,9 +113,9 @@
 		},
 		{
 			"name":				"MFA",
-			"learningCost":		15,
+			"learningCost":		10,
 			"desc":				"Multiple factor authentication. Using multiple methods of authentications of different types (don't put all of one's eggs in one basket). Halves the success rate of rival attacks.",
-			"cost":				60,
+			"cost":				50,
 			"modifier":			"0:Brute-force attack:successRate:/:2;0:Dictionary attack:successRate:/:2;0:Sniffing attack:successRate:/:2;0:Replay attack:successRate:/:2",
 			"selfBuffs":		["MFA"]
 		},
@@ -134,7 +136,7 @@
 		},
 		{
 			"name":				"Password error delay",
-			"prerequisites":		["Password error limit"],
+			"prerequisites":	["Password error limit"],
 			"learningCost":		5,
 			"desc":				"Resistent to Brute-force attack.",
 			"cost":				10,
@@ -181,7 +183,7 @@
 ],
 "commonBuffs":
 [
-	"MITM", "503 Server Unavailable", "Credential compromised", "Denial of service attacked", "Offline", "MFA"
+	"503 Server Unavailable", "Credential compromised", "Shared channel", "MITM", "Denial of service attacked", "MFA"
 ],
 "buffs":
 [
@@ -238,10 +240,6 @@
 [
 	[],
 	[
-		{
-			"name":		"MITM",
-			"length":	-1
-		},
 		{
 			"name":		"Password-based authentication",
 			"length":	-1

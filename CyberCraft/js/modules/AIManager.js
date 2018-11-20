@@ -78,19 +78,6 @@ AIManager.prototype.activatePatterns = function()
 					found = true;
 					break;
 				}
-				/*if(!Number.isInteger(this.ai[i].pattern[a]))	//still name string
-				{
-					id = this.actManager.name2id(this.role, this.ai[i].pattern[a]);
-					if(id != -1)
-					{
-						this.ai[i].patternap] = id;
-					}
-					else	//act still not defined
-					{
-						found = true;
-						break;
-					}
-				}*/
 			}
 			if(found == false)
 			{
@@ -112,8 +99,8 @@ AIManager.prototype.control = function(gameManager, round)
 	if(this.currentPlan == -1)
 	{
 		//calling setTimeout will lose all context. code like this will guarantee context
-		setTimeout(function(fun, context){fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
-		//this.gameManager.roundFinal();
+		setTimeout(function(fun, context){if(context)fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
+		//non-delayed equivalence: if(gameManager)this.gameManager.roundFinal();
 		return;
 	}
 	
@@ -123,8 +110,7 @@ AIManager.prototype.control = function(gameManager, round)
 		if(this.learnAct(this.ai[this.currentPlan].pattern[a]) == false)
 		{	//cannot learn them all
 			//calling setTimeout will lose all context. code like this will guarantee context
-			setTimeout(function(fun, context){fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
-			//this.gameManager.roundFinal();
+			setTimeout(function(fun, context){if(context)fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
 			return;
 		}
 	
@@ -138,22 +124,15 @@ AIManager.prototype.control = function(gameManager, round)
 		allResource += this.actManager.getAct(this.role, id).cost;
 	}
 	//if resource not enough for all acts in one shot, wait for the next round
-	if(gameManager.getResource(this.role) < allResource)
+	if(gameManager && gameManager.getResource(this.role) < allResource)
 	{
 		//calling setTimeout will lose all context. code like this will guarantee context
 		setTimeout(function(fun, context){fun.call(context);}, this.operationDelay, this.gameManager.roundFinal, this.gameManager);
 		//this.gameManager.roundFinal();
 		return;
 	}
-	//resource also enough. ready to apply acts according to time interval
-	setTimeout(this.singleAct, this.operationDelay, this, this.ai[this.currentPlan].pattern, 0, round);
-	/*for(a in this.ai[this.currentPlan].pattern)
-	{
-		///need 1.5s idle between each act?
-		this.actManager.applyAct(this.role, this.ai[this.currentPlan].pattern[a], round);
-	}
-	//plan executed. ready for another plan
-	this.currentPlan = -1;*/
+	//resource also enough. ready to apply acts after each time interval
+	this.actTimer = setTimeout(this.singleAct, this.operationDelay, this, this.ai[this.currentPlan].pattern, 0, round);
 };
 /**
 Function invoked for each single act in the selected action pattern.
@@ -163,36 +142,51 @@ It will recursively call itself after each operatioDelay
 */
 AIManager.prototype.singleAct = function(context, pattern, i, round)
 {
-	try{
-		if(i >= pattern.length)
-		{//plan executed. get ready for another plan
-			context.currentPlan = -1;
-			context.gameManager.roundFinal();
-			return;
-		}
-		
-		context.actManager.applyAct(context.role, pattern[i], round);
-		setTimeout(context.singleAct, context.operationDelay, context, pattern, i+1, round);
-	}catch(e){console.log("Game already ended.");}
+	//return when game already ended (restarted or gameover)
+	if(!context.gameManager || context.gameManager.disableControl)
+		return;
+	if(i >= pattern.length)//all acts in the plan executed.
+	{ 	
+		//reset for another plan
+		context.currentPlan = -1;
+		//AI ends the turn
+		context.gameManager.roundFinal();
+		return;
+	}
+	
+	context.actManager.applyAct(context.role, pattern[i], round);
+	context.actTimer = setTimeout(context.singleAct, context.operationDelay, context, pattern, i+1, round);
 };
 /**
-Recursive function to lean an act. Recursively invoke the learning of the prerequist.
+Callback function to stop AI's attempt to perform further acts or end turn, when game restarted or gameover
+*/
+AIManager.prototype.stopAct = function()
+{
+	clearTimeout(this.actTimer);
+}
+
+/**
+Recursive function to lean an act. Recursively invoke the learning of the prerequisites.
 @returns {boolean} - true for it was learnt or it's successfully learnt, false for leaning failure (insufficient resource)
 */
 AIManager.prototype.learnAct = function(id)
 {
+	//return when game already ended (restarted or gameover)
+	if(!this.gameManager || this.gameManager.disableControl)
+		return;
+	
 	if(this.actManager.actLearnt(this.role, id))
 		return true;
 	//not learnt
 	var result;
-	//whether prerequists meet
-	for(var p in this.actManager.getAct(this.role, id).prerequists)
+	//whether prerequisites meet
+	for(var p in this.actManager.getAct(this.role, id).prerequisites)
 	{	
-		result = this.learnAct(this.actManager.getAct(this.role, id).prerequists[p]);
-		if(!result)	//prerequists can't be learnt
+		result = this.learnAct(this.actManager.getAct(this.role, id).prerequisites[p]);
+		if(!result)	//prerequisites can't be learnt
 			return;
 	}
-	//prerequists meet
+	//prerequisites meet
 	result = this.actManager.learnAct(this.role, id);
 	return result;
 };
@@ -224,7 +218,7 @@ AIManager.prototype.randomPlan = function()
 };
 
 /**
-Check if the action pattern (actually the last one of the acts) will enforce more buffs or clean any existing buffs on success
+Check if the action pattern (actually the last one of the acts) will enforce more buffs or clean any existing buffs on success. Note that, last straws also enforce buff like "Credential compromised"
 @param {Array} - an array of acts that is to be performed
 @returns {boolean} - true if the action pattern 
 */

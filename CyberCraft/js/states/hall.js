@@ -15,33 +15,41 @@ var hall = {
 	init: function(index)
 	{
 		this.index = index;
-		this.notes = new Notes(this);
 		this.npcManager = new NPCManager(index);
 	},
 	
 	create: function()
 	{
-		this.hintBox = new HintBox("box");
 		this.createMap();
-		this.gateSprite = game.add.button(950, 96, "gate", function(){game.state.start("startMenu", true, false);}, this, 1, 0, 3, 0);
-		this.gateSprite.anchor.setTo(0.5);
-		this.notesButton = game.add.button(50, 40, "book", this.notes.createNotes, this.notes, 0, 0, 1, 0);
-		this.hintBox.setHintBox(this.notesButton, "   Open personal notes (N)");
-		this.notesButton.anchor.setTo(0.5);
-        this.createNPCs();
+		//this.groundGroup = game.add.group();
+		this.npcGroup = game.add.group();
+		this.dialogueGroup = game.add.group();
+		this.notesGroup = game.add.group();
+		this.createNPCs();
 		this.createDialogue();
 		
-		//if need a talk at the start
-		this.talkTo(null, null, 0);
+		this.hintBox = new HintBox("box");
+		
+		this.gateSprite = game.add.button(950, 96, "gate", function(){game.state.start("startMenu", true, false);}, this, 1, 0, 3, 0, this.npcGroup);
+		this.gateSprite.anchor.setTo(0.5);
+		this.notesButton = game.add.button(50, 40, "book", this.createNotes, this, 0, 0, 1, 0, this.npcGroup);
+		this.hintBox.setHintBox(this.notesButton, "   Open personal notes (N)");
+		this.notesButton.anchor.setTo(0.5);
+		
+		
+		this.notes = new Notes(this.notesGroup);
 		
 		//shortcut key for personal notes
 		var notesKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
-		notesKey.onDown.add(this.notes.createNotes, this.notes);
+		notesKey.onDown.add(this.createNotes, this);
 		
 		//BGM
 		if(this.index < 0 || game.globals.scenarioCybers[this.index].defensive)	//tutorial 1
 			game.globals.audioManager.defenderHallMusic();
 		else game.globals.audioManager.intruderHallMusic();
+		
+		//if need a talk at the start
+		this.talkTo(null, null, 0);
 	},
 
 	/**
@@ -51,14 +59,14 @@ var hall = {
 		if(this.index%2 == 0)
 		{	//intruder's hall
 			var hallName = "hallMapIntruder";
-			this.map = window.game.add.tilemap(hallName, 32, 32);
+			this.map = game.add.tilemap(hallName, 32, 32);
 			//imports the tileset image in the map object
 			this.map.addTilesetImage('ceramics_32x32aigei_com', 'ceramics_32x32aigei_com');
 		}
 		else
 		{	//defender's hall	
 			var hallName = "hallMapDefender";
-			this.map = window.game.add.tilemap(hallName, 32, 32);
+			this.map = game.add.tilemap(hallName, 32, 32);
 			//Imports the tileset image in the map object
 			//The first parameter is the tileset name as specified in Tiled, the second is the key to the asset
 			this.map.addTilesetImage('floor_tile', 'floor_tile');
@@ -75,7 +83,7 @@ var hall = {
     createNPCs: function() {
 		//store all the NPCs in this scenario. The index is the npc id
 		var npcs = this.npcManager.NPCs;
-		this.npcGroup = game.add.group();
+		
 		var npc;
 		//this.multimedia = new MultimediaText();
 		for(var n in npcs)
@@ -99,6 +107,17 @@ var hall = {
 	},
 	
 	/**
+	Try to open personal notes when player click on notesButton or when pressing "N" key
+	Check if there is a mask (yes/no question) before opening personal notes
+	*/
+	createNotes: function(button, pointer)
+	{
+		if(this.mask && this.mask.alive == true)
+			return;
+		this.notes.createNotes();
+	},
+	
+	/**
 	A recursive function that calls itself (after a random delay) to constantly play the turning animation of NPC sprite
 	@param {Phaser.Sprite} sprite - the NPC sprite whose animation is been set
 	*/
@@ -119,7 +138,7 @@ var hall = {
 	*/
 	createDialogue: function()
 	{
-		this.multimedia = new MultimediaText(250, 470, 1, this.dismissDialogue, this);
+		this.multimedia = new MultimediaText(250, 470, 1, this.dialogueGroup, this.dismissDialogue, this, );
 	},
 	
 	/**
@@ -211,7 +230,9 @@ var hall = {
 	shutdown: function()
 	{
 		delete this.npcManager;
+		delete this.groundGroup;
 		delete this.npcGroup;
+		delete this.notesGroup;
 		delete this.multimedia;
 	}
 };

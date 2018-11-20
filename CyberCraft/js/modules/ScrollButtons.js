@@ -7,19 +7,22 @@ It updates the current page number, and call the real page update function from 
 @param {function} updateFunction - the update function to call when the scroll up or scroll down arrow is clicked
 @param {Object} context - the context of updateFunction
 @param {int} NPage - the number of page
-@param {Phaser.Group} group - (optional) the group this button is to join. Useful for hiding or deleting with a whole group, and useful for aligning it to the right layer.
+@param {Phaser.Group} group - the group this button is to join. Useful for hiding or deleting with a whole group, and useful for aligning it to the right layer.
 @constructor
 */
-function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages)
+function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages, fatherGroup)
 {
 	this.updateFunction = updateFunction;
 	this.context = context;
 	this.NPages = NPages;
-	
+	this.fatherGroup = fatherGroup;
+	//constants
 	this.style = { font: "15px Segoe UI black", fontWeight: "bold", fill: "#FF3300", align: "right"};
 	
 	this.currentPage = 0;
 	this.scrollGroup = game.add.group();
+	//add to the parent group, which is passed as parameter
+	fatherGroup.add(this.scrollGroup);
 	this.upArrow = game.add.button(maxX, minY+20, "arrowUp", this.scrollUp, this, 0, 0, 0, 0, this.scrollGroup);
 	this.upArrow.anchor.setTo(1, 1);
 	this.upTween = game.add.tween(this.upArrow.scale).to({y:1.5}, 500,
@@ -39,10 +42,6 @@ function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages)
 	//text to indicate the current and maximum page
 	this.pageIndicator = game.add.text(maxX, (minY+maxY)/2, parseInt(this.currentPage+1) + "/" + this.NPages, this.style, this.scrollGroup);
 	this.pageIndicator.anchor.setTo(1, 0.5);
-	
-	if(arguments[6])
-		//add to the parent group, which is passed as parameter
-		arguments[6].add(this.scrollGroup);
 }
 /**
 (Used by the description of personal notes or by acts when new acts are added by the script)

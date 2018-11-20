@@ -62,8 +62,8 @@ function NPCManager(index)
 				targetId = this.name2id(string);
 				if(targetId == -1)
 				{
-					window.alert("Error! in the scenario file scenario" + index + "_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!");
-					exit(3);
+					var errorMessage = "Error! In the file scenario" + index + "_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!";
+					game.state.start('error', true, false, errorMessage);
 				}
 				else
 				{

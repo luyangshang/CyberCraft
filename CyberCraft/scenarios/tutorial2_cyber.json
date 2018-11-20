@@ -28,7 +28,7 @@
 	[
 		{
 			"name":			"DDoS",
-			"desc":			"Distributed Denial of Service attack. Make use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its sucess rate is much more than the original DOS attack. Effect based on how many botnet machines bought.",
+			"desc":			"DoS category .\nDistributed Denial of Service attack makes use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its success rate is much more than the original DOS attack. Its effect is based on how many botnet machines bought.",
 			"cost":			30,
 			"rivalBuffs":	["Denial of service attacked"],
 			"buffLength":	2,
@@ -37,7 +37,7 @@
 		},
 		{
 			"name":				"MITM",
-			"desc":				"Performe a Man-In-The-Midele attack. If no authentication of any kind, give the buff \"MITM\".",
+			"desc":				"Perform a Man-In-The-Middle attack. If no authentication or encryption of any kind, give the buff \"MITM\".",
 			"cost":				15,
 			"rivalBuffs":		["MITM"],
 			"buffLength":		2,
@@ -46,7 +46,7 @@
 		{
 			"name":				"Sniffing attack",
 			"learningCost":		10,
-			"desc":				"Obtain rival's username and password, as well as other data, provided that the communication is not encrypted.",
+			"desc":				"Finishing move. \nObtain rival's username and password, as well as other data, provided that the communication is not encrypted.",
 			"needRivalBuffs":	["MITM"],
 			"noRivalBuffs":		["Encrypted", "Credential compromised"],
 			"cost":				10,
@@ -60,7 +60,7 @@
 		{
 			"name":			"CAPTCHA",
 			"learningCost":	5,
-			"desc":			"Completely Automated Public Turing test to tell Computers and Humans Apart. Grant 50% defence against DoS attacks.",
+			"desc":			"Completely Automated Public Turing test to tell Computers and Humans Apart. Grant 50% defense against DoS attacks.",
 			"cost":			20,
 			"selfBuffs":	["CAPTCHA"],
 			"buffLength":	10,
@@ -95,7 +95,7 @@
 ],
 "commonBuffs":
 [
-	 "503 Server Unavailable", "Denial of service attacked","CDN", "Encrypted", "Credential compromised", "MITM"
+	 "503 Server Unavailable", "Denial of service attacked", "CDN", "Encrypted", "Credential compromised", "MITM"
 ],
 "buffs":
 [
@@ -138,7 +138,7 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Ah, get a little nervous for my first internship in network defence. Let's see what are there. ^This is the first round among those 18 rounds, as can be seen in the top-left corner. The menu button, my persoanl notes and the action log are also there. ^I love the action log. With it, I can know the detail information about the effects of my actions and potential intruder's as well. It's for the moment empty though. ^Then, the company have offered me a computer with possible acts I can perform in the main panel. Now there is only a \"CDN\". ^Nevertheless, no mission is assigned for the moment, so I will just look around and do no acts. ^Then, just click on the \"End turn\" button to end my turn."
+				"dialogue": "Ah, get a little nervous for my first internship in network defense. Let's see what are there. ^In the top-left corner, there are menu button, my personal notes and the action log. A round indicator nearby is also telling that this is round 1 out of the 18 rounds. ^I love the action log. With it, I can know the detail information about actions performed by me and by the potential intruder, did they failed, and why they failed. For the current moment it's empty though. ^I can't wait to have a look at the computer provided by the company. Oh, it's just down here. On the screen, the possible acts I can perform is displayed. Now there is only a \"CDN\". ^Nevertheless, no mission is assigned for the moment, so I will just look around and do no acts. ^Then, I will click on the \"End turn\" button near the top-left corner to end my turn."
 			}
 		]
 	},
@@ -149,22 +149,27 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Hei, Godfried, come here. One important work for you. ^You should have known that, this is a network company, whose business is to serve incoming client requests. ^From our investigation, we discovered that the current number of requests has surpassed the power our server to sustain. Not to say the rush hours. ^Probably you have already see one or two unhappy faces poping out. Each unhappy face represent the failure to serve one client's request. One served client will grant you 10 resource, but one unserved client will result in 5 resource lose. ^Whenever any of the clients encounter problems getting served, they will report to us that they get the \"503 Server Unavailable\" page. ^Such buff is presented on you, to warn you that of the problem. You can find buffs on you by clicking on your portrait, or by the \"S\" shortcut key. ^Then if you click on one particular buff, you can view the details of the buff. ^And, at the detail of the buff, you can even directly find the term in your notes. ^The shortcut key for your own notes is \"N\"."
+				"dialogue": "Hei, Godfried, come here. One important work for you. ^You should have known that, this is a network company, whose business is to serve incoming client requests. ^From our investigation, we discovered that the current number of requests has surpassed the capacity our server. Not to say the rush hours. ^Probably you have already see one or two unhappy faces popping out. Each unhappy face represent the failure to serve one client request, while each happy face for one served client request. ^One served client will grant you 10 resource, but one unserved client will result in 5 resource lose. ^Whenever any of the clients encounter problems getting served, they will report to us that they get the \"503 Server Unavailable\" page. ^A buff in this name is presented on you, to warn you of the problem. You can find buffs on you by clicking on your portrait, or by the \"S\" shortcut key. Yeah, try it now. Have you seen \"503 Server Unavailable\"? ^In such a buff list, if you click on one particular buff, you can view the buff detail. ^Moreover, at the buff detail page, the book-like button will directly lead you to the corresponding term in your personal notes. The shortcut key for personal notes is \"N\"."
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Um, so, similarly, by clicking on the rival's portrait, I can see buff on him also?"
+				"dialogue": "Um, so, similarly to my portrait, rival's portrait will lead to the list of buffs on him/her also?"
 			},
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Right. And the shortcut key for the rival is \"R\". Now we have not encounter any intruder, and you see no buff there. ^Now, in order to address on the problem of server capacity, I suggest you build something like CDN(Content Delivery Network) to increase our server capacity."
+				"dialogue": "Right. And the shortcut key for the rival is \"R\". \nWe have not encounter any intruder yet, and you see no buff there. ^Now, in order to deal with the problem of server capacity, I suggest you build something like CDN (Content Delivery Network) to increase our server capacity."
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "CDN...Um, I remember see that back in the university. There is also an entry of it in my personal notes... ^Nevertheless, I haven't yet built one with my own hands. I should firstly study what practically should be done. ^Click on \"CDN\" in the main panel, them click on \"learn\" (shortcut key \"E\"). After that, I am able to \"Apply\" it to our server (shortcut key \"A\")."
+				"dialogue": "(Yeah, of course. There is only a \"CDN\" on my computer. What else do you expect me to do...) ^By the way, I firstly heard of \"CDN\" back in the university. How I miss the days when we were young... We played basketball on the court, we chased beautiful girls... ^Oh, sorry for getting sidetracked. Anyway, there is an entry of CDN in my personal notes. I will refer to it when I need more information. ^However, theory is one thing, and practice is another. I haven't really built one with my own hands yet. I have to firstly study what practically should be done."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "I will give you a jumpstart this time. Click on \"CDN\" on the screen, then click on \"learn\" (shortcut key \"E\"). After that, you can \"Apply\" it to our server (shortcut key \"A\"). ^When \"CDN\" is applied, you can end the turn."
 			}
 		],
 		"shouldApply": ["CDN"]
@@ -176,7 +181,7 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "With the CDN built, our server capacity has boomed, and our business boomed. no clients complains, and I earns more. Now I have a buff called \"CDN\" on me. ^My action of applying CDN is also noted down in the action log. ^No more mission today, I will take a nap."
+				"dialogue": "With the CDN built, our server capacity has increased, and our business booms. no clients complains, and I earns more. ^Now there is a buff called \"CDN\" on me. And because the server capacity is high enough, no \"503 Server Unavailable\" buff anymore. ^My action of applying CDN is also recorded in the action log. ^No mission is assigned today, I will take a nap... \nLet's go to the next round."
 			}
 		],
 		"newActs":
@@ -192,12 +197,12 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Ah, my work is easy and boring. I am under challenged. I even start to expect some intruders now."
+				"dialogue": "Ah, my work is easy and boring. It's too... unchallenging. I even start to expect some intruders now."
 			},
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Hei, Godfried, dont' Jinx it. ^Intelligence tells that a group of hackers have set us as their new target. They used to use DoS, well, actually DDoS attack to paralyze the target server. ^CDN itself provides some defence against DoS attack, and that's one of the reasons why I suggested you CDN yesterday. ^However, CDN alone is supposed to be inadequate for it. ^Wait, the newest report says that they are aready attacking! ^Go to check the action logs (shortcut key \"L\"). ^We should immediately apply CAPTCHA to intercept as much spam requests as possible, otherwise, our server will be totally flooded with spam requests."
+				"dialogue": "Hei, Godfried, dont' Jinx it. ^Intelligence tells that a group of hackers have targeted us. They used to launch DoS... Well, actually DDoS attack to paralyze the target server. ^CDN itself provides some defense against those like DoS attack, and that's one of the reasons why I suggested you CDN last time. ^However, CDN alone is supposed to be inadequate for the defense. ^Wait, the newest report says that they have already started DDoS attack on us! ^See that in the action logs (shortcut key \"L\")? ^We should immediately apply CAPTCHA to intercept as much spam requests as possible. Otherwise, our server will be totally flooded with their spam requests."
 			}
 		],
 		"newActs":
@@ -224,27 +229,27 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Nevertheless, clients begin to complain about the 503 Server Unavailable error again."
+				"dialogue": "Nevertheless, clients still complain about the \"503 Server Unavailable\" error."
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "What? Why? The defence should be airtight."
+				"dialogue": "What? Why? The defense should be airtight."
 			},
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Not like other attacks, DoS attack is unlikely to be totally resolved. What we do is only to alleviate its harm. Don't you know that? Go back and check your personal notes!"
+				"dialogue": "Not like other types of attack, DoS attack is quite unlikely to be totally resolved. What we do is only to alleviate its harm. Don't you know that? Go back and check your personal notes!"
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Well, as you say it... I remember seeing that in the university. ^Oh, I see. This point was not listed among those questions for the examination, so I just..."
+				"dialogue": "Well, as you say it... I remember hearing that in the university. ^Oh, I see. This point was not one of those questions for the examination, so I just..."
 			},
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Ok. Enough. ^These are the maximum defences we can put up for now. ^By the way, if you check the buff \"CAPTCHA\", you will see it has an upkeep, which means you earn a little less. ^This is because some clients don't like CAPTCHA as it requires them to do one more validation. ^They just don't know, without CAPTCHA, our server will be engaged with spam requests, and they could not even connect to the server."
+				"dialogue": "Ok. Enough. ^I have searched the repository of our company. It's a pity that we cannot put up more defense for now. The only thing we can do is just to wait for them to stop... ^But at least we have kept the majority of spam requests out. ^By the way, if you check the buff \"CAPTCHA\", you will see it has an upkeep, which means you will earn a little less. ^This is because some clients don't like CAPTCHA, for it requires them to do one more validation. ^They just don't know, without CAPTCHA, our server will be engaged with spam requests, and they could not even connect to the server. ^So, no mission for the moment. Just keep an eye on the attacks."
 			}
 		],
 		"newActs":
@@ -260,18 +265,18 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "An urgent report! ^The hackers have started intercepting messages between our server and our clients. ^Some clients have reported that their login passwords are uncovered. ^I will not tell them that our connection with them are actually unencrypted... ^You may have already noticed that some of our assets are already lost due to this leakage. ^Godfried, quickly find a solution at least to encrypt our message!"
+				"dialogue": "An urgent report! ^The hackers started to intercept messages between our server and our clients. ^Some clients have reported that their login passwords are uncovered. ^I will not tell them that our connections with them are actually unencrypted... ^You may have already noticed that some of our assets are already lost due to this leakage. A buff called \"Credential compromised\" is also created on you to indicate the data leakage. ^Godfried, quickly find a solution to encrypt our messages!"
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "eh, encryption... ^My memory of cryptography has faded with time. I have nearly forgotten everything one month after the exam... I need to review the knowledge of \"symmetric cryptography\" first. ^Nevertheless, after reviewing the knowledge of symmetric cryptography, I need to select a specific encryption technique and \"apply\" it."
+				"dialogue": "eh, encryption... ^My memory of cryptography has faded with time. I have nearly forgotten everything just one month after the exam... ^I need to review the knowledge of \"symmetric cryptography\" first. It's the prerequisite for message encryption. ^Nevertheless, after symmetric cryptography, I need to select a specific encryption technique and \"apply\" it."
 			}
 		],
 		"newActs":
 		[
 			[],
-			["Symmetric cryptography","DES encryption","3DES encryption"]
+			["Symmetric cryptography", "DES encryption","3DES encryption"]
 		],
 		"shouldApply": ["3DES encryption"]
 	},
@@ -282,7 +287,7 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "You have encrypted our message with 3DES. I was worried that you would use DES."
+				"dialogue": "So you have encrypted our message with 3DES. I was worried that you would use DES."
 			},
 			{
 				"name": 	"Godfried",
@@ -297,7 +302,7 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Yes, I have also noticed the problem with CDN... The buff vanished, and more clinets complains. ^Um, to solve the problem, I don't have to re-learn CDN, I will just re-apply it."
+				"dialogue": "Yes, I have also noticed the problem with CDN... The buff vanished, and more clients complains. ^Um, to solve the problem, I don't have to re-learn CDN, I will just re-apply it. ^N.B. The list of buffs on me may expand across pages. I may need to use scroll arrow to see all the buffs."
 			}
 		],
 		"shouldApply":	["CDN"]
@@ -319,12 +324,12 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "The hackers of course! From their connections we have obtained their IP address... ^Oh, I see, for the DDoS attack, the spam requests come from the manipulated machines, not the real hackers'. And for other attacks, they can easily use IP spoofing to hide their real IP address."
+				"dialogue": "The hackers of course! From their connection attempts we have obtained their IP address... ^Oh, I see, for the DDoS attack, the spam requests come from the manipulated machines, not the real hackers'. And for other attacks, intruders can also easily use IP spoofing to hide their real IP addresses."
 			},
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "At least this time you have realized the point by yourself. ^Just keep going. It's almost done. ^By the way, except for CDN, you should also care about the expiration of other buffs. ^You don't want our server be exposed to attacks again, do you? ^Note that You can apply acts before its corresponding buff expires. The buff length will be refreshed. ^It's not so much cost-effective, but you may need such kind of operation in the future."
+				"dialogue": "At least this time you have realized the point by yourself. ^A tip here: it's possible that you re-apply a defensive act before its related buff expires. The buff length will be refreshed. ^It's not so much cost-effective, but you may need such kind of operation in the future. ^By the way, except for CDN, you should also care about the expiration of other buffs. ^You don't want our server be exposed to attacks again, do you? ^It should be known that, as defender, you should frequently check the positive buffs on you. Except that you can remember the expiration day of all the buffs. ^Just keep going. It's almost done. I believe you can sustain the last days."
 			}
 		]
 	}

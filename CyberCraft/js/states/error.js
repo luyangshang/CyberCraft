@@ -19,7 +19,7 @@ var error = {
      */
     create: function() {
         //Creates the error message text
-        this.style = {font: "30px Courier New, monospace", fill: "#b50101", align: "center", wordWrap: true,
+        this.style = {font: "30px Courier New, monospace", fill: "#b50101", fontWeight: "bold", align: "center", wordWrap: true,
             wordWrapWidth: window.game.width - 80};
         this.error_text = window.game.add.text(window.game.world.centerX, window.game.world.centerY - 75, "", this.style);
         this.error_text.anchor.set(0.5, 0.5);

@@ -73,7 +73,7 @@ The file contains an array called NPCs, whose elements are description of each N
 	portrait: the path to the picture of the portrait of the NPC
 	x: the x coordinate to put the NPC sprite in the game
 	y: the y coordinate to put the NPC sprite in the game
-	speeches: the array of the NPC's speeches. A speech is a chain of sentences (potentially multi page) that the NPC will say without stoping.	Though not specified here, when the game runs each NPC will have a state. e.g. at state 0, when talked to, the NPC will use the first piece of speech; at state 1, the second piece of speech
+	speeches: the array of the NPC's speeches. A speech is a chain of sentences (potentially multi page) that the NPC will say without stopping.	Though not specified here, when the game runs each NPC will have a state. e.g. at state 0, when talked to, the NPC will use the first piece of speech; at state 1, the second piece of speech
 
 Each piece of speech contains prerequists (optinal) and speech. speech is of course what the NPC will say at the particular state. Long speech need to be devided into multiple pages. The character "^" will be used to separate pages.
 
@@ -147,7 +147,7 @@ scenarioX_cyber.json and tutorialX_cyber.json:
 		round: the script will be activated at the start of this round
 		dialogues: the dialogues to display:
 			name: the name to be displayed for the speaker of the dialogue
-			portrait: the portrait of the speacker
+			portrait: the portrait of the speaker
 			dialogue: the (multi-page)dialogue to display. Use "\^{}" to delimit pages.
 		newActs: arrays of acts to be unlocked. First array for the intruder and second array for the defender
 		shouldApply: (should be specified only for player¡¯s rounds) it¡¯s an array of act names. It enforces the player to apply those acts in the designated round. If
@@ -163,7 +163,7 @@ About numbering of scenarios: one can create as many new scenarios as he/she wan
 
 					Error messages
 
-If you modify the files in the scenario folder, you may encounter some error messages related to the inconsistence or wrong format. Here are some of the erros messages:
+If you modify the files in the scenario folder, you may encounter some error messages related to the inconsistence or wrong format. Here are some of the error messages:
 
 *Cannot find scenarios/assetsTable.json or the file is corrupted! 
 Maybe assertsTable.json is missing, maybe the file does not conform with JSON format. One common mistake is missing or having too much commas in an array.
@@ -183,6 +183,9 @@ In the definition of an act, the cost is compulsory. No act should cost zero res
 *Error! The buff "XXX" related to an act in scenario Y is not found!
 This scenario will enforce/clean buff on the character. Nevertheless, the definition of the buff is not found.
 
+*Error! The buff "XXX" selected for this scenario (scenario Y) is not defined in common_acts.json
+In scenarioY_cyber.json under commonBuffs, a buff called XXX is selected. Nevertheless, it's not defined in common_acts.json. You should add the buff definition in common_acts.json, or define the buff in scenarioY_cyber.json instead, and delete this reference in commBuffs.
+
 *modifier format wrong
 It's not suggested to use modifier if you have other alternatives. But if you do want to use it, the  modifier should be written as a string, delimited by semicolon(;) into substrings, each following this regular expression:
 /^[01]:[^:]*:[^:]*:["+""-""*""/""="]:[0-9]+\.?[0-9]*$/
@@ -191,13 +194,10 @@ For detailed description, see "File format details" above.
 *Error! The act "XXX" specified in the AI pattern for this scenario (scenario Y) is not defined!
 Under the element pattern of AI, you have given a name that is not seen as an act name.
 
-*Warning! The buff "XXX" activated for this scenariol (scenario Y) misses description
-A buff called XXX is not defined. The program assumes the buff has empty description and no other properties (capacity, upkeep, dosResistance). But it's still recommended that you define the buff or import it from generic_acts.json.
-
 *Sorry. This entry is not found in personal notes!
 It's recommended that when you add new acts or buffs to the game, you add entries to the personal notes also. In this way, the player will have a in-game help about the new security term. Also, personal notes serves as an in-game source of knowledge for those interested to learn.
 
-*Error! in the scenario file scenarioX_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!
+*Error! in the file scenarioX_NPCs.json, in the prerequisites of the speeches, a reference to a npc name is not found!
 The dependency of dialogues is based on the name of the NPC. Probably you have changed the name of the NPC, but have not changed the references to it. Remember that it's case sensitive.
 
 *Warning! The script for round X is not understandable.

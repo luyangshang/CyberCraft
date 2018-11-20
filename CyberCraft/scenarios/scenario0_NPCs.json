@@ -12,10 +12,10 @@
 				"speech": "Welcome, to HackIt. ^We have witnessed your talent, and we are glad to see you willing to join us. ^Joining HackIt, and we are going to shape the world with our talents. Still, as a convention, you need to accomplish a little task before we formally accept you as our member. ^By the way, I think you, as a talent youth in this field, have your personal notes with you, right? ^It seems to be in the topleft corner if I'm not wrong. It's also accessible with a \"N\" key. ^Probaly you want to firstly say hello to our fellows before you start the task. ^Come back to me in the topleft when you are ready for your mission briefing."
 			},
 			{
-				"speech": "You probably know that J is small, but autocratic country. ^Its ruler is a war maniac, and he presses on its people hard, and is suspected to use torment and assissination to take done dissidents. ^Intelligence tells that he is ploting some scheme. ^Therefore, your task is to crack some secret messages in the country J. ^With these messages cracked, we will be able to reveal something of him. ^You will have to confront with J's defensive AI. However, it's still a new product, and has not be tested by time. I belive you will be able to find its weakness and succeed. ^Ok, everything clear? If you have some more questions about the mission, you can refer to my fellows around. ^When you start engaging the attack, we will try not to interrupt you. Therefore, collect as much information as you may need here. Then, come back to me when you are ready."
+				"speech": "You probably know that J is small, but autocratic country. ^Its ruler is a war maniac, and he presses on its people hard, and is suspected to use torment and assissination to take done dissidents. ^Intelligence tells that he is ploting some scheme. ^Therefore, your task is to crack some secret messages from the country J. ^With these messages cracked, we will be able to reveal something of the autocrat. ^You will have to confront with J's defensive AI. However, it's still a new product, and has not be tested by time. I belive you will be able to find its weakness and succeed. ^Ok, everything clear? If you have some more questions about the mission, you can refer to my fellows around. ^When you start engaging the attack, we will try not to interrupt you. Therefore, collect as much information as you may need here. Then, come back to me when you are ready."
 			},
 			{
-				"speech": "` This computer has already Kali linux and other special purpose tools install. It's yours now. Are you ready?"
+				"speech": "` This computer has already had Kali linux and other special purpose tools installed. It's yours now. Are you ready?"
 			}
 		]
 	},
@@ -36,10 +36,10 @@
 					{"npc": "Hank",
 					"state": 1}
 				],
-				"speech": "Remember to learn what promiscuous mode is before you launch sniffing attack."
+				"speech": "To reduce your workload, we have built a VPN channel to our secret agent lurking in the country J. Thereby, you can assume you share the same communication channel with the autocrat."
 			},
 			{
-				"speech": "When you see the buff of \"shared secret\" that means ArtificialCore has exchanged encryption key with the country J. ^Because their messages will be encrypted with the key, you cannot just just sniff the message. ^Neverthelss, if they exchanged the key only with DH, the MITM (Man-In-The-Middle) attack can be used to easily fool them."
+				"speech": "Remember to learn what promiscuous mode is before you launch \"Sniffing attack\"."
 			}
 		]
 	},
@@ -60,7 +60,10 @@
 					{"npc": "Hank",
 					"state": 1}
 				],
-				"speech": "If you have problem cracking their encryption, remember that Replay attack does not require the knowledge of encryption key."
+				"speech": "It's quite likely that your rival will use encryption to hide the secrets. The buff of \"shared secret\" means the country J exchanges encryption key with its supporters. That is to say, the messages will be encrypted with the key, and a \"sniffing attack\" alone will not reveal the messages. ^Neverthelss, if they exchange the key only with a technique called \"DH\", then the MITM (Man-In-The-Middle) attack can be used to easily fool this protocol."
+			},
+			{
+				"speech": "If you have problem cracking their encryption, remember that Replay attack is your alternative, and it does not require the knowledge of encryption key."
 			},
 			{
 				"speech": "We are developing a Quantum computer: a super computer of the next era. When it comes, the whole field of cryptography (whether encryption or hash) will tremble in front of the overwhelming computational power of quantum computer."
@@ -84,7 +87,10 @@
 					{"npc": "Hank",
 					"state": 1}
 				],
-				"speech": "You can send spam emails to overload the mailbox of ArtificialCore with scrambled messages. ^But be careful, its defensive AI may adopt some techniques on your attack, so remember to check the rival's buffs (Clicking on the rival or use shortcut key \"R\")"
+				"speech": "You can send spam emails to overload the mailbox of ArtificialCore with scrambled messages. ^But be careful, its defensive AI may adopt some techniques to thwart your attack, so remember to check the rival's buffs (Clicking on the rival or use shortcut key \"R\")"
+			},
+			{
+				"speech": "You can buy more botnet machines on the deep net to increase the power of your spam email. There is no limitation on how many botnet machines you can buy, but you should know that, it costs."
 			}
 		]
 	}

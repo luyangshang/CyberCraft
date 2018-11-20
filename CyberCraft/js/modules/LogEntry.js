@@ -1,12 +1,12 @@
 /**
 Note down the player's attempt to attack or defende. The information will be used in review section
-Defence is expected to be always successful.
+Defence is expected to be always successful in applying acts.
 @constructor
 */
-function LogEntry(round, actPattern)
+function LogEntry(round, act)
 {
-	this.round = round;					//round number
-	this.actPattern = actPattern;	//the attack pattern
+	this.round = round;		//round number
+	this.act = act;			//the act performed
 	this.noBuffHurdle = [];	//failed because of the absence of rival buff
 	this.buffHurdle = [];	//failed because of the presence of rival buff
 	this.unlucky = false;	//failed because of unluck

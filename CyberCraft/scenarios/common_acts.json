@@ -18,7 +18,7 @@
 			"name":				"Sniffing attack",
 			"prerequisites":	["Promiscuous mode"],
 			"learningCost":		10,
-			"desc":				"Obtain rival's username and password, as well as other data, provided that the communication is not encrypted or hashed.",
+			"desc":				"Finishing move. \nObtain rival's username and password, as well as other data, provided that the communication is not encrypted or hashed.",
 			"needRivalBuffs":	["MITM"],
 			"noRivalBuffs":		["Encrypted", "Credential compromised"],
 			"cost":				10,
@@ -28,22 +28,22 @@
 		},
 		{
 			"name":				"MITM",
-			"desc":				"Performe a Man-In-The-Midele attack. If no authentication of any kind, give the buff \"MITM\".",
+			"desc":				"A Man-In-The-Midele attack will gurantee the victim's messages to pass through the attacker. It could fail in face of authentication mechanisms.",
 			"cost":				15,
 			"rivalBuffs":		["MITM"],
 			"buffLength":		2
 		},
 		{
 			"name":				"Deauth attack",
-			"needRivalBuffs":	["Shared channel", "Wifi channel"],
-			"desc":				"Deauthenticate in place of the victim in the Wifi network. This Kicks the victim's personal computer offline, so that the victim cannot perform acts in his round. Offline is also a buff required for \"Rogue access point\".",
-			"cost":				25,
+			"needRivalBuffs":	["Shared channel", "Wi-Fi channel"],
+			"desc":				"Deauthenticate in place of the victim in the Wi-Fi network. This Kicks the victim's personal computer offline, so that the victim cannot perform acts in his round. Offline is also a buff required for \"Rogue access point\".",
+			"cost":				30,
 			"rivalBuffs":		["Offline"],
 			"buffLength":		2
 		},
 		{
 			"name":			"Zero-day attack",
-			"desc":			"Make a use of a most newly found vulnerability. Strike quickly, so that no one is able to counteract in any way. This attack costs grealy, but overwhelming.",
+			"desc":			"Finishing move. \nMake a use of a most newly found vulnerability. Strike quickly, so that no one is able to counteract in any way. This attack costs grealy, but overwhelming.",
 			"cost":			90,
 			"rivalBuffs":	["Credential compromised", "Offline"],
 			"bonus":		50,
@@ -51,7 +51,7 @@
 		},
 		{
 			"name":			"DoS",
-			"desc":			"Denial of Service attack. Send endless requests to serverer to paralyze it. Rival will have problem serving requests, and therefore, gains much less resouces. Consumes much resources on the attacker side.",
+			"desc":			"DoS category. Denial of Service attack. Send endless requests to serverer to paralyze it. Rival will have problem serving requests, and therefore, gains much less resouces. Consumes much resources on the attacker side.",
 			"cost":			30,
 			"rivalBuffs":	["Denial of service attacked"],
 			"buffLength":	2,
@@ -61,7 +61,7 @@
 			"name":			"DDoS",
 			"prerequisites":	["DoS"],
 			"needBuff":		[],
-			"desc":			"Distributed Denial of Service attack. Make use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its sucess rate is much more than the original DOS attack. Effect based on how many botnet machines bought.",
+			"desc":			"DoS category. \nDistributed Denial of Service attack. Make use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its sucess rate is much more than the original DOS attack. Effect based on how many botnet machines bought.",
 			"cost":			20,
 			"rivalBuffs":	["Denial of service attacked"],
 			"buffLength":	2,
@@ -165,7 +165,7 @@
 [
 	{
 		"name":		"503 Server Unavailable",
-		"desc":		"Our server is overleaded with requests. Are we under DoS attack? Or it's just because of the boom of our business?"
+		"desc":		"Our server is overloaded with requests. Are we under DoS attack? Or it's just because of the boom of our business?"
 	},
 	{
 		"name":		"Offline",
@@ -184,11 +184,11 @@
 		"desc":		"The characters have a shared channel. All unencrypted data can be easily sniffed."
 	},
 	{
-		"name":		"Wifi channel",
-		"desc":		"Both characters are connected to the same Wifi. Cautious for Wifi-based attack like Rogue access point."
+		"name":		"Wi-Fi channel",
+		"desc":		"Both characters are connected to the same Wi-Fi. Cautious for Wi-Fi-based attacks like Rogue access point."
 	},
 	{	"name":		"MITM",
-		"desc":		"the rival has performed MITM(Man In The Middle) attack. Unencripted data could be sniffed by the rival; Unauthenticated data could be modified by the rival. Reply attack is also possible."
+		"desc":		"the rival has performed one kind of MITM (Man In The Middle) attack. Unencripted data could be sniffed by the rival; Unauthenticated data could be modified by the rival. Reply attack is also possible."
 	},
 	
 	{

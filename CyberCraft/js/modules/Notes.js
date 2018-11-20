@@ -5,39 +5,57 @@ var HintBox = require("../modules/HintBox");
 
 /**
 The class that manages the interface of personal notes. A new instance is created every time the personal notes is refered to.
-@param {Object} context - the context where the personal note is to be displayed in
+@param {Phaser.Group} fatherGroup - the group to created notes in
 @constructor
 */
-function Notes()
-{
+function Notes(fatherGroup)
+{	
 	//constants
 	this.namesPerPage = 10;	//maximum number of names that can be shown without scrolling
 	this.styleLabel = { font: "12px Segoe Print", fontWeight: "bold", align: "center"};
+	this.styleAlsoSee = { font: "15px Segoe Print", fontWeight: "bold", align: "center"};
 	this.styleTitle = { font: "17px Segoe Print", fontWeight: "bold", align: "center"};
 	this.styleLink = { font: "15px Segoe Print", fontWeight: "bold", fill: "#3300FF", align: "center"};
 	//this.style = { font: "16px Courier New, monospace", fontWeight: "bold", fill: "#00FF11", align: "left", wordWrap: true, wordWrapWidth: window.game.width - 95};
 	//this.style = { font: '24px Arial', fill: '#fff'};
+	this.fatherGroup = arguments[0];
+	this.fatherGroup.visible = false;
 	
 	this.hintBox = new HintBox("box");
 	this.noteNames =[];		//array of strings
 	this.descTexts = [];	//array of strings. Assigned at each time a name is clicked
-	//this.noteDescs = [];
 	this.nameSprites = [];	//sprites
-	this.nameGroup;			//sprite group
-	//this.description;		//sprite
+	this.descGroup;		//sprite
 
-	//this.descNPages;	//the number of pages of the description
-	//this.descCurrentPage;
-
-	this.multimedia = new MultimediaText(230, 50, 2);	//to manage the the image-text-mixed page
-	this.theDesc;		//a pointer to the current pure text description or the image-text-mixed description
-	
 	this.personalNotes = game.globals.personalNotes;
 	this.noteNames = this.personalNotes.getNames();	//retrieve the names
 	//the number of pages of the names
 	this.nameNPage = Math.ceil(this.noteNames.length/this.namesPerPage);
-	/*if(this.noteNames.length%this.namesPerPage)
-		this.nameNPage++;*/
+	
+	//general frame
+	this.PNFrame = game.add.sprite(1000, 0, "notes", 0, this.fatherGroup);
+	this.PNFrame.anchor.setTo(1,0);
+	/*intercept all clicking events before they reach those buttons covered by this image*/
+	this.PNFrame.inputEnabled = true;
+	//name panel
+	this.nameGroup = game.add.group();
+	this.fatherGroup.add(this.nameGroup);
+		//scroll buttons for the name list
+	this.nameScroll = new ScrollButtons(200, 50, 570, this.updateNamePage, this, this.nameNPage, this.nameGroup);
+		
+	//description panel
+	this.descGroup = game.add.group();
+	this.fatherGroup.add(this.descGroup);
+	//scroll buttons for the description
+		//number of pages of the description is initialized as 0. It will be updated by readNote function
+	this.descScroll = new ScrollButtons(955, 100, 500, this.updateDescPage, this, 0, this.descGroup);	
+	this.descriptionTitle = game.add.text(550, 30, "", this.styleTitle, this.descGroup);
+	this.descriptionTitle.anchor.setTo(0.5);
+	this.multimedia = new MultimediaText(230, 50, 2, this.descGroup);	//to manage the the image-text-mixed page
+	this.theDesc;		//a pointer to the current pure text description or the image-text-mixed description
+
+	this.internalGroup = game.add.group();
+	this.fatherGroup.add(this.internalGroup);
 	
 	//shortcut key for personal notes
 	var escKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
@@ -52,37 +70,15 @@ Formally create the personal notes, after the player have clicked on "personal n
 */
 Notes.prototype.createNotes = function()
 {
+	if(this.fatherGroup.visible == true)
+		return;	//avoid diplaying two personal notes
+	this.fatherGroup.visible = true;
 	game.globals.audioManager.lowVolume(true);
-	/*//the biggest group containing everything is the personal notes
-	this.notesGroup = game.add.group();*/
-	//general frame
-	this.PNFrame = game.add.sprite(1000, 0, "notes");
-	this.PNFrame.anchor.setTo(1,0);
-	/*intercept all clicking events before they reach those buttons covered by this image*/
-	this.PNFrame.inputEnabled = true;
-	//name panel
-	this.nameGroup = game.add.group();
-		//scroll buttons for the name list
-	this.nameScroll = new ScrollButtons(200, 50, 570, this.updateNamePage, this, this.nameNPage);
-	/*this.notesGroup.add(this.nameScroll);*/
-		
-	//description panel
-		//scroll buttons for the description
-	//number of pages of the description is initialized as 0. It will be updated by readNote function
-	this.descScroll = new ScrollButtons(955, 100, 500, this.updateDescPage, this, 0);	
-	/*this.notesGroup.add(this.descScroll);*/
-	this.descriptionTitle = game.add.text(550, 30, "", this.styleTitle);
-	this.descriptionTitle.anchor.setTo(0.5);
 	
 	//exit button
-	this.exitButton = game.add.button(game.world.width-30, 30, "cross", this.exitNotes, this, 0, 0, 1, 0);
+	this.exitButton = game.add.button(game.world.width-30, 30, "cross", this.exitNotes, this, 0, 0, 1, 0, this.fatherGroup);
 	this.hintBox.setHintBox(this.exitButton, "Close (ESC)       ");
 	this.exitButton.anchor.setTo(0.5);
-	//this.exitButton = game.add.button(game.world._width-10, 10, "cross", exitNotes, context);
-	/*this.notesGroup.add(this.exitButton);*/
-	this.internalGroup = game.add.group();
-	//Lowers the music volume
-    //window.game.globals.music.setVolume(window.game.globals.music.lowVolume);
 	
 	this.updateNamePage(0);	//name starts at the first page
 	/*description starts at the introduction of personal notes
@@ -173,14 +169,13 @@ Notes.prototype.readNote = function(id)
 	if(internalLinks && internalLinks.length)
 	{
 		var length = internalLinks.length;
-		game.add.text(230, 550, "Also see:", this.styleLabel, this.internalGroup);
+		game.add.text(230, 550, "Also see:", this.styleAlsoSee, this.internalGroup);
 		for(var i = 0; i < length; i++)
 		{
 			var internalText = game.add.text(300, 590-(length -i)*25, internalLinks[i], this.styleLink, this.internalGroup);
 			internalText.inputEnabled = true;
 			var newId = this.name2id(internalLinks[i]);
-			if(newId != -1)
-				internalText.events.onInputDown.add(this.internal, this, 0, newId);
+			internalText.events.onInputDown.add(this.internal, this, 0, newId);
 			this.hintBox.setHintBox(internalText, "Click to jump to");
 		}
 	}
@@ -197,14 +192,14 @@ Notes.prototype.readNote = function(id)
 	{
 		if(urls[0])
 		{
-			this.externalButton1 = game.add.button(770, 550, "link", this.external, this, 0, 0, 1, 0);
+			this.externalButton1 = game.add.button(770, 550, "link", this.external, this, 0, 0, 1, 0, this.fatherGroup);
 			this.externalButton1.anchor.setTo(0.5);
 			this.externalButton1.url = urls[0];
 			this.hintBox.setHintBox(this.externalButton1, "View external link");
 		}
 		if(urls[1])
 		{
-			this.externalButton2 = game.add.button(620, 550, "link", this.external, this, 0, 0, 1, 0);
+			this.externalButton2 = game.add.button(620, 550, "link", this.external, this, 0, 0, 1, 0, this.fatherGroup);
 			this.externalButton2.anchor.setTo(0.5);
 			this.externalButton2.url = urls[1];
 			this.hintBox.setHintBox(this.externalButton2, "View external link");
@@ -219,6 +214,11 @@ Invoked when a internal link is clicked. Will change to the designated entry in 
 */
 Notes.prototype.internal = function(sprite, pointer, id)
 {
+	if(id == -1)
+	{
+		game.globals.messager.createMessage("Sorry. This entry is not found in personal notes!");
+		return;
+	}
 	this.hintBox.hide();
 	this.readNote(id);
 };
@@ -254,7 +254,8 @@ Therefore, a check is necessary
 */
 Notes.prototype.escFun = function()
 {
-	if(this.nameGroup && this.nameGroup.length)
+	if(this.fatherGroup.visible == true)
+	//if(this.exitButton && this.notes.exitButton.alive == true/*this.nameGroup && this.nameGroup.length*/)
 		this.exitNotes();
 };
 /**
@@ -272,14 +273,17 @@ Notes.prototype.scrollFun = function(key)
 
 /**
 Close the personal note, and return to where it was
-The lower level sprites are restored
+The lower layer sprites are revealed
 */
 Notes.prototype.exitNotes = function()
 {
 	this.hintBox.hide();
+	this.fatherGroup.visible = false;
+	this.exitButton.destroy();
+	/*this.fatherGroup.removeAll(true);
 	this.nameGroup.destroy();
 	//this.description.destroy();
-	this.exitButton.destroy();
+	
 	this.PNFrame.destroy();
 	this.nameScroll.destroy();
 	delete this.nameScroll;
@@ -291,7 +295,7 @@ Notes.prototype.exitNotes = function()
 	if(this.externalButton1)
 		this.externalButton1.destroy();
 	if(this.externalButton2)
-		this.externalButton2.destroy();
+		this.externalButton2.destroy();*/
 	//restore the music volume
 	game.globals.audioManager.lowVolume(false);
 };

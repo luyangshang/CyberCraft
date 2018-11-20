@@ -9,20 +9,23 @@ Each of the above interface will create one instance of this class
 @param {int} x -  the minimum x coordinate to create the sprite/sprites
 @param {int} y -  the minimum y coordinate to create the sprite/sprites
 @param {int} pattern - which multimedia pattern is requested. 0: intro/outro/credits/tutorial, 1: hall, 2: personal notes
+@param {Phaser.Group} fatherGroup - create the elements into this group, and the content will be placed in the right layer
 @param {function} callback - (optional) the callback function when the player click on the dialogue. (for dialogue only)
 @param {Object} callbackContext - (optional) the context of the callback function (for dialogue only)
-@param {Phaser.Group} fatherDialogueGroup - put the dialogueGroup in this group, and the content will be placed in the right layer
+
 @constructor
 */
-function MultimediaText(x, y, pattern)
+function MultimediaText(x, y, pattern, fatherGroup)
 {
 	this.x = x;
 	this.y = y;
 	this.pattern = pattern;
+	//add elements in fatherGroup to be presented in the right layer
+	this.fatherGroup = fatherGroup;
 	
 	//the two default sytles for texts together with image group
 	this.styles = { font: "20px Courier New, monospace", fill: "#00AA11", align: "left", wordWrap: true, wordWrapWidth: window.game.width - 310};
-	this.styleDialogue = { font: "20px Courier New, monospace", fill: "#0077FF", align: "left", wordWrap: true, wordWrapWidth: game.width - 520};
+	this.styleDialogue = { font: "20px Courier New, monospace", fill: "#FFF022", align: "left", wordWrap: true, wordWrapWidth: game.width - 520};
 	this.styleNotes = { font: "20px Segoe Print", align: "left", wordWrap: true, wordWrapWidth: window.game.width - 320};
 	this.styleName = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#00AA11", align: "left", }; 
 	
@@ -43,13 +46,8 @@ function MultimediaText(x, y, pattern)
 	if(pattern == 1)		//hall (dialogue)
 	{
 		this.dialogueGroup = game.add.group();
+		fatherGroup.add(this.dialogueGroup);
 	//initialize dynamic text
-		this.textSprite = game.add.text(x, y, "", this.styleDialogue, this.dialogueGroup);
-		this.finishSignal = new Phaser.Signal();	//signals when typing finishes
-		this.finishSignal.add(this.writeFinishedFunc, this);
-	
-		/*//when the player tap on the screen, immediately finish the typing animation
-		game.input.onTap.add(finishWriting, this);*/
 		
 	//dialogue frame, potrait and name of the speaker
 		//two arguments expected exclusively for dialogue
@@ -58,8 +56,8 @@ function MultimediaText(x, y, pattern)
 			window.alert("Error! more arguments as callback function when clicking on dialogue are expected!");
 			exit(4);
 		}
-		this.callbackFun = arguments[3];
-		this.callbackContext = arguments[4];
+		this.callbackFun = arguments[4];
+		this.callbackContext = arguments[5];
 
 		this.dialogueFrame = this.dialogueGroup.create(x-150, y-60, "dialogueBox");
 		this.nameSprite = game.add.text(x-130, y-30, "", this.styleName, this.dialogueGroup);		//the speaker name awaits
@@ -71,16 +69,16 @@ function MultimediaText(x, y, pattern)
 		//this.dialogueGroup.input.enableDrag(false, true);
 		this.dialogueFrame.events.onInputDown.add(this.tapOnDialogue, this);
 		this.dialogueGroup.visible = false;
-		//fatherDialogueGroup. To let dialogueGroup be presented in the right layer
-		if(arguments[5])
-			arguments[5].add(this.dialogueGroup);
-		this.textSprite.bringToTop();
+		//this.textSprite.bringToTop();
+		this.textSprite = game.add.text(x, y, "", this.styleDialogue, this.dialogueGroup);
+		this.finishSignal = new Phaser.Signal();	//signals when typing finishes
+		this.finishSignal.add(this.writeFinishedFunc, this);
 		return this;
 	}
 	if(pattern == 2)		//personal notes
 	{
 	//initialize pure text
-		this.textSprite = game.add.text(this.x, this.y, "", this.styleNotes);
+		this.textSprite = game.add.text(this.x, this.y, "", this.styleNotes, this.fatherGroup);
 	//initialize image
 	
 		return this;
@@ -126,8 +124,8 @@ MultimediaText.prototype.dynamicTextWithPortrait = function(pureText, portrait, 
 		//this.portraitSprite.anchor.setTo(0.5, 0.5);
 		
 		this.nameSprite.setText(name);
-		game.world.bringToTop(this.nameSprite);
-		game.world.bringToTop(this.textSprite);
+		//game.world.bringToTop(this.nameSprite);
+		//game.world.bringToTop(this.textSprite);
 		this.dynamicText(pureText);
 	}
 	else	//continue with old dialogue page (when changing page)
@@ -176,6 +174,7 @@ MultimediaText.prototype.imageText = function(textToParse, currentPage)
 	else {
 		//Creates the current page group
 		this.pageGroups[currentPage] = window.game.add.group();
+		this.fatherGroup.add(this.pageGroups[currentPage]);
 
 		//Puts all the commands on one line removing the line breaks
 		var commands = textToParse.split(/\r\n|\r|\n/).join("");
@@ -214,7 +213,7 @@ MultimediaText.prototype.imageText = function(textToParse, currentPage)
 					//If the word wrap width has been specified the text style is overwritten
 					if (args[4]) {
 						if(this.pattern == 2)
-							var style = this.styleNotes;
+							var style = Object.assign({}, this.styleNotes);
 						else var style = Object.assign({}, this.styles);
 						style.wordWrapWidth = window.game.width - args[4];
 
