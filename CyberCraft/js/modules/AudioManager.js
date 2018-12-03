@@ -24,7 +24,10 @@ function AudioManager()
 	this.defenderBGM = game.add.audio("defenderBGM");
 	this.cyberBGM = [];
 	for(var i=0; i<this.NCyberBGMs; i++)
-		this.cyberBGM[i] = game.add.audio("cyberBGM"+i);	
+	{
+		this.cyberBGM[i] = game.add.audio("cyberBGM"+i);
+		this.cyberBGM[i].onStop.add(this.cyberMusic, this);
+	}
 	this.outroBGM = game.add.audio("outroBGM");
 	//the pointer to the BGM currently been played
 	this.BGM = "";
@@ -167,8 +170,6 @@ AudioManager.prototype.cyberMusic = function()
 	var integer = Math.floor(Math.random()*this.NCyberBGMs);
 	this.BGM = this.cyberBGM[integer];
 	this.BGM.play("", 0, this.volumeH);
-	//continue with cyber music
-	this.BGM.onStop.add(this.cyberMusic, this);
 };
 /**
 Play the the review's BGM

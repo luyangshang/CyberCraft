@@ -115,7 +115,7 @@ ActManager.prototype.createAct = function(actSource, role)
 	var cost, successRate = 1.0;
 	var	selfBuffs=[], cleanSelfBuffs=[], rivalBuffs=[], cleanRivalBuffs=[];
 	var buffLength = -1, bonus = 0;
-	var spamRequests;
+	var superfluousRequests;
 	var modifier = "";
 	var learnt=false, unlocked=true;
 	//set the act properties
@@ -159,8 +159,8 @@ ActManager.prototype.createAct = function(actSource, role)
 		buffLength = actSource.buffLength;
 	if(actSource.bonus != undefined && actSource.bonus > 0)
 		bonus = actSource.bonus;
-	if(actSource.spamRequests != undefined)
-		spamRequests = actSource.spamRequests;
+	if(actSource.superfluousRequests != undefined)
+		superfluousRequests = actSource.superfluousRequests;
 	if(actSource.modifier != undefined)
 		modifier = actSource.modifier;
 	if(actSource.learnt != undefined)
@@ -168,7 +168,7 @@ ActManager.prototype.createAct = function(actSource, role)
 	if(actSource.unlocked != undefined)
 		unlocked = actSource.unlocked;
 	//finally create the act
-	var id = this.acts[role].push(new Act(name,prerequisites,learningCost,desc,needSelfBuffs,needRivalBuffs,noSelfBuffs,noRivalBuffs,cost,successRate,selfBuffs,rivalBuffs,cleanSelfBuffs,cleanRivalBuffs,buffLength,bonus,spamRequests,modifier,learnt,unlocked));
+	var id = this.acts[role].push(new Act(name,prerequisites,learningCost,desc,needSelfBuffs,needRivalBuffs,noSelfBuffs,noRivalBuffs,cost,successRate,selfBuffs,rivalBuffs,cleanSelfBuffs,cleanRivalBuffs,buffLength,bonus,superfluousRequests,modifier,learnt,unlocked));
 	return --id;
 };
 /**
@@ -295,8 +295,11 @@ ActManager.prototype.learnAct = function(role, id)
 	//check resource
 	if(act.learningCost > this.gameManager.getResource(role))
 	{
-		game.globals.audioManager.accessDenied();
-		this.messager.createMessage("Not enough resource!");
+		if(role == this.playerRole)
+		{
+			game.globals.audioManager.accessDenied();
+			this.messager.createMessage("Not enough resource!");
+		}
 		return false;
 	}
 	//check prerequisites
@@ -435,8 +438,8 @@ ActManager.prototype.applyAct = function(role, id, round)
 	{
 		this.buffManager.addBuff(act.rivalBuffs[b], act.buffLength, 1-role);
 		//DoS attack expects single rivalBuff!
-		if(act.spamRequests)
-			this.buffManager.setSpam(act.rivalBuffs[b], act.spamRequests);
+		if(act.superfluousRequests)
+			this.buffManager.setSuperfluous(act.rivalBuffs[b], act.superfluousRequests);
 	}
 	for(b in act.cleanRivalBuffs)
 	{

@@ -71,7 +71,7 @@ LogViewer.prototype.display = function(lastPage)
 	{
 		if(this.role == 1)
 		{
-			roleText = "Your role: dedender";
+			roleText = "Your role: defender";
 			var roleSprite = game.add.text(game.world.centerX + 120, 110, roleText, this.styleDefender, this.logGroup);
 		}
 		else

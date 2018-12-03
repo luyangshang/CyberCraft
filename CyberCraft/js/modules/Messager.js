@@ -71,7 +71,7 @@ Messager.prototype.display = function()
 	//var callback = this.callbackQueue.shift();
 	//this.lastCallback = callback;
 	this.messageText.setText(message);
-	if(message.length<50)	//auto adjust text size depending on text length
+	if(message.length<60)	//auto adjust text size depending on text length
 		this.messageText.setStyle(this.style);
 	else this.messageText.setStyle(this.styleLong);
 	this.messageGroup.visible = true;

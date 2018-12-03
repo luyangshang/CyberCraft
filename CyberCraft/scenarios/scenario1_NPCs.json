@@ -54,7 +54,7 @@
 				"speech": "Oh, sorry. I was overloaded with the work, and had no mood to talk. ^So, you are the cyber defender our boss have called for, right? Finally someone comes to offload my work."
 			},
 			{
-				"speech": "The intruders may not actually stay far from our company. They seems capable of wire tapping. That's why we say to you, use data encryption."
+				"speech": "The intruders may not actually stay far from our company. They seems capable of wiretapping. ^That's why we say to you, use data encryption. Keeping an intruder off the communication channel is not so much a feasible choice."
 			},
 			{
 				"speech": "I'm worried that the first quantum computer will be built soon. It will be a disaster for cryptography. ^One of the methods to defend from quantum computing is to use quantum cryptography."

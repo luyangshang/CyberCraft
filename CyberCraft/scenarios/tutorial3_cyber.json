@@ -2,9 +2,9 @@
 "serverCapacity":			2,
 "serverRequestValley":		1,
 "serverRequestPeak":		1,
-"initialResource":			[60, 40],
-"constantIncome":			[15,0],
-"maxResource":				150,
+"initialResource":			[80, 40],
+"constantIncome":			[20,0],
+"maxResource":				250,
 "maxRounds":				16,
 "assets":					150,
 "defensive":				false,
@@ -76,7 +76,7 @@
 			"learningCost":		30,
 			"noSelfBuffs":		["Bombe"],
 			"desc":				"Improvement. \nBritish electro-mechanical device used to crack Enigma. Greatly improves your cracking power (enhances Brute-force attack, Known-plaintext attack and Chosen-plaintext attack).",
-			"cost":				25,
+			"cost":				35,
 			"selfBuffs":		["Bombe"],
 			"buffLength":		-1,
 			"modifier":			"0:Brute-force attack:successRate:*:2;0:Known-plaintext attack:successRate:*:2;0:Chosen-plaintext attack:successRate:*:2",
@@ -87,7 +87,7 @@
 			"needSelfBuffs":	["Bombe"],
 			"noSelfBuffs":		["Gordon's improvement"],
 			"desc":				"Improvement. \nGordon's improvement makes Bombe even more efficient at cracking Enigma (enhances Brute-force attack, Known-plaintext attack and Chosen-plaintext attack).",
-			"cost":				20,
+			"cost":				30,
 			"selfBuffs":		["Gordon's improvement"],
 			"buffLength":		-1,
 			"modifier":			"0:Brute-force attack:successRate:*:2;0:Known-plaintext attack:successRate:*:2;0:Chosen-plaintext attack:successRate:*:2",
@@ -116,7 +116,7 @@
 		"desc": "The German communication is encrypted with Enigma machine. It's really hard to break the ciphertext without know the key."
 	},
 	{	"name":	"Confidential message divulged",
-		"desc": "The Enigma encryption is cracked. German's confidential messages for the day are divulged to the Allies. Great work!"
+		"desc": "The Enigma encryption is cracked, and German's confidential messages for the day are divulged to the Allies. Great work!"
 	},
 	{	"name":	"Bombe",
 		"desc": "With the help of the machine, cracking becomes much quicker."
@@ -159,7 +159,7 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "Unbelievable! The polish cryptanalysts Marian Rejewski, Henryk Zygalski and Jerzy Różycki have already broken the unbreakable Enigma! ^It's only a pity that the German has improved the machine, making Rejewski's technique hardly effective. ^What's worse, now the whole Poland has fallen to German. ^I have to break the improved Enigma, so as to save Allies from the scourge of the Nazi. ^Our mission is to break the Enigma encryption, and then use \"Sniffing attack\" to get Nazi's secret messages in the same day. ^It's only that... Brute-force attack, the only currently available attack is too inefficient. ^Probably I should not launch any attacks before we have made more descoveries."
+				"dialogue": "Unbelievable! The polish cryptanalysts Marian Rejewski, Henryk Zygalski and Jerzy Różycki have already broken the unbreakable Enigma! ^It's only a pity that the German has improved the machine, making Rejewski's technique hardly effective. ^What's worse, now the whole Poland has fallen to German. ^I have to break the improved Enigma, so as to save Allies from the scourge of the Nazi. ^Our mission is to break the Enigma encryption, and then use \"Sniffing attack\" to get Nazi's secret messages in the same day. ^It's only that... Brute-force attack, the only currently available attack is too inefficient. ^Probably I should not launch any attacks before we have made more descoveries. \nWhen better techniques are developed, if we don't get enough resource to apply them, it will be a pity."
 			}
 		]
 	},

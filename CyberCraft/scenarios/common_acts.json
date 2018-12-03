@@ -11,7 +11,7 @@
 		{
 			"name":			"Promiscuous mode",
 			"learningCost":	5,
-			"desc":			"The knowledge of setting up Network Interface Card (NIC) in promiscuous mode. Enables you to capture all packages in your local area network.",
+			"desc":			"The knowledge of setting up Network Interface Card (NIC) in promiscuous mode. It enables you to capture all packages that pass through your device, even if they are destined for someone else.",
 			"cost":			0
 		},
 		{
@@ -55,7 +55,7 @@
 			"cost":			30,
 			"rivalBuffs":	["Denial of service attacked"],
 			"buffLength":	2,
-			"spamRequests":	3		
+			"superfluousRequests":	3		
 		},
 		{
 			"name":			"DDoS",
@@ -65,14 +65,14 @@
 			"cost":			20,
 			"rivalBuffs":	["Denial of service attacked"],
 			"buffLength":	2,
-			"spamRequests":	0
+			"superfluousRequests":	0
 		},
 		{
-			"name":			"Buy botnet machines",
+			"name":			"Botnet machines",
 			"prerequisites":	["DDoS"],
 			"desc":			"buy 2 botnet machines to increase the strength of the DDoS attack",
 			"cost":			40,
-			"modifier":		"0:DDoS:spamRequests:+:2"
+			"modifier":		"0:DDoS:superfluousRequests:+:2"
 		},
 		
 		{
@@ -127,19 +127,19 @@
 		{
 			"name":			"Symmetric cryptography",
 			"learningCost":	5,
-			"desc":			"The knowledge of symmetric cryptography. Prerequist for nearly all the encryption techniques.",
+			"desc":			"Also calle private-key cryptography. Prerequist for nearly all the encryption techniques.",
 			"cost":			0
 		},
 		{
 			"name":			"Asymmetric cryptography",
 			"learningCost":	10,
-			"desc":			"The knowledge of Asymmetric cryptography. Prerequist for PKI and RSA key exchange.",
+			"desc":			"Also calle public-key cryptography. Prerequist for PKI and RSA key exchange.",
 			"cost":			0
 		},
 		{
 			"name":				"PKI",
 			"prerequisites":	["Asymmetric cryptography"],
-			"desc":				"Build the public key infrastructure. The buff is necessary for MQV and RSA key exchange.",
+			"desc":				"Build the public key infrastructure. With it, those techniques related to certificates like MQV and RSA key exchange can be used.",
 			"noSelfBuffs":		["PKI"],
 			"cost":				30,
 			"selfBuffs":		["PKI"],
@@ -148,7 +148,7 @@
 		{
 			"name":			"CDN",
 			"learningCost":	5,
-			"desc":			"Create Content Delivering Network. The server becomes more resistant to the burst of requests and to DoS attack as well.",
+			"desc":			"Create Content Delivering Network. The server becomes more resistant to the burst of requests and to DoS attacks as well.",
 			"cost":			50,
 			"selfBuffs":	["CDN"],
 			"buffLength":	10
@@ -173,7 +173,7 @@
 	},
 	{
 		"name":		"Credential compromised",
-		"desc":		"the character's password is compromised by the rival."
+		"desc":		"The important assets are divulged. \nAn intruder should apply no more \"Finishing move\" in this round."
 	},
 	{
 		"name": 	"Denial of service attacked",
@@ -185,7 +185,7 @@
 	},
 	{
 		"name":		"Wi-Fi channel",
-		"desc":		"Both characters are connected to the same Wi-Fi. Cautious for Wi-Fi-based attacks like Rogue access point."
+		"desc":		"Both characters are connected to the same Wi-Fi. One should be cautious for Wi-Fi-based attacks like Rogue access point."
 	},
 	{	"name":		"MITM",
 		"desc":		"the rival has performed one kind of MITM (Man In The Middle) attack. Unencripted data could be sniffed by the rival; Unauthenticated data could be modified by the rival. Reply attack is also possible."
@@ -206,7 +206,7 @@
 	},
 	{
 		"name":		"MFA",
-		"desc":		"this character has activated multiple factors of authentication. The success rate of the opponent's attack is reduced",
+		"desc":		"this character has activated multiple factors of authentication. The success rates of the opponent's authentication attempts are reduced",
 		"upkeep":	6
 	},
 	{

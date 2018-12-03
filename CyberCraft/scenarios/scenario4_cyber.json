@@ -5,8 +5,8 @@
 "initialResource":			[60, 40],
 "constantIncome":			[15,0],
 "maxResource":				200,
-"maxRounds":				16,
-"assets":					200,
+"maxRounds":				24,
+"assets":					300,
 "defensive":				false,
 "doublePlayer":				true,
 "characterName":
@@ -133,7 +133,7 @@
 		},
 		{
 			"name":				"DHCP snooping",
-			"desc":				"A group of defensive technique to protect the DHCP service.",
+			"desc":				"A group of defensive techniques to protect the DHCP service.",
 			"cost":				20,
 			"selfBuffs":		["DHCP snooping"],
 			"buffLength":		6
@@ -168,7 +168,7 @@
 		},
 		{
 			"name":				"DNSSEC",
-			"desc":				"The secure version(using certificates) of DNS. It counters all attacks on DNS.",
+			"desc":				"The secure version (using certificates) of DNS. It counters all attacks on DNS.",
 			"cost":				40,
 			"selfBuffs":		["DNSSEC"],
 			"cleanSelfBuffs":	["Manual DNS setting"],
@@ -298,7 +298,7 @@
 "scripts":
 [
 	{
-		"round":		6,
+		"round":		9,
 		"dialogues":
 		[
 			{
@@ -314,7 +314,7 @@
 		]
 	},
 	{
-		"round":		9,
+		"round":		13,
 		"dialogues":
 		[
 			{

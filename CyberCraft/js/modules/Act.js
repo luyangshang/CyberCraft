@@ -16,13 +16,13 @@ As a creation function, remember to create new arrays, rather than just pointing
 @param {Array} cleanRivalBuffs - the buffs cleaned on the rival when the act suceeds
 @param {int} buffLength - the length of the enforced buff
 @param {int} bonus - the bounty for the intruder and the damange to the defender's assets, when the acts succeds
-@param {int} spamRequests - the amount of spam requests to generate
+@param {int} superfluousRequests - the amount of superfluous requests to generate
 @param {string} modifier - a string that is used to modifies other properties
 @param {int} learnt - if the act is already learnt at the beginning
 @param {int} enabled - if the act is enabled at the beginning (otherwise, it should be later on enabled by script)
 @constructor
 */
-function Act(name, prerequisites, learningCost, desc, needSelfBuffs, needRivalBuffs, noSelfBuffs, noRivalBuffs, cost, successRate, selfBuffs, rivalBuffs, cleanSelfBuffs, cleanRivalBuffs, buffLength, bonus, spamRequests, modifier, learnt, unlocked)
+function Act(name, prerequisites, learningCost, desc, needSelfBuffs, needRivalBuffs, noSelfBuffs, noRivalBuffs, cost, successRate, selfBuffs, rivalBuffs, cleanSelfBuffs, cleanRivalBuffs, buffLength, bonus, superfluousRequests, modifier, learnt, unlocked)
 {
 	this.name = name;
 	this.prerequisites = prerequisites.slice(0);
@@ -40,7 +40,7 @@ function Act(name, prerequisites, learningCost, desc, needSelfBuffs, needRivalBu
 	this.cleanRivalBuffs = cleanRivalBuffs.slice(0);
 	this.buffLength = buffLength;
 	this.bonus = bonus;
-	this.spamRequests = spamRequests;
+	this.superfluousRequests = superfluousRequests;
 	this.modifier = modifier;
 	//dynamic properties not specified in the json files
 	this.learnt = learnt;

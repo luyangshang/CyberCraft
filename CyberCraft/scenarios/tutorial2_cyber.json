@@ -27,13 +27,13 @@
 [
 	[
 		{
-			"name":			"DDoS",
-			"desc":			"DoS category .\nDistributed Denial of Service attack makes use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its success rate is much more than the original DOS attack. Its effect is based on how many botnet machines bought.",
-			"cost":			30,
-			"rivalBuffs":	["Denial of service attacked"],
-			"buffLength":	2,
-			"spamRequests":	6,
-			"unlocked":		false
+			"name":					"DDoS",
+			"desc":					"DoS category .\nDistributed Denial of Service attack makes use of a big crowd of computers to synchronously attack the victim server. With large amount of botnet machines, its success rate is much more than the original DOS attack. Its effect is based on how many botnet machines bought.",
+			"cost":					30,
+			"rivalBuffs":			["Denial of service attacked"],
+			"buffLength":			2,
+			"superfluousRequests":	8,
+			"unlocked":				false
 		},
 		{
 			"name":				"MITM",
@@ -60,7 +60,7 @@
 		{
 			"name":			"CAPTCHA",
 			"learningCost":	5,
-			"desc":			"Completely Automated Public Turing test to tell Computers and Humans Apart. Grant 50% defense against DoS attacks.",
+			"desc":			"Completely Automated Public Turing test to tell Computers and Humans Apart. Grant 60% defense against DDoS attacks.",
 			"cost":			20,
 			"selfBuffs":	["CAPTCHA"],
 			"buffLength":	10,
@@ -74,16 +74,16 @@
 			"unlocked":		false
 		},
 		{
-			"name":			"DES encryption",
+			"name":			"DES",
 			"prerequisites":	["Symmetric cryptography"],
 			"learningCost":	5,
-			"desc":			"One of the historical symmetric-key algorithm for encryption. Obsolete now.",
+			"desc":			"One of the historical symmetric-key algorithm used for encryption. Obsolete now.",
 			"cost":			0,
 			"unlocked":		false
 		},
 		{
-			"name":			"3DES encryption",
-			"prerequisites":	["DES encryption"],
+			"name":			"3DES",
+			"prerequisites":	["DES"],
 			"learningCost":	5,
 			"desc":			"One symmetric encryption method to encrypt with DES three times to achieve the satisfying security strength.",
 			"cost":			15,
@@ -103,7 +103,7 @@
 		"name":				"CAPTCHA",
 		"desc":				"Completely Automated Public Turing test to tell Computers and Humans Apart. Widely used by websites to keep off automated attacks in cases likea registration or login.",
 		"upkeep":			1,
-		"dosResistance":	0.5
+		"dosResistance":	0.6
 	}
 ],
 "initialActs":
@@ -276,9 +276,9 @@
 		"newActs":
 		[
 			[],
-			["Symmetric cryptography", "DES encryption","3DES encryption"]
+			["Symmetric cryptography", "DES","3DES"]
 		],
-		"shouldApply": ["3DES encryption"]
+		"shouldApply": ["3DES"]
 	},
 	{
 		"round": 13,

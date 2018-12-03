@@ -134,6 +134,7 @@ scenarioX_cyber.json and tutorialX_cyber.json:
 	maxRounds: the number of rounds of this scenario. If the defender can sustain until this time, the defender wins.
 	assets: the initial "HP" of the defender. The defender will be penalized on assets at each credential breach. If the assets dropped to zero or less than zero before the maxRounds reaches, the intruder wins.
 	defensive: if true, the player plays as the intruder; if false, the player plays as the defender. The AI written in the latter part of this file should be consistent with the value here: the AI plays the opposite role.
+	doublePlayer: true: the scenario supports double player mode; false (default): the scenario will be omitted by double player mode. It's useless to set this property for a tutorial.
 	characterName: the name to be displayed as the name of the intruder and the defender
 	portrait: key value of the portrait pictures of the intruder and the defender
 	common acts/buffs: the name of the acts/buffs activated in this scenario, which is defined in common_acts.json. If this scenario will modify some parameters of an act/buff, the act/buff should not be listed here.

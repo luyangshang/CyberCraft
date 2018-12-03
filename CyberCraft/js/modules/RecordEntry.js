@@ -29,20 +29,20 @@ RecordEntry.prototype.calculateScores = function()
 			if(this.logs[l].success)
 			//{
 				//if(this.role == 0)
-					this.scores[0] +=100;	//intruder gains 100 points at each success at his round
+					this.scores[0] += 90;	//intruder gains 90 points at each success at his round
 			//}
 			else //if(this.role == 1)
 					this.scores[1] += 100;	//defender gains 100 points at each failure at intruder's round
 	}
 	//if(this.role == 0)
 	//{
-		this.scores[0] -= this.endingRound*40;		//intruder loss 40 points for every round the defender survives
-		this.scores[0] += this.assetsCompromised*4;	//intruder gains 4 points for every damage dealt to the assets
+		this.scores[0] -= this.endingRound*50;		//intruder loss 40 points for every round the defender survives
+		this.scores[0] += this.assetsCompromised*5;	//intruder gains 4 points for every damage dealt to the assets
 	//}
 	//else 
 	//{
-		this.scores[1] += this.endingRound*40;		//defender gains 40 points for every round he survives
-		this.scores[1] -= this.assetsCompromised*4;	//defender loss 4 points for every damage dealt to the assets
+		this.scores[1] += this.endingRound*50;		//defender gains 40 points for every round he survives
+		this.scores[1] -= this.assetsCompromised*5;	//defender loss 4 points for every damage dealt to the assets
 	//}
 	/*nagative score is too much frustrating for the players, even if they did play badly.
 	nagative scores will be raised to zero, hoping to console them a little*/

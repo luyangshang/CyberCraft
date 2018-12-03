@@ -13,6 +13,7 @@
 		{
 			"name":	"Bombe",
 			"desc":	"#image$800$260$bombeNotes#text$220$290$Bombe is a British electro-mechanical device built during the World War II to decrypt messages encrypted by German Enigma enciphering machine. Bombe was designed by Alan Turing at 1939, and improved by Gordon Welchman in 1949. Nevertheless, Turing's bombe is still based on the work of Polish cryptologist Marian Rejewski, which is called \"bomba\" instead. Bombe was used to crack the daily setting of the Enigma encipher machine, granting the Allies super knowledge over the German movements.$520",
+			"sees":	["Encrypt with Enigma", "Gordon's improvement"],
 			"url1":	"https://en.wikipedia.org/wiki/Bombe",
 			"url2": "https://en.wikipedia.org/wiki/The_Imitation_Game"
 		},
@@ -23,16 +24,10 @@
 			"url1":	"https://en.wikipedia.org/wiki/Brute-force_attack"
 		},
 		{
-			"name":	"Buy botnet machines",
+			"name":	"Botnet machines",
 			"desc":	"Crackers cracks other's computers and gains control over the computers. These computers are then called zombie computers, as they will act according to the cracker's remote control, while the real owners are still unaware. A distributed Denial-of-service attack is based on synchronized attacks of multiple computers. Therefore, the number of computers under the control of the attacker makes a great difference. See this need, the crackers over the Internet will actively crack more computers, inserting bots, and sell the control of these machines to those who prepare for DDoS or spammers.",
 			"sees":	["DDoS", "Spam email"],
 			"url1":	"https://en.wikipedia.org/wiki/Botnet"
-		},
-		{
-			"name":	"Buy rainbow table",
-			"desc":	"A rainbow table is an advanced pre-computed table mapping between the texts and their hashed values. Unlike the pre-computed dictionary attack, a rainbow table is capable of cracking also the long passwords. \nRainbow table takes advantage of the chaining technique, trading a little more processing time for less storage, as compared to the pre-computed dictionary attack. One may calculate the rainbow tables by himself, or he can also buy the table from others. ^The defense against rainbow table is the use of salt, especially long salt. By adding salt to the password before hashing, even users using the same password gets different hashes. This means the attacker has to calculate one table for each salt, which becomes impossible the salt is long enough.",
-			"sees":	["Dictionary attack", "Salt"],
-			"url1":	"https://en.wikipedia.org/wiki/Rainbow_table"
 		},
 		{
 			"name":	"Chosen-plaintext attack",
@@ -48,14 +43,14 @@
 		},
 		{
 			"name":	"Dictionary attack",
-			"desc":	"Dictionary attack is an improved version of brute-force attack. It does not try all the possible character combinations, but only those more likely combinations, e.g. words from a dictionary. ^When used to against the hashes of the passwords, pre-computed dictionary attack is more often see. The attacker firstly prepares a huge table of all the mappings between the original texts and its hashed values. Although the preparation time is prolonged, the actual time needed for the attack is greatly shortened. Pre-computed dictionary attack is more effective when cracking a large number of hashes, in the sense that the pre-computed table can be reused. \nThere is also an improved table of the mappings called rainbow table, which trades between storage space and search speed. ^Dictionary attack prevails because of the human tendency to choose only meaningful passwords (or just simple variations from the meaningful ones). As a consequence, choosing a password which seems not having any meaning will greatly frustrate dictionary attacks. Passphrase features meaninglessness (and length), is one possible choice. \nAdding salt (a nonce) to the password before hashing is also an excellent way against dictionary attack, for the fact that the attacker has to create a table for each salt, which, for long salt, becomes impossible.",
-			"sees": ["Buy rainbow table", "Salt", "Password Hashed"],
+			"desc":	"Dictionary attack is an improved version of brute-force attack. It does not try all the possible character combinations, but only those more likely combinations, e.g. words from a dictionary. ^When used to against the hashes of the passwords, pre-computed dictionary attack is more often used. The attacker firstly prepares a huge table of all the mappings between the original texts and its hashed values. Although the preparation time is prolonged, the actual time needed for the attack is greatly shortened. Pre-computed dictionary attack is more effective when cracking a large number of hashes, in the sense that the pre-computed table can be reused. \nThere is also an improved table of the mappings called rainbow table, which trades between storage space and searching speed. ^Dictionary attack prevails because of the human tendency to choose only meaningful passwords (or just simple variations from the meaningful ones). As a consequence, choosing a password which seems not having any meaning will greatly frustrate dictionary attacks. A password mixing uppercase, lowercase letters, numbers or punctuations is more resistive to dictionary attack. \nPassphrase features meaninglessness (and length) and it is a good alternative for password. \nAdding salt (a nonce) to the password before hashing is also an excellent way against dictionary attack, for the fact that the attacker has to create a table for each salt, which, for long salt, becomes impossible.",
+			"sees": ["Rainbow table", "Salt", "Password Hashed"],
 			"url1":	"https://en.wikipedia.org/wiki/Dictionary_attack"
 		},
 		{
 			"name":	"DDoS",
 			"desc":	"#image$800$260$ddosNotes#text$220$250$DDoS (Distributed Denial of Service) attack is an improved version of Denial of Service attack, in the sense that, it exploit multiple  computers to organize an collective attack. Fairly synchronized at the attack time, the target host is nearly immediately paralyzed by the flood of requests. The strength of the attack can be improved by more botnet machines.$520",
-			"sees":	["DoS", "Buy botnet machines", "Spam email", "CDN", "CAPTCHA"],
+			"sees":	["DoS", "Botnet machines", "Spam email", "CDN", "CAPTCHA"],
 			"url1": "https://en.wikipedia.org/wiki/Denial-of-service_attack"
 		},
 		{
@@ -80,7 +75,7 @@
 		{
 			"name":	"Gordon's improvement",
 			"desc":	"#image$800$260$GordonNotes$240$350#text$220$250$Gordon Welchman was an English mathematician, professor, codebreaker and author. He exploited the reciprocity in the connection of the plugboard, reducing a considerable number of possible settings of the Enigma settings. The adding is called as a diagonal board, which greatly improved Bombe's capability to break Enigma machine.$540",
-			"sees":	["Change Enigma setting", "Bombe"],
+			"sees":	["Encrypt with Enigma", "Bombe"],
 			"url1":	"https://en.wikipedia.org/wiki/Gordon_Welchman"
 		},
 		{
@@ -97,7 +92,7 @@
 		{
 			"name":	"MITM",
 			"desc": "#image$510$500$mitmNotes#text$220$260$Man-In-The-Middle attack is a collection of attacks, where the attacker secretly inserts himself/herself between two parties, forwarding their messages, reading and possibly manipulating the messages, with the two parties unaware, thinking they were communicating directly. With MITM attack, all the messages exchanged between the two parties are accessible to the attacker, and if unencrypted, every secret is revealed to the attacker. What's more, the attacker can alter the messages as he/she wants, while the two parties, if without no authentication mechanism, are never aware. \nSome protocols like DH (Diffie-Hellman key exchange) can be easily fooled by MITM. ^Encryption is the way against sniffing attack following MITM (but be aware, DH itself will be compromised by MITM). All kinds of authentication will guarantee the attacker's manipulation will be detected. Transmission latency also gives some clues to the possibility of MITM attack. There are also other ways, each targeting each specific kind of MITM attack, based on the principles and properties of each attack.",
-			"sees":	["DH", "Sniffing attack"],
+			"sees":	["DH", "Sniffing attack", "Replay attack"],
 			"url1":	"https://en.wikipedia.org/wiki/Man-in-the-middle_attack"
 		},
 		{
@@ -119,20 +114,26 @@
 		},
 		{
 			"name":	"Promiscuous mode",
-			"desc":	"Promiscuous mode is a mode for the computer's wired or wireless NIC (Network Interface Controler), where the controller passes all traffic to the CPU, rather than only those that target this computer. This mode is usually used for packet sniffing in the network, whether for good (e.g. network diagnose) or evil (e.g. obtaining sensitive data) purposes. \nIn an Ethernet, all the devices share a common channel, and the frames from and to any hosts in the networks go all around. The NIC was instructed to only capture those Ethernet frames that target the MAC address of the NIC, or the Ethernet frame in broadcast mode. Nevertheless, the NIC can be configured also to capture any the frames that have reached this device. ^This can be a blessing that the network administrator can obtain the knowledge of the network traffic. Whereas, this can be also a problem that someone with evil intent can spy on the communication of others. This action of secretly reading other's communication is called sniffing attack.",
+			"desc":	"Promiscuous mode is a mode for the computer's wired or wireless NIC (Network Interface Controler), where the controller passes all traffic to the CPU, rather than only those that target this computer. This mode is usually used for packet sniffing in the network, whether for good (e.g. network diagnose) or evil (e.g. obtaining sensitive data) purposes. \nIn an Ethernet, the devices share a common channel, and the frames from and to any hosts in the networks go all around. The NIC was instructed to capture only those Ethernet frames that target the MAC address of the NIC, or the Ethernet frame in broadcast mode. Nevertheless, the NIC can be configured also to capture any the frames that have reached this device. ^This can be a blessing that the network administrator can obtain a good map of the network traffic. Whereas, this can be also a problem that someone with evil intent can spy on the communication of others. This action of illegally and secretly reading other's communication is called sniffing attack.",
 			"sees":	["Sniffing attack"],
 			"url1":	"https://en.wikipedia.org/wiki/Promiscuous_mode"
 		},
 		{
 			"name":	"Quantum computing",
-			"desc":	"Quantum computing is to compute using the properties of quantum-mechanical phenomena, and a quantum computer does this computing. A quantum computer is expected to have a great computational potential. The current public key cryptographic system is based on the computational infeasibility of integer factorization of large integers. But for quantum computers, it can be cracked using Shor's algorithm with polynomial time. This mean, with a quantum computer, many of the current cryptographic systems would be broken. ^There are still some other cryptographic algorithms which do not rely on integer factorization or discrete logarithm problems, and can still stand quantum computing. Quantum cryptography, as the adversary of quantum computing is also resistant to quantum computing.",
-			"sees":	["Hash algorithm", "Quantum cryptography"],
+			"desc":	"Quantum computing is to compute using the properties of quantum-mechanical phenomena, and a quantum computer does this computing. A quantum computer is expected to have a great computational potential. Many of the current public key cryptographic systems are based on the computational infeasibility of integer factorization for large integers. But with the computational power of a quantum computer, large integer factorization can be done using Shor's algorithm in polynomial time. This mean, a quantum computer can break many of the current cryptographic systems. ^There are still some other cryptographic algorithms which do not rely on integer factorization or discrete logarithm problems, which can still stand quantum computing. The study of these algorithms is called post-quantum cryptography. Especially, quantum key distribution, as the adversary of quantum computing, is one of them.",
+			"sees":	["Quantum key distribution", "DH", "RSA key exchange"],
 			"url1": "https://en.wikipedia.org/wiki/Quantum_computing"
 		},
 		{
+			"name":	"Rainbow table",
+			"desc":	"A rainbow table is an advanced pre-computed table mapping between the texts and their hashed values. Unlike the pre-computed dictionary attack, a rainbow table is capable of cracking also the long passwords. \nRainbow table takes advantage of the chaining technique, trading a little more processing time for less storage, as compared to the pre-computed dictionary attack. One may calculate the rainbow tables by himself, or he can also buy the table from others. ^The defense against rainbow table is the use of salt, especially long salt. By adding salt to the password before hashing, even users using the same password gets different hashes. This means the attacker has to calculate one table for each salt, which becomes impossible the salt is long enough.",
+			"sees":	["Dictionary attack", "Salt"],
+			"url1":	"https://en.wikipedia.org/wiki/Rainbow_table"
+		},
+		{
 			"name":	"Replay attack",
-			"desc":	"#image$510$500$replayNotes#text$225$230$Replay attack or playback attack is a form of network attack where a valid message is repeated or delayed by people of evil intent. For example, a server requires its users to send the password (or a hash value of the password) at login. The attacker can secretly capture a message at the client's login, and then resend the message to the server at login attempt, pretending to be a legitimate user. This can happen even if the message is encrypted. After all, there is no requirement that the attacker has to be able to decrypt the message or understand what is inside, he/she just need to send the message as it was. ^There are some ways to thwart replay attack: \nOne can use the session id. This id is chosen by the server, changing unpredictably at each login attempt. As a result, if the attacker just resends the old authentication message, the session id for the new attempt will be different to session id used in the old message. ^One can also use nonce together with MAC (Message authentication code). \nOne can also use timestamp. The login message will contain a timestamp, for the estimated time when the message is sent. If the attacker resends the login in message, the server will detect the problem with time, and the authentication fails. To use timestamp, a time synchronization between the client and the server is needed. The authentication protocol Kerberos uses the timestamp against replay attack. ^One can also use a OTP (One-Time Password). The password expires at each login attempt. That means each login attempt requires a new password, making the old password and the old message useless for the authentication. ^It's also possible to use CHAP (Challenge-Handshake Authentication Protocol). Similar to session id, servers using CHAP sends something random to the client for each authentication attempt. At the second authentication attempt, the random data sent (called the challenge) changes, and replay of the previous response message makes no use anymore.",
-			"sees":	["Nonce", "Timestamp", "OTP", "Kerberos"],
+			"desc":	"#image$510$500$replayNotes#text$225$230$Replay attack or playback attack is a form of network attack where a valid message is repeated or delayed by people of evil intent. For example, a server requires its users to send the password (or a hash value of the password) at login. The attacker can secretly capture a message at the client's login, and then resend the message to the server at login attempt, pretending to be a legitimate user. This can happen even if the message is encrypted. After all, there is no requirement that the attacker has to be able to decrypt the message or understand what is inside, he/she just need to send the message as it was. ^There are some ways to thwart replay attack: \nOne can use the session id. This id is chosen by the server, changing unpredictably at each login attempt. As a result, if the attacker just resends the old authentication message, the session id for the new attempt will be different to session id used in the old message. \nOne can also use nonce together with MAC (Message authentication code). ^One can also use timestamp. The login message will contain a timestamp, for the estimated time when the message is sent. If the attacker resends the login in message, the server will detect the problem with time, and the authentication fails. To use timestamp, a time synchronization between the client and the server is needed. The authentication protocol Kerberos uses the timestamp against replay attack. ^One can also use a OTP (One-Time Password). The password expires at each login attempt. That means each login attempt requires a new password, making the old password and the old message useless for the authentication. \nIt's also possible to use CHAP (Challenge-Handshake Authentication Protocol). Similar to session id, servers using CHAP sends something random to the client for each authentication attempt. At the second authentication attempt, the random data sent (called the challenge) changes, and replay of the previous response message makes no use anymore.",
+			"sees":	["Nonce", "Timestamp", "OTP", "Kerberos", "MITM"],
 			"url1": "https://en.wikipedia.org/wiki/Replay_attack"
 			
 		},
@@ -163,14 +164,14 @@
 		},
 		{
 			"name":	"Sniffing attack",
-			"desc":	"Sniffing attack or sniffer attack represent the behavior of intercepting data traffic traveling on the network with the use of a sniffer. If the data is not in any sense encrypted, the data can be read and understood by the sniffer. The sniffing attack will grant the attacker some information that he/she is not supposed to know, whether it's the detailed traffic information or a user's password. Sniffing attack is closely related to the term of wiretapping or eavesdropping. ^To fight against sniffing attack, there are two possibilities: 1. (deprecated) To keep the attacker off the communication channel. If there's enough physical separation between the attacker and the channel, the information is secure. 2. To encrypt the information transmitted over the channel. The attack can obtain access to the data, but without the power to decrypt the message, it's just a piece of scrambled characters. N.B. One-way hashing is hard to unhash. Therefore, hashed data also provides a similar effect as encryption.",
-			"sees":	["Promiscuous mode", "Encrypted", "Password hashed", "MITM"],
+			"desc":	"Sniffing attack or sniffer attack represent the behavior of intercepting data traffic traveling on the network with the use of a sniffer. If the data is not in any sense encrypted, the data can be read and understood by the sniffer. The sniffing attack will grant the attacker some information that he/she is not supposed to know, whether it's the detailed traffic information or a user's password. Sniffing attack is closely related to the term of wiretapping or eavesdropping. \nAs one kind of passive attack, sniffing attack does not actively tamper with the systems or the related parties. Thereby, it's not easy to be detected. ^To fight against sniffing attack, there are two possibilities: \n1. (deprecated) To keep the attacker off the communication channel. If there's enough physical separation between the attacker and the channel, the information is secure. \n2. To encrypt the information transmitted over the channel. The attack can obtain access to the data, but without the power to decrypt the message, it's just a piece of scrambled characters. N.B. One-way hashing is hard to unhash. Therefore, hashed data also provides somewhat a similar effect as encryption.",
+			"sees":	["Promiscuous mode", "Encrypted", "Password hashed", "MITM", "OTP"],
 			"url1":	"https://en.wikipedia.org/wiki/Sniffing_attack"
 		},
 		{
 			"name":	"Spam email",
-			"desc":	"Email spam or junk email. Spam email is one of the major sources of phishing messages. Attachments or external links which looks quite similar to legitimate websites are put in spam emails. However, the attachment usually contains viruses, and the link actually leads to some phishing website, or websites with malware, or even the link itself could be crafted in order to perform CSRF attack. The majority of spam emails are sent by botnet, where the computers are remotely controlled by the crackers. \nDefensive approaches of spam emails include DNSBL (DNS-based blackhole list), spamtraps, greylisting, nolisting and others.",
-			"sees":	["Greylisting", "Buy botnet machines", "CSRF"],
+			"desc":	"Email spam, or say junk email, is one of the major sources of phishing messages. Attachments or external links which looks quite similar to legitimate websites are put in spam emails. However, the attachment usually contains viruses, and the link actually leads to some phishing website, or websites with malware, or even the link itself could be crafted in order to perform CSRF attack. The majority of spam emails are sent by botnet, where the computers are remotely controlled by the crackers. \nDefensive approaches of spam emails include DNSBL (DNS-based blackhole list), spamtraps, greylisting, nolisting and others.",
+			"sees":	["Greylisting", "Botnet machines", "CSRF"],
 			"url1":	"https://en.wikipedia.org/wiki/Email_spam"
 		},
 		{
@@ -193,7 +194,7 @@
 		},
 		{
 			"name":	"Zero-day attack",
-			"desc":	"A zero-day or 0-day vulnerability represents the vulnerability that is newly found by the attacker, and unknown to those who would mitigate the vulnerability. When the vulnerability is not mitigated, the attacker can fully exploit it for the attacker, with little or no defense in the way. The exploit targeting zero-day vulnerability is called a zero-day exploit or zero-day attack. ^#text$220$200$The turn \"Day zero\" represent the day when the people who would mitigate the vulnerability learn of it. Starting from, day zero, they would begin to make patches or suggest workarounds, so that the severity of the vulnerability begins to drop. However, zero-day vulnerability witnesses no defense of any kind on it, and it's of great threat. #image$560$400$zeroDayNotes$700$200",
+			"desc":	"A zero-day or 0-day vulnerability represents the vulnerability that is newly found by the attacker, and unknown to those who would mitigate the vulnerability. When the vulnerability is not mitigated, the attacker can fully exploit it for the attacker, with little or no defense in the way. The exploit targeting zero-day vulnerability is called a zero-day exploit or zero-day attack. ^#text$220$200$The turn \"Day zero\" represent the day when the people who would mitigate the vulnerability learn of it. Starting from, day zero, they would begin to make patches or suggest workarounds, so that the severity of the vulnerability begins to drop. However, zero-day vulnerability witnesses no defense of any kind on it, and it's of great threat. #image$560$400$zeroDayNotes$700$120",
 			"url1":	"https://en.wikipedia.org/wiki/Zero-day_(computing)"
 		}
 	],
@@ -212,8 +213,8 @@
 		},
 		{
 			"name":	"Asymmetric cryptography",
-			"desc":	"Asymmetric cryptography or public-key cryptography is a way of cryptography using a pair of two keys: a public key and a private key. The public key is to be distributed as widely as possible, while the private key has to be kept secret. There is a relationship between these two keys: the message encrypted with the public key can and can only be decrypted with the private key; the messages encrypted with the private key can and can only be decrypted with the public key. As a result, message encrypted with the public key becomes a secret: only the private key holder can read (this provides secrecy). The message that can be decrypted with the public key is supposed to be encrypted with the private key: only the private key holder can do this (this provides authentication and non-repudiation). ^Even with same key length, Asymmetric cryptography is far slower than symmetric cryptography, as a consequence, it's not used to encrypt the whole message, but only an important part related to it. For example, for secrecy, the message is still encrypted with a symmetric key, but the key is sent, encrypted with the receiver's public key. And for authentication, instead of the whole message, only the hash of the message is encrypted with the sender's private key.",
-			"sees":	["Symmetric cryptography", "RSA key exchange", "DH", "MQV"],
+			"desc":	"Asymmetric cryptography or public-key cryptography is a way of cryptography using a pair of two keys: a public key and a private key. The public key is to be distributed as widely as possible, while the private key has to be kept secret. ^There is a relationship between these two keys: the message encrypted with the public key can and can only be decrypted with the private key; the messages encrypted with the private key can and can only be decrypted with the public key. As a result, message encrypted with the public key becomes a secret: only the private key holder can read (this provides secrecy). The message that can be decrypted with the public key is supposed to be encrypted with the related private key: only the private key holder can do this (this provides authentication and non-repudiation). ^Even with same key length, Asymmetric cryptography is far slower than symmetric cryptography, as a consequence, it's not used to encrypt the whole message, but only an important part related to it. For example, for secrecy, the message is still encrypted with a symmetric key, but the key is sent, encrypted with the receiver's public key (asymmetric key). And for authentication, instead of the whole message, only the hash value of the message (which is  much smaller) is encrypted with the sender's private key.",
+			"sees":	["Key exchange", "Symmetric cryptography", "RSA key exchange", "DH", "MQV"],
 			"url1":	"https://en.wikipedia.org/wiki/Public-key_cryptography"
 		},
 		{
@@ -229,7 +230,7 @@
 		{
 			"name":	"Encrypt with Enigma",
 			"desc":	"#image$800$80$enigmaLogo$200$88#image$800$350$enigmaNotes#text$220$270$The Enigma machines were a series of electro-mechanical rotor cipher machines developed and used in the early and mid-20th century for the encryption of commercial, diplomatic and military purposes. It was invented by the German engineer Arthur Scherbius at the end of the World War 1, and is more widely used by Nazi Germany before and during the World War 2. Especially, the German military model Enigma machine, with also a plugboard, is the much more complex than other versions of the machine.$520 ^In 1932, a Polish mathematician and cryptanalyst Marian Rejewski, aided by Jerzy Różycki and Henryk Zygalski, has taken advantage of the operator mistakes and the misconfiguration of German military Enigma machine, to break the Enigma machine. They also built an electro-mechanical machine referred to as \"Bomba\" to help the search for the encryption key. ^In 1938, the Germans increased the complexity of Enigma machine, change the number of rotors of the machine from 3 to 5, increasing the time to crack the key ten times, making the Polish cryptanalyst not anymore able to crack the code.",
-			"sees":	["Bombe"],
+			"sees":	["Bombe", "Encrypted"],
 			"url1":	"https://en.wikipedia.org/wiki/Enigma_machine",
 			"url2":	"https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma"
 		},
@@ -241,13 +242,13 @@
 		},
 		{
 			"name":	"DES",
-			"desc":	"Data Encryption Standard is a symmetric-key algorithm to encrypt electronic data. It is an algorithm for the block cipher with the block size of 64bits. It had a great impact on modern cryptography, but, due to its short key length (56bits), it is not anymore able to stand the attack of the current computers, and it has been proven obsolete. Triple DES, as another algorithm which applies DES encryption three times, is one of the successors of DES. Whereas, AES (Advanced Encryption Standard), as an independent algorithm, is more widely considered the successor of DES.",
+			"desc":	"Data Encryption Standard is a symmetric-key algorithm to encrypt electronic data. It is an algorithm for the block cipher with the block size of 64bits. It had a great impact on modern cryptography. But, due to its short key length (56bits), it is not anymore able to stand the attack of the current computers, and it has been proven obsolete. Triple DES, as another algorithm which applies DES encryption three times, is one of the successors of DES. Whereas, AES (Advanced Encryption Standard), as an independent algorithm, is more widely considered the successor of DES.",
 			"sees":	["3DES", "Symmetric cryptography"],
 			"url1":	"https://en.wikipedia.org/wiki/Data_Encryption_Standard"
 		},
 		{
 			"name":	"DH",
-			"desc":	"Diffie–Hellman key exchange is a method to securely exchange encryption key between two parties over a public channel. DH is one of the first public-key protocols, and one of the first public key exchange algorithm implemented. \nThe encryption of messages between two parties requires the safe exchange of encryption keys first. The key exchange was done out-of-band, with a courier taking the key with him. DH, however, requires no prior knowledge between the two parties, and allows them to together establish an encryption key over an insecure network. ^#image$520$270$DHNotes$400$450^Nevertheless, DH is susceptible to MITM (Man-In-The-Middle) attack, as the attacker can establish connections and perform DH exchange with both parties, without letting them know the presence of the attacker.",
+			"desc":	"Diffie–Hellman key exchange is a method to securely exchange encryption key between two parties over a public channel. DH is one of the first public-key protocols, and one of the first public key exchange algorithm implemented. \nThe encryption of messages between two parties requires the safe exchange of encryption keys first. The key exchange was done out-of-band, with a courier taking the key with him. DH, however, requires no prior knowledge between the two parties, and allows them to together establish an encryption key over an insecure network. ^#image$520$270$DHNotes$400$450^Nevertheless, DH is susceptible to MITM (Man-In-The-Middle) attack, as the attacker can establish two connections performing two DH exchanges with both parties, whereas they are unaware of the presence of the attacker.",
 			"sees":	["MQV", "MITM"],
 			"url1": "https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange"
 		},
@@ -266,7 +267,7 @@
 		},
 		{
 			"name":	"Greylisting",
-			"desc":	"Greylisting is a method to defend from spam emails. A MTA (Message Transfer Agent) applying greylisting will firstly temporarily reject emails from unknown sender. If the mail is legitimate, the original server will resend the email later, if enough time is elapsed since the first rejection, this MTA will accept the email. This technique exploits the fact that, the spammers have little time, and many mass email tools used by the spammers do not queue or resend email when encountering errors. \nThis method also gets shortcomings: emails are refused at their first delivery, both a spam email and a legitimate one as well.",
+			"desc":	"Greylisting is one of the methods to defend from spam emails. A MTA (Message Transfer Agent) applying greylisting will firstly temporarily reject all emails from unknown sender. If the mail is sent from legitimate mail server, the server will resend the email in a later time. When enough time has elapsed since the first rejection, this MTA will accept the retransmitted email. This technique exploits the fact that, the spammers have little time, and many mass email tools used by the spammers do not queue or resend email when they encountering errors. \nHowever, this method also gets its shortcoming: legitimate emails (called as \"ham\") are refused at their first delivery, just like spam.",
 			"sees":	["Spam email"],
 			"url1":	"https://en.wikipedia.org/wiki/Greylisting"
 		},
@@ -304,17 +305,19 @@
 		{
 			"name":	"MQV",
 			"desc":	"Menezes–Qu–Vanstone is an authenticated protocol for key exchange based on Diffie-Hellman. With the use of certificates, it adds also the authentication to Diffie-Hellman, protecting it from Man-In-The-Middle attack.",
-			"sees":	["DH","RSA key exchange"]
+			"sees":	["DH","RSA key exchange"],
+			"url1": "https://en.wikipedia.org/wiki/MQV"
 		},
 		{
 			"name":	"Nonce",
-			"desc":	"Nonce is an arbitrary number that can be used only once. It's a random or pseudo-random number generated for authentication purposes, so that the old number becomes invalid for new authentication, and thus, defenses replay attacks. It's also used for initialization vector and cryptographic hash functions. It's closely related to the term of salt",
+			"desc":	"Nonce is an arbitrary number that can be used only once. It's a random or pseudo-random number generated for authentication purposes, so that the old number becomes invalid for new authentication. Because of this, the replay attack becomes impossible. Nonce is also used for initialization vector and cryptographic hash functions. It's closely related to the term of salt",
 			"sees":	["Replay attack", "Salt"],
 			"url1":	"https://en.wikipedia.org/wiki/Cryptographic_nonce"
 		},
 		{
 			"name":	"OTP",
-			"desc":	"One-Time Password is a password that is valid only for a single login session or transaction. Due to the fact that each password is useful only for one transaction, it provides a great defense against replay attack and sniffing attack. One-Time Password can be sent through mobile phones, generated from cryptographic hardware tokens, or hard copied. The main problem of one-time password is that it is consumable. Therefore, one-time passwords are still used only for crucial actions, while normal day actions use other methods.",
+			"desc":	"One-Time Password is a password that is valid only for a single login session or transaction. Due to the fact that each password is useful only for one transaction, it provides a great defense against replay attack and sniffing attack. One-Time Password can be sent through mobile phones, generated from cryptographic hardware tokens, or hard copied. The main problem of one-time password is that it is consumable. Therefore, one-time passwords are still used only for crucial actions, while other day-to-day authentication attempts use other methods.",
+			"sees":	["Sniffing attack", "Replay attack"],
 			"url1":	"https://en.wikipedia.org/wiki/One-time_password"
 		},
 		{
@@ -335,7 +338,7 @@
 		{
 			"name":	"Password hashed",
 			"desc":	"Although the (cryptographic) hashing function is more widely used for authentication purpose, it still provides a kind of obfuscation similar to encryption. In the old days when the passwords of the clients are stored in the server in clear text, the data leakage on the server means the usernames and the passwords are all revealed to the intruder. Things will be even worse if the clients have used the same password across different servers, meaning that the intruder has obtained credential for multiple services. ^One way hash can transfer the password into another piece of text, which has no notable clue to the password. Except for a brute-force search, there is no algorithm that can find the original password out of its hashed value. For more details, see the entry \"Hash algorithm\". \nHere is how it goes: instead of storing the client password itself, the server stores only the hash of the password. At each login attempt, the inserted password is also hashed, before being compared to the value stored. In this way, even if the server's defense is breached, the intruder still will not obtain the password, but only the hash value of it. ^It the intruder use the hash value for login, the server, or any other server will hash it again, converting it to another value, and the login attempt fails. Moreover, if two servers use two different hash algorithms, or the same hash algorithm with different block size (assuming a block cipher), the hashed values differ. However, there are offensive techniques to thwart the hashing of the password. Besides the most basic and slowest brute-force attack, which tests all possible passwords and their corresponding hash values, there are also dictionary attack and, its improved version, rainbow table attack.",
-			"sees":	["Hash algorithm", "Brute-force attack", "Dictionary attack", "Buy rainbow table"]
+			"sees":	["Hash algorithm", "Brute-force attack", "Dictionary attack", "Rainbow table"]
 		},
 		{
 			"name":	"Password manager",
@@ -346,13 +349,13 @@
 		},
 		{
 			"name":	"PKI",
-			"desc":	"#text$220$180$A Public Key Infrastructure is a set of roles, policies, and procedures needed to create, manage, distribute, use, store, and revoke digital certificates and manage public-key encryption. It binds the public keys to respective identities, through the registration and issuance of the certificate at and by the certificate authority. #image$490$430$pkiNotes$480$300",
+			"desc":	"#text$220$180$A Public Key Infrastructure is a set of roles, policies, and procedures needed to create, manage, distribute, use, store, and revoke digital certificates and manage public-key encryption. It binds the public keys to respective identities, through the registration and issuance of the certificate at and by the certificate authority.         key point: certificates#image$490$430$pkiNotes$480$300",
 			"url1":	"https://en.wikipedia.org/wiki/Public_key_infrastructure"
 		},
 		{
-			"name":	"Quantum cryptography",
-			"desc":	"Quantum cryptography is the science of using the quantum mechanics for cryptographic purposes. One of the most known quantum cryptography is quantum key distribution, which exploits the quantum mechanics property that it's impossible to copy any data encoded in a quantum state without changing the quantum state. Many of the current cryptographic methods are breakable with the incoming quantum computers, and quantum cryptography is one of the possible solutions for the future.",
-			"sees":	["Quantum computer"],
+			"name":	"Quantum key distribution",
+			"desc":	"Quantum cryptography is the science of using the quantum mechanics for cryptographic purposes. One of the most known example of quantum cryptography is quantum key distribution. It exploits the quantum mechanics property that, it's impossible to copy any data encoded in a quantum state without changing the quantum state. Many of the current cryptographic methods are breakable with the incoming quantum computers, but quantum key distribution is one of the possible solutions for the future.",
+			"sees":	["Quantum computing"],
 			"url1":	"https://en.wikipedia.org/wiki/Quantum_cryptography"
 		},
 		{
@@ -364,7 +367,7 @@
 		{
 			"name":	"Salt",
 			"desc":	"Salt is a random data to be added to the original text (e.g. password or passphrase) before hashing operation. It's closely related to the term of nonce. It's used against dictionary attack and pre-computed rainbow table attack. \nThe user password was stored in clear text in the server. Later on people stores only the hash of the password, in order to avoid password leakage from the server. Then, in face of the dictionary attack and the pre-computed rainbow table attack, salt is also added to the password before they are together hashed. The server then stores the salt-added-hash together with the salt used. ^The salt should be generated randomly every time, and should be long enough. With random salt, even if users used the same password, their salt-add password differs, and their final hash value differs. Also, the intruder has to generate one rainbow table for each random salt, which becomes greatly challenging (more challenging if the salt is long). With long salt, even if the password was short, the salt-add password can still be of size big enough to frustrates crackers.",
-			"sees":	["Dictionary attack", "Buy rainbow table", "Nonce"],
+			"sees":	["Dictionary attack", "Rainbow table", "Nonce"],
 			"url1":	"https://en.wikipedia.org/wiki/Salt_(cryptography)"
 		},
 		{
@@ -377,7 +380,7 @@
 		{
 			"name":	"Symmetric cryptography",
 			"desc":	"Symmetric cryptography or private-key cryptography is a way of cryptography using the same key for both encryption (at sender) and decryption (at receiver). Symmetric-key encryption use either block ciphers or stream ciphers. The block cipher encrypts and decrypts messages in blocks of fixed size. Padding or methods like ciphertext stealing are usually used to make the length plaintext a multiple of block size. The stream cipher, however, encrypts or decrypts messages as the bits flow, and has no requirement on the length of the plaintext. ^Symmetric cryptography is based on the encryption/decryption key exchanged between two parties (known as shared secret) and unknown to others. As a consequence, the generation and distribution of the shared secret is an important issue. Except for out-of-band approaches, Diffie–Hellman and other public key protocol like RSA can be used for the key exchange.",
-			"sees":	["Asymmetric cryptography", "DES", "3DES"],
+			"sees":	["Key exchange", "Asymmetric cryptography", "DES", "3DES"],
 			"url1":	"https://en.wikipedia.org/wiki/Symmetric-key_algorithm"
 		},
 		
@@ -395,16 +398,16 @@
 },
 "buffs": 
 {
-	"buffDesc":	"Buffs are the lasting effect of offensive or defensive acts performed by the characters. There are positive acts, which enhances the ability of the character, or provides defense against attacks. There are also negative buffs, usually enforced on the defender by the intruder. Negative buffs indicate the states of how the intruder lures the victim into his trap. \nSome buffs have infinite length, but some buffs have finite length, which means the buff, together with its effect will vanish at expiration.",
+	"buffDesc":	"Buffs are the lasting effects of the offensive or defensive acts performed by the characters. There are positive acts, which enhance the ability of the character, or provide defense against attacks. There are also negative buffs, which are usually enforced on the defender by the intruder. Negative buffs indicate the states of how the intruders lure the victims into their traps. \nSome buffs have infinite length, but some others have finite length. If a buff's remaining length decreses to zero, the buff, together with its effects will vanish. ^In general, a defender is supposed to put on as many (positive) buffs as possible, to gurantee better security. An intruder, however, would like to remove those positive buffs (if possible) from the defender, and enforces some negative buffs on the defender, so as to successfully deal damage to the assets.",
 	"buffs":
 	[
 		{
 			"name":	"503 Server Unavailable",
-			"desc": "503 Server Unavailable. The server is overburdened with requests. Possible reason:\n - The server's computation or communication power does not match the need of the clients.\n - Because of some events (e.g. a festival or a promotion) many clients send requests in a short amount of time.\n - The server is under DoS attack, where a huge number of requests are fake requests aiming at exhaust the computational or communicational power of the server."
+			"desc": "503 Server Unavailable. The server is overburdened with requests. Possible reason:\n - The server's computation or communication power does not match the need of the clients.\n - Because of some events (e.g. a festival or a promotion) many clients send requests within a short time period.\n - The server is under DoS attack, where a huge number of requests are fake requests aiming at exhaust the computational or communicational power of the server."
 		},
 		{
 			"name":	"Confidential message divulged",
-			"desc":	"German military movement and other important, secret information are revealed to the Allies.",
+			"desc":	"German military movement and other important and secret information are revealed to the Allies.",
 			"sees":	["Credential compromised"]
 		},
 		{
@@ -414,7 +417,7 @@
 		},
 		{
 			"name":	"Credential compromised",
-			"desc":	"The server/client's important data like a password is compromised. The intruder obtains these data, and he can sell these data in the deep web, or even use the important login credential for more devastating things (e.g. deleting the whole database, export more client secret information).",
+			"desc":	"The server/client's important data like username and password are compromised. The intruder obtains these data, and he can sell these data in the deep web, or even use the important login credential for more devastating things (e.g. deleting the whole database, exporting more client secret information, tampering with account credits).",
 			"sees":	["Confidential message divulged"]
 		},
 		{
@@ -436,8 +439,8 @@
 		},
 		{
 			"name":	"Encrypted",
-			"desc":	"The data transferred over the Internet is encrypted with a symmetric key shared by the sender and the receiver. Pure sniffing attack will not compromise the secrecy. \nThe process to create encryption key known only by the two parties is called key exchange.",
-			"sees":	["Key exchange"]
+			"desc":	"The data transferred over the Internet is encrypted with a symmetric key shared by the sender and the receiver. Sniffing attack alone will not compromise the secrecy. \nThe process to create encryption key known by and only by the two parties is called key exchange. For more information, please refer to \"Key exchange\".",
+			"sees":	["Key exchange", "Symmetric cryptography", "Encrypt with Enigma"]
 		},
 		{
 			"name":	"IP spoofed",
@@ -447,8 +450,8 @@
 		},
 		{
 			"name":	"Key exchange",
-			"desc": "The server and its client has exchanged their encryption key. Now they have a shared secret, known by and only by these two parties. Future messages between them will be encrypted with this shared secret (or any variation derived from it). No other people will be able to understand the message, except that he/she crack the encryption or hack on the process of key exchange.",
-			"sees":	["Encrypted"]
+			"desc": "Key exchange represent the process to create a shared secret known by and only by two parties. Symmetric encryption is then used, taking the shared secret, or a variation derived from it as encryption key. No other people will be able to understand the encrypted messages, except that they crack the encryption or hack on the process of key exchange. \nTo securely exchange the key, people used to adopt out-of-band approaches like delivering the key in person. The creation of key exchange protocols like Diffie-Hellman key exchange totally changed this. With these protocols, the shared secret can be transmitted over insecure channels, while still not divulged to the third person. ^Symmetric keys are delivered by key exchange to encrypt the messages, but asymmetric keys are not used in this way. This is majorly because asymmetric encryption is much slower than symmetric encryption. Encrypting and decrypting the whole message takes up too much time. Nevertheless, Asymmetric cryptography, or better say, public-key cryptography turns out quite useful in the process of key exchange. For deatils, see \"Asymmetric cryptography\".",
+			"sees":	["Encrypted", "Symmetric cryptography", "Asymmetric cryptography"]
 		},
 		{
 			"name":	"Offline",

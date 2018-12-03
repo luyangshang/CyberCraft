@@ -35,7 +35,7 @@ var review = {
 		this.hintBox = new HintBox("box");
 		this.messager = new Messager(this.messageGroup, this.hintBox);
 		game.globals.messager = this.messager;
-		this.logViewer = new LogViewer(this.record.logs, this.role, this.doublePlayer, this.notes, this.messager, this.logGroup);
+		this.logViewer = new LogViewer(this.record.logs, this.record.role, this.doublePlayer, this.notes, this.messager, this.logGroup);
 	},	
 	
 	create: function(){		
@@ -53,12 +53,12 @@ var review = {
 		this.menuButton = game.add.button(game.world.centerX - 150 , 550, "menuButton", function(){game.state.start("startMenu");}, this, 0, 0, 1, 0, this.logGroup);
 		this.menuButton.anchor.setTo(0.5);
 		//personal notes button
-		this.notesButton = game.add.button(game.world.centerX + 50, 550, "book", this.notes.createNotes, this.notes, 0, 0, 1, 0, this.logGroup);
+		this.notesButton = game.add.button(game.world.centerX + 50, 550, "book", this.openNotes, this, 0, 0, 1, 0, this.logGroup);
 		this.hintBox.setHintBox(this.notesButton, "Open personal notes (N)");
 		this.notesButton.anchor.setTo(0.5);
 		//shortcut key for personal notes
 		var notesKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
-		notesKey.onDown.add(this.notes.createNotes, this.notes);
+		notesKey.onDown.add(this.openNotes, this);
 		
 		if(!this.doublePlayer)
 		{
@@ -113,6 +113,14 @@ var review = {
 				}
 			}
 		}
+	},
+	/**
+	Open personal notes while also hide the hintBox
+	*/
+	openNotes: function()
+	{
+		this.hintBox.hide();
+		this.notes.createNotes();
 	},
 	/**
 	A function called at the ending phase of this state, when the game switch to another state. One can recycle or nullify some elements of this state, so that there will be no problem when returning to the state.

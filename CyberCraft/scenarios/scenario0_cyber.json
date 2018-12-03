@@ -5,8 +5,8 @@
 "initialResource":			[60, 40],
 "constantIncome":			[15,0],
 "maxResource":				200,
-"maxRounds":				16,
-"assets":					150,
+"maxRounds":				24,
+"assets":					230,
 "defensive":				false,
 "doublePlayer":				true,
 "characterName":
@@ -31,7 +31,6 @@
 		{
 			"name":				"Sniffing attack",
 			"prerequisites":	["Promiscuous mode"],
-			"learningCost":		10,
 			"desc":				"Finishing move. \nObtain rival's username and password, secret key, as well as other data, if the rival's network communication is not encrypted or hashed.",
 			"needRivalBuffs":	["Shared channel"],
 			"noRivalBuffs":		["Key exchange", "Credential compromised"],
@@ -43,7 +42,7 @@
 		{
 			"name":				"MITM",
 			"desc":				"A Man-In-The-Midele attack will gurantee the victim's messages to pass through the attacker. It could fail in face of authentication mechanisms.",
-			"noRivalBuffs":		["MQV", "RSA key exchange", "Quantum cryptography"],
+			"noRivalBuffs":		["MQV", "RSA key exchange", "Quantum key distribution"],
 			"cost":				15,
 			"rivalBuffs":		["MITM"],
 			"cleanRivalBuffs":	["Key exchange"],
@@ -51,8 +50,9 @@
 		},
 		{
 			"name":				"Quantum computing",
-			"desc":				"Crack DH, MQV and RSA key exchange, but not Quantum cryptography",
-			"noRivalBuffs":		["Quantum cryptography"],
+			"learningCost":		15,
+			"desc":				"Use a quantum computer to crack DH, MQV and RSA key exchange. But it's useless against quantum key distribution",
+			"noRivalBuffs":		["Quantum key distribution"],
 			"cost":				50,
 			"cleanRivalBuffs":	["Key exchange", "MQV", "RSA key exchange"],
 			"unlocked":			false
@@ -69,18 +69,18 @@
 		},
 		{
 			"name":				"Spam email",
-			"desc":				"DoS category. \nSend spam email to overload the rival's mailbox.",
+			"desc":				"DoS category. \nSend spam email to overload the rival's mailing service. It's not really one kind of DoS attack, but it results in similar frustration.",
 			"cost":				20,
 			"rivalBuffs":		["Denial of service attacked"],
 			"buffLength":		2,
-			"spamRequests":		5
+			"superfluousRequests":		5
 		},
 		{
-			"name":				"Buy botnet machines",
+			"name":				"Botnet machines",
 			"prerequisites":	["Spam email"],
-			"desc":				"buy 2 botnet machines to increase the strength of your spam emails",
+			"desc":				"Improvement. \nBuy 2 botnet machines to increase the strength of your spam emails",
 			"cost":				35,
-			"modifier":			"0:Spam email:spamRequests:+:2"
+			"modifier":			"0:Spam email:superfluousRequests:+:2"
 		}
 	],
 	[
@@ -95,7 +95,7 @@
 		{
 			"name":				"MQV",
 			"prerequisites":	["DH"],
-			"desc":				"The scured DH. Resistent to MITM attack, but requires PKI.",
+			"desc":				"The scured version of DH. Resistent to MITM attack, but requires the establishment of PKI.",
 			"needSelfBuffs":	["PKI"],
 			"cost":				20,
 			"selfBuffs":		["Key exchange", "MQV"],
@@ -104,8 +104,8 @@
 		},
 		{
 			"name":				"RSA key exchange",
-			"prerequisites":	["Asymmetric cryptography", "PKI"],
-			"desc":				"Another method for key exchange, based RSA. Resistent to MITM, but requires PKI",
+			"prerequisites":	["Asymmetric cryptography", "Symmetric cryptography"],
+			"desc":				"Another method for key exchange, based on RSA. Resistent to MITM, but requires the establishment of PKI.",
 			"needSelfBuffs":	["PKI"],
 			"cost":				20,
 			"selfBuffs":		["Key exchange", "RSA key exchange"],
@@ -121,16 +121,17 @@
 		},
 		{
 			"name":				"Greylisting",
-			"desc":				"A method to fight spam email by delaying email messages. It has an unkeep, due to the delay of legitimate email.",
+			"desc":				"A method to fight spam email by delaying email messages. It has an unkeep, due to a delay of legitimate email.",
 			"cost":				15,
 			"selfBuffs":		["Greylisting"],
 			"buffLength":		6
 		},
 		{
-			"name":				"Quantum cryptography",
+			"name":				"Quantum key distribution",
+			"learningCost":		15,
 			"desc":				"Use quantum mechanics for the key distribution. The key distribution itself is Unbreakable.",
 			"cost":				40,
-			"selfBuffs":		["Key exchange", "Quantum cryptography"],
+			"selfBuffs":		["Key exchange", "Quantum key distribution"],
 			"cleanSelfBuffs":	["RSA key exchange", "MQV"],
 			"buffLength":		6,
 			"unlocked":			false
@@ -145,7 +146,7 @@
 [
 	{	
 		"name":		"Key exchange",
-		"desc":		"The server and its client have built a secure connection, with an encryption key shared by both sides, and unknown by others. Sniffing is not possible."		
+		"desc":		"The server and its client have built a secure connection, by exchanging an encryption key shared by both sides, and unknown to others. Sniffing attack is not possible."
 	},
 	{
 		"name":		"MQV",
@@ -166,7 +167,7 @@
 		"dosResistance":	0.8
 	},
 	{	
-		"name":				"Quantum cryptography",
+		"name":				"Quantum key distribution",
 		"desc":				"Use quantum mechanics for cryptography. Unbreakable."
 	}
 ],
@@ -188,7 +189,7 @@
 "AI":
 [
 	{
-		"pattern":	["Quantum cryptography"],
+		"pattern":	["Quantum key distribution"],
 		"chance":	0.1
 	},
 	{
@@ -211,19 +212,19 @@
 "scripts":
 [
 	{
-		"round":		10,
+		"round":		15,
 		"dialogues":
 		[
 			{
 				"name":		"Calvin",
 				"portrait":	"pirate4",
-				"dialogue":	"Fabulous! We have successfully built a quantum computer. You can now use it against any encryption. ^Meanwhile, quantum cryptography is the adversary to quantum computer. Be aware!"
+				"dialogue":	"Fabulous! We have successfully built a quantum computer. You can now use it against the current cryptographic system. ^Meanwhile, its adversary quantum key distribution is also discovered. Be aware!"
 			}
 		],
 		"newActs":
 		[
 			["Quantum computing"],
-			["Quantum cryptography"]
+			["Quantum key distribution"]
 		]
 	}
 ]

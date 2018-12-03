@@ -114,6 +114,7 @@ var hall = {
 	{
 		if(this.mask && this.mask.alive == true)
 			return;
+		this.hintBox.hide();
 		this.notes.createNotes();
 	},
 	

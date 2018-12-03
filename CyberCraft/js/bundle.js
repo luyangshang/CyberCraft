@@ -305,13 +305,13 @@ As a creation function, remember to create new arrays, rather than just pointing
 @param {Array} cleanRivalBuffs - the buffs cleaned on the rival when the act suceeds
 @param {int} buffLength - the length of the enforced buff
 @param {int} bonus - the bounty for the intruder and the damange to the defender's assets, when the acts succeds
-@param {int} spamRequests - the amount of spam requests to generate
+@param {int} superfluousRequests - the amount of superfluous requests to generate
 @param {string} modifier - a string that is used to modifies other properties
 @param {int} learnt - if the act is already learnt at the beginning
 @param {int} enabled - if the act is enabled at the beginning (otherwise, it should be later on enabled by script)
 @constructor
 */
-function Act(name, prerequisites, learningCost, desc, needSelfBuffs, needRivalBuffs, noSelfBuffs, noRivalBuffs, cost, successRate, selfBuffs, rivalBuffs, cleanSelfBuffs, cleanRivalBuffs, buffLength, bonus, spamRequests, modifier, learnt, unlocked)
+function Act(name, prerequisites, learningCost, desc, needSelfBuffs, needRivalBuffs, noSelfBuffs, noRivalBuffs, cost, successRate, selfBuffs, rivalBuffs, cleanSelfBuffs, cleanRivalBuffs, buffLength, bonus, superfluousRequests, modifier, learnt, unlocked)
 {
 	this.name = name;
 	this.prerequisites = prerequisites.slice(0);
@@ -329,7 +329,7 @@ function Act(name, prerequisites, learningCost, desc, needSelfBuffs, needRivalBu
 	this.cleanRivalBuffs = cleanRivalBuffs.slice(0);
 	this.buffLength = buffLength;
 	this.bonus = bonus;
-	this.spamRequests = spamRequests;
+	this.superfluousRequests = superfluousRequests;
 	this.modifier = modifier;
 	//dynamic properties not specified in the json files
 	this.learnt = learnt;
@@ -455,7 +455,7 @@ ActManager.prototype.createAct = function(actSource, role)
 	var cost, successRate = 1.0;
 	var	selfBuffs=[], cleanSelfBuffs=[], rivalBuffs=[], cleanRivalBuffs=[];
 	var buffLength = -1, bonus = 0;
-	var spamRequests;
+	var superfluousRequests;
 	var modifier = "";
 	var learnt=false, unlocked=true;
 	//set the act properties
@@ -499,8 +499,8 @@ ActManager.prototype.createAct = function(actSource, role)
 		buffLength = actSource.buffLength;
 	if(actSource.bonus != undefined && actSource.bonus > 0)
 		bonus = actSource.bonus;
-	if(actSource.spamRequests != undefined)
-		spamRequests = actSource.spamRequests;
+	if(actSource.superfluousRequests != undefined)
+		superfluousRequests = actSource.superfluousRequests;
 	if(actSource.modifier != undefined)
 		modifier = actSource.modifier;
 	if(actSource.learnt != undefined)
@@ -508,7 +508,7 @@ ActManager.prototype.createAct = function(actSource, role)
 	if(actSource.unlocked != undefined)
 		unlocked = actSource.unlocked;
 	//finally create the act
-	var id = this.acts[role].push(new Act(name,prerequisites,learningCost,desc,needSelfBuffs,needRivalBuffs,noSelfBuffs,noRivalBuffs,cost,successRate,selfBuffs,rivalBuffs,cleanSelfBuffs,cleanRivalBuffs,buffLength,bonus,spamRequests,modifier,learnt,unlocked));
+	var id = this.acts[role].push(new Act(name,prerequisites,learningCost,desc,needSelfBuffs,needRivalBuffs,noSelfBuffs,noRivalBuffs,cost,successRate,selfBuffs,rivalBuffs,cleanSelfBuffs,cleanRivalBuffs,buffLength,bonus,superfluousRequests,modifier,learnt,unlocked));
 	return --id;
 };
 /**
@@ -635,8 +635,11 @@ ActManager.prototype.learnAct = function(role, id)
 	//check resource
 	if(act.learningCost > this.gameManager.getResource(role))
 	{
-		game.globals.audioManager.accessDenied();
-		this.messager.createMessage("Not enough resource!");
+		if(role == this.playerRole)
+		{
+			game.globals.audioManager.accessDenied();
+			this.messager.createMessage("Not enough resource!");
+		}
 		return false;
 	}
 	//check prerequisites
@@ -775,8 +778,8 @@ ActManager.prototype.applyAct = function(role, id, round)
 	{
 		this.buffManager.addBuff(act.rivalBuffs[b], act.buffLength, 1-role);
 		//DoS attack expects single rivalBuff!
-		if(act.spamRequests)
-			this.buffManager.setSpam(act.rivalBuffs[b], act.spamRequests);
+		if(act.superfluousRequests)
+			this.buffManager.setSuperfluous(act.rivalBuffs[b], act.superfluousRequests);
 	}
 	for(b in act.cleanRivalBuffs)
 	{
@@ -893,7 +896,10 @@ function AudioManager()
 	this.defenderBGM = game.add.audio("defenderBGM");
 	this.cyberBGM = [];
 	for(var i=0; i<this.NCyberBGMs; i++)
-		this.cyberBGM[i] = game.add.audio("cyberBGM"+i);	
+	{
+		this.cyberBGM[i] = game.add.audio("cyberBGM"+i);
+		this.cyberBGM[i].onStop.add(this.cyberMusic, this);
+	}
 	this.outroBGM = game.add.audio("outroBGM");
 	//the pointer to the BGM currently been played
 	this.BGM = "";
@@ -1036,8 +1042,6 @@ AudioManager.prototype.cyberMusic = function()
 	var integer = Math.floor(Math.random()*this.NCyberBGMs);
 	this.BGM = this.cyberBGM[integer];
 	this.BGM.play("", 0, this.volumeH);
-	//continue with cyber music
-	this.BGM.onStop.add(this.cyberMusic, this);
 };
 /**
 Play the the review's BGM
@@ -1090,8 +1094,8 @@ function BuffManager(scenarioIndex, messager)
 	this.dosResistance = [];
 	//an array storing the buff remaining lengths. 0 for the intruder, 1 for the defender
 	this.buffLengths = [[],[]];
-	//the spam request related to each buff. This array doesn't have intruder part
-	this.buffSpam = [];
+	//the superfluous request related to each buff. This array doesn't have intruder part
+	this.buffSuperfluous = [];
 	
 	
 	//set buffNames, buffDesc and buffUpkeep
@@ -1110,12 +1114,12 @@ function BuffManager(scenarioIndex, messager)
 		this.createInitialBuffs(this.cyber.initialBuffs[1], 1);
 	}
 	
-	//set buffSpam
-	for(i=0; i< buffSize; i++)	//start with no spam
-		this.buffSpam[i] = 0;
+	//set buffSuperfluous
+	for(i=0; i< buffSize; i++)	//start with no superfluous requests
+		this.buffSuperfluous[i] = 0;
 }
 /**
-Create and initializes the arrays for the information of the buffs: buffNames, buffDesc, buffCapacity, buffUpkeep, dosResistance, buffLength. However, buffSpam will be filled by the act dynamically at run time.
+Create and initializes the arrays for the information of the buffs: buffNames, buffDesc, buffCapacity, buffUpkeep, dosResistance, buffLength. However, buffSuperfluous will be filled by the act dynamically at run time.
 */
 BuffManager.prototype.createStatic = function()
 {
@@ -1316,9 +1320,9 @@ BuffManager.prototype.decayBuff = function()
 		if(this.buffLengths[1][i] > 0)
 		{
 			this.buffLengths[1][i]--;
-			//reset the spam requests when the buff expires
-			if(!this.buffLengths[1][i] && this.buffSpam[i])
-				this.buffSpam[i] = 0;
+			//reset the superfluous requests when the buff expires
+			if(!this.buffLengths[1][i] && this.buffSuperfluous[i])
+				this.buffSuperfluous[i] = 0;
 		}
 	}
 };
@@ -1369,40 +1373,40 @@ BuffManager.prototype.totalUpkeep = function()
 };
 
 /**
-Set the number for spam requests generated by a certain buff
+Set the number for superfluous requests generated by a certain buff
 The amount comes from act, rather than buff
-@param {int} id - the id of the buff generating spam requests
-@param {int} amount - the amount for spam requests
+@param {int} id - the id of the buff generating superfluous requests
+@param {int} amount - the amount for superfluous requests
 */
-BuffManager.prototype.setSpam = function(id, amount)
+BuffManager.prototype.setSuperfluous = function(id, amount)
 {
-	this.buffSpam[id] = amount;
+	this.buffSuperfluous[id] = amount;
 };
 /**
-Get the number for spam requests generated by a certain buff
-@param {int} id - the id of the buff generating spam requests
-@returns {int} - the amount for spam requests generated from this buff
+Get the number for superfluous requests generated by a certain buff
+@param {int} id - the id of the buff generating superfluous requests
+@returns {int} - the amount for superfluous requests generated from this buff
 */
-BuffManager.prototype.getSpam = function(id)
+BuffManager.prototype.getSuperfluous = function(id)
 {
-	return this.buffSpam[id];
+	return this.buffSuperfluous[id];
 };
 /**
-Get the total number for spam requests generated by the buffs
-@returns {int} - total number of spam requests generated
+Get the total number for superfluous requests generated by the buffs
+@returns {int} - total number of superfluous requests generated
 */
-BuffManager.prototype.totalSpam = function()
+BuffManager.prototype.totalSuperfluous = function()
 {
-	var spamRequests = 0;
+	var superfluousRequests = 0;
 	for(l in this.buffLengths[1])
-		if(this.buffLengths[1][l] && this.buffSpam[l])
-			spamRequests += this.buffSpam[l];
-	return spamRequests;	
+		if(this.buffLengths[1][l] && this.buffSuperfluous[l])
+			superfluousRequests += this.buffSuperfluous[l];
+	return superfluousRequests;	
 };
 
 /**
 Get resistance to DoS attack provided by a certain buff
-@param {int} id - the id of the buff generating spam requests
+@param {int} id - the id of the buff generating superfluous requests
 @returns {int} - resistance to DoS attack provided by this buff
 */
 BuffManager.prototype.getResistance = function(id)
@@ -1820,8 +1824,9 @@ Increase the resource of the character
 */
 GameManager.prototype.obtainResource = function(role, amount)
 {
-	///animation?
+	//[0, maxResource]
 	this.resources[role] = Math.min(this.resources[role] + parseInt(amount), this.maxResource);
+	this.resources[role] = Math.max(this.resources[role], 0);
 	this.cyberspace.updateResource(role, this.resources[role]);
 };
 /**
@@ -1831,8 +1836,7 @@ Decrease the resource of the character
 */
 GameManager.prototype.consumeResource = function(role, amount)
 {
-	this.resources[role] -= amount;
-	this.cyberspace.updateResource(role, this.resources[role]);
+	this.obtainResource(role, 0- parseInt(amount));
 };
 /**
 Deal damange to the server. Can invoke on game over.
@@ -1883,17 +1887,19 @@ GameManager.prototype.roundInit = function()
 		this.obtainResource(1, this.constantIncome[1]); 
 		//random client requests
 		var legitimateRequests = this.randomRequests();
-		//spam requests
-		var spamRequests = this.buffManager.totalSpam();
+		//superfluous requests
+		var superfluousRequests = this.buffManager.totalSuperfluous();
 		var DoSSusceptance = this.buffManager.totalDosSusceptance();
-		spamRequests *= DoSSusceptance;
-		var servingRatio = (parseFloat(this.serverCapacity)+parseFloat(this.buffManager.totalCapacity()))/(legitimateRequests+spamRequests);
+		superfluousRequests *= DoSSusceptance;
+		var servingRatio = (parseFloat(this.serverCapacity)+parseFloat(this.buffManager.totalCapacity()))/(legitimateRequests+superfluousRequests);
 		if(servingRatio >= 1)	//five by five
 		{
 			var serverIncome = legitimateRequests*this.servingBonus;
 			this.obtainResource(1, serverIncome);
 			//animation: one happy face for each served client
 			this.effectManager.faces(true, legitimateRequests);
+			console.log("The server has served all " + legitimateRequests + " legitimated requests");
+			console.log("Server net income is: "+serverIncome);
 		}
 		else	//some clients unserved
 		{
@@ -2015,7 +2021,7 @@ GameManager.prototype.notApplied = function(round)
 	for(var a in shouldApply)
 	{
 		for(l=0; l<this.logs.length; l++)
-			if(this.logs[l].round == round && this.logs[l].actPattern == shouldApply[a])
+			if(this.logs[l].round == round && this.logs[l].act == shouldApply[a])
 				break;
 		if(l >= this.logs.length) //not found
 			return shouldApply[a];
@@ -2195,7 +2201,7 @@ LogViewer.prototype.display = function(lastPage)
 	{
 		if(this.role == 1)
 		{
-			roleText = "Your role: dedender";
+			roleText = "Your role: defender";
 			var roleSprite = game.add.text(game.world.centerX + 120, 110, roleText, this.styleDefender, this.logGroup);
 		}
 		else
@@ -2471,7 +2477,7 @@ Messager.prototype.display = function()
 	//var callback = this.callbackQueue.shift();
 	//this.lastCallback = callback;
 	this.messageText.setText(message);
-	if(message.length<50)	//auto adjust text size depending on text length
+	if(message.length<60)	//auto adjust text size depending on text length
 		this.messageText.setStyle(this.style);
 	else this.messageText.setStyle(this.styleLong);
 	this.messageGroup.visible = true;
@@ -3467,20 +3473,20 @@ RecordEntry.prototype.calculateScores = function()
 			if(this.logs[l].success)
 			//{
 				//if(this.role == 0)
-					this.scores[0] +=100;	//intruder gains 100 points at each success at his round
+					this.scores[0] += 90;	//intruder gains 90 points at each success at his round
 			//}
 			else //if(this.role == 1)
 					this.scores[1] += 100;	//defender gains 100 points at each failure at intruder's round
 	}
 	//if(this.role == 0)
 	//{
-		this.scores[0] -= this.endingRound*40;		//intruder loss 40 points for every round the defender survives
-		this.scores[0] += this.assetsCompromised*4;	//intruder gains 4 points for every damage dealt to the assets
+		this.scores[0] -= this.endingRound*50;		//intruder loss 40 points for every round the defender survives
+		this.scores[0] += this.assetsCompromised*5;	//intruder gains 4 points for every damage dealt to the assets
 	//}
 	//else 
 	//{
-		this.scores[1] += this.endingRound*40;		//defender gains 40 points for every round he survives
-		this.scores[1] -= this.assetsCompromised*4;	//defender loss 4 points for every damage dealt to the assets
+		this.scores[1] += this.endingRound*50;		//defender gains 40 points for every round he survives
+		this.scores[1] -= this.assetsCompromised*5;	//defender loss 4 points for every damage dealt to the assets
 	//}
 	/*nagative score is too much frustrating for the players, even if they did play badly.
 	nagative scores will be raised to zero, hoping to console them a little*/
@@ -4077,7 +4083,7 @@ var cyberspace = {
 		this.styleUnlearnt = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#1144FF", align: "left", wordWrap: true, wordWrapWidth: game.width - 95};
 		this.styleName = { font: "22px Courier New, monospace", fontWeight: "bold", fill: "#00CC11", align: "left", wordWrap: true, wordWrapWidth: game.width - 95};
 		this.styleCaption = { font: "26px Courier New, monospace", fontWeight: "bold", fill: "#FFEE11", align: "left"};
-		this.styleResource = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#00AAFF", align: "center"};
+		this.styleResource = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#00AAFF", align: "center", wordWrap: true, wordWrapWidth: 740};
 		this.styleAssets = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#FFEE00", align: "center"};
 		this.styleRequire = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#EE00FF", align: "center", wordWrap: true, wordWrapWidth: game.width - 250};
 		this.styleResult = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#FF8800", align: "center", wordWrap: true, wordWrapWidth: game.width - 250};
@@ -4423,14 +4429,6 @@ var cyberspace = {
 		var role = this.currentRound % 2;
 		this.effectManager.createRoundSpark("Round:\n"+ this.currentRound, role, 400);
 	},
-	/**
-	Activate or deactivate player's learning and applying functionality, base on whether it's the player's role
-	@param {boolean} playerRound - true: player's round, false: rival's round
-	*/
-	/*changeControl: function(playerRound)
-	{
-		this.playerRound = playerRound;
-	},*/
 /* -------------------- update functions ends -----------------------*/		
 	
 /* ---- act/buffs/buff/attack log popup screen functions starts -----*/	
@@ -4611,9 +4609,9 @@ var cyberspace = {
 				this.bonusSprite = game.add.text(150, y, "Damange: " + act.bonus , this.styleDamage, this.variableGroup);
 				y+=20;
 			}
-			//spam requests
-			if(act.spamRequests)
-				this.spamSprite = game.add.text(150, y, "Generate spam request: " + act.spamRequests , this.styleDamage, this.variableGroup);
+			//superfluous requests
+			if(act.superfluousRequests)
+				this.superfluousSprite = game.add.text(150, y, "Generate superfluous request: " + act.superfluousRequests , this.styleDamage, this.variableGroup);
 			
 			if(!this.doublePlayer && this.role != this.controllerRole)
 			{	//single player mode and at AI's round
@@ -4819,9 +4817,9 @@ var cyberspace = {
 		//buff capacity (additional server capacity)
 		if(num = this.buffManager.getCapacity(id))
 			var capacitySprite = game.add.text(150, 300, "Extra capacity: " + num, this.styleAssets, this.variableGroup);
-		//buff spam requests
-		if(num = this.buffManager.getSpam(id))
-			var spamSprite = game.add.text(150, 250, "Spam requests: " + num, this.styleDamage, this.variableGroup);
+		//buff superfluous requests
+		if(num = this.buffManager.getSuperfluous(id))
+			var superfluousSprite = game.add.text(150, 250, "Superfluous requests: " + num, this.styleDamage, this.variableGroup);
 		//buff DoS Resistance
 		if(num = this.buffManager.getResistance(id))
 			var resistanceSprite = game.add.text(150, 250, "DoS resistance: " + num * 100 + " %", this.styleResource, this.variableGroup);
@@ -5275,6 +5273,7 @@ var hall = {
 	{
 		if(this.mask && this.mask.alive == true)
 			return;
+		this.hintBox.hide();
 		this.notes.createNotes();
 	},
 	
@@ -5460,7 +5459,7 @@ var intro = {
 								this.texts = ["#text$380$300$Your victory!"];
 						}
 					}
-					else if(this.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? \n\nDon't lose your heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
+					else if(this.record.role) this.texts = ["You failed to defend the assets!\n\nMaybe you got some holes in your defence? \n\nDon't lose your heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
 						else this.texts = ["Intrusion failed!\n\nMaybe you attacked too aggressively and exhausted all your resources on those well defended? \nMaybe you attacked too timidly and missed too many chances before the rounds expired? \n\nDon't lose heart. From Review you will find where you have not done well, and you can try again.", "If you keep failing, you can probably refer to the section \"Extra guide for the scenarios\" in the user manual. \nUser manual can be opened by appending \"User manual.pdf\" to the current url. But if the current url has \"index.html\", you should replace it with \"User manual.pdf\"."];
 				}
 				else 
@@ -6054,7 +6053,7 @@ var review = {
 		this.hintBox = new HintBox("box");
 		this.messager = new Messager(this.messageGroup, this.hintBox);
 		game.globals.messager = this.messager;
-		this.logViewer = new LogViewer(this.record.logs, this.role, this.doublePlayer, this.notes, this.messager, this.logGroup);
+		this.logViewer = new LogViewer(this.record.logs, this.record.role, this.doublePlayer, this.notes, this.messager, this.logGroup);
 	},	
 	
 	create: function(){		
@@ -6072,12 +6071,12 @@ var review = {
 		this.menuButton = game.add.button(game.world.centerX - 150 , 550, "menuButton", function(){game.state.start("startMenu");}, this, 0, 0, 1, 0, this.logGroup);
 		this.menuButton.anchor.setTo(0.5);
 		//personal notes button
-		this.notesButton = game.add.button(game.world.centerX + 50, 550, "book", this.notes.createNotes, this.notes, 0, 0, 1, 0, this.logGroup);
+		this.notesButton = game.add.button(game.world.centerX + 50, 550, "book", this.openNotes, this, 0, 0, 1, 0, this.logGroup);
 		this.hintBox.setHintBox(this.notesButton, "Open personal notes (N)");
 		this.notesButton.anchor.setTo(0.5);
 		//shortcut key for personal notes
 		var notesKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
-		notesKey.onDown.add(this.notes.createNotes, this.notes);
+		notesKey.onDown.add(this.openNotes, this);
 		
 		if(!this.doublePlayer)
 		{
@@ -6132,6 +6131,14 @@ var review = {
 				}
 			}
 		}
+	},
+	/**
+	Open personal notes while also hide the hintBox
+	*/
+	openNotes: function()
+	{
+		this.hintBox.hide();
+		this.notes.createNotes();
 	},
 	/**
 	A function called at the ending phase of this state, when the game switch to another state. One can recycle or nullify some elements of this state, so that there will be no problem when returning to the state.

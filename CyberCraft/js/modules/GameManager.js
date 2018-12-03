@@ -92,8 +92,9 @@ Increase the resource of the character
 */
 GameManager.prototype.obtainResource = function(role, amount)
 {
-	///animation?
+	//[0, maxResource]
 	this.resources[role] = Math.min(this.resources[role] + parseInt(amount), this.maxResource);
+	this.resources[role] = Math.max(this.resources[role], 0);
 	this.cyberspace.updateResource(role, this.resources[role]);
 };
 /**
@@ -103,8 +104,7 @@ Decrease the resource of the character
 */
 GameManager.prototype.consumeResource = function(role, amount)
 {
-	this.resources[role] -= amount;
-	this.cyberspace.updateResource(role, this.resources[role]);
+	this.obtainResource(role, 0- parseInt(amount));
 };
 /**
 Deal damange to the server. Can invoke on game over.
@@ -155,17 +155,19 @@ GameManager.prototype.roundInit = function()
 		this.obtainResource(1, this.constantIncome[1]); 
 		//random client requests
 		var legitimateRequests = this.randomRequests();
-		//spam requests
-		var spamRequests = this.buffManager.totalSpam();
+		//superfluous requests
+		var superfluousRequests = this.buffManager.totalSuperfluous();
 		var DoSSusceptance = this.buffManager.totalDosSusceptance();
-		spamRequests *= DoSSusceptance;
-		var servingRatio = (parseFloat(this.serverCapacity)+parseFloat(this.buffManager.totalCapacity()))/(legitimateRequests+spamRequests);
+		superfluousRequests *= DoSSusceptance;
+		var servingRatio = (parseFloat(this.serverCapacity)+parseFloat(this.buffManager.totalCapacity()))/(legitimateRequests+superfluousRequests);
 		if(servingRatio >= 1)	//five by five
 		{
 			var serverIncome = legitimateRequests*this.servingBonus;
 			this.obtainResource(1, serverIncome);
 			//animation: one happy face for each served client
 			this.effectManager.faces(true, legitimateRequests);
+			console.log("The server has served all " + legitimateRequests + " legitimated requests");
+			console.log("Server net income is: "+serverIncome);
 		}
 		else	//some clients unserved
 		{
@@ -287,7 +289,7 @@ GameManager.prototype.notApplied = function(round)
 	for(var a in shouldApply)
 	{
 		for(l=0; l<this.logs.length; l++)
-			if(this.logs[l].round == round && this.logs[l].actPattern == shouldApply[a])
+			if(this.logs[l].round == round && this.logs[l].act == shouldApply[a])
 				break;
 		if(l >= this.logs.length) //not found
 			return shouldApply[a];

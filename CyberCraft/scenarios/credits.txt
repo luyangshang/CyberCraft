@@ -40,16 +40,16 @@ cyberpunk-24042017 (at intruder's hall) by cabled_mess
 Sci-fi Laboratory Ambience (at defender's hall) by qubodup
 Spy or action TV show intro song (at cyberspace) by 4barrelcarb
 Cyber Race (at cyberspace) by jammerboy70
-Spy Music (at outro) by ModulationStation
+Spy Music (at outro and credits) by ModulationStation
 
-^The code of this game is developed with reference to the work of Dropit!, created my predecessor Antonino Aloi.
+^The code of this game is developed with reference to the work of Dropit!, which is created Antonino Aloi.
 
 ^Disclaimer
-The story of tutorial 1 is based on a story that professor Antonio Lioy has ever told during the class of computer system security.
+The story of tutorial 1 is based on a story that professor Antonio Lioy has ever told during the course of computer system security.
 The story of tutorial 3 is based on the real history event during the world war II.
 All other stories are purely fictional, and any resemblance to the actual events, organizations, nations or people, whether living or dead, are just coincidence.
 
-^This game is developed as the master thesis of Politecnico di Torino.
+^This game is developed as a master thesis of Polytechnic University of Turin.
 Thesis Title: CyberCraft, a security serious game
 Designed and created by Lu Yang
 Thesis supervisors: professor Antonio Lioy and engineer Andrea Atzeni

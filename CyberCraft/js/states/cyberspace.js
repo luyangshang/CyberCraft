@@ -29,7 +29,7 @@ var cyberspace = {
 		this.styleUnlearnt = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#1144FF", align: "left", wordWrap: true, wordWrapWidth: game.width - 95};
 		this.styleName = { font: "22px Courier New, monospace", fontWeight: "bold", fill: "#00CC11", align: "left", wordWrap: true, wordWrapWidth: game.width - 95};
 		this.styleCaption = { font: "26px Courier New, monospace", fontWeight: "bold", fill: "#FFEE11", align: "left"};
-		this.styleResource = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#00AAFF", align: "center"};
+		this.styleResource = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#00AAFF", align: "center", wordWrap: true, wordWrapWidth: 740};
 		this.styleAssets = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#FFEE00", align: "center"};
 		this.styleRequire = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#EE00FF", align: "center", wordWrap: true, wordWrapWidth: game.width - 250};
 		this.styleResult = { font: "20px Courier New, monospace", fontWeight: "bold", fill: "#FF8800", align: "center", wordWrap: true, wordWrapWidth: game.width - 250};
@@ -375,14 +375,6 @@ var cyberspace = {
 		var role = this.currentRound % 2;
 		this.effectManager.createRoundSpark("Round:\n"+ this.currentRound, role, 400);
 	},
-	/**
-	Activate or deactivate player's learning and applying functionality, base on whether it's the player's role
-	@param {boolean} playerRound - true: player's round, false: rival's round
-	*/
-	/*changeControl: function(playerRound)
-	{
-		this.playerRound = playerRound;
-	},*/
 /* -------------------- update functions ends -----------------------*/		
 	
 /* ---- act/buffs/buff/attack log popup screen functions starts -----*/	
@@ -563,9 +555,9 @@ var cyberspace = {
 				this.bonusSprite = game.add.text(150, y, "Damange: " + act.bonus , this.styleDamage, this.variableGroup);
 				y+=20;
 			}
-			//spam requests
-			if(act.spamRequests)
-				this.spamSprite = game.add.text(150, y, "Generate spam request: " + act.spamRequests , this.styleDamage, this.variableGroup);
+			//superfluous requests
+			if(act.superfluousRequests)
+				this.superfluousSprite = game.add.text(150, y, "Generate superfluous request: " + act.superfluousRequests , this.styleDamage, this.variableGroup);
 			
 			if(!this.doublePlayer && this.role != this.controllerRole)
 			{	//single player mode and at AI's round
@@ -771,9 +763,9 @@ var cyberspace = {
 		//buff capacity (additional server capacity)
 		if(num = this.buffManager.getCapacity(id))
 			var capacitySprite = game.add.text(150, 300, "Extra capacity: " + num, this.styleAssets, this.variableGroup);
-		//buff spam requests
-		if(num = this.buffManager.getSpam(id))
-			var spamSprite = game.add.text(150, 250, "Spam requests: " + num, this.styleDamage, this.variableGroup);
+		//buff superfluous requests
+		if(num = this.buffManager.getSuperfluous(id))
+			var superfluousSprite = game.add.text(150, 250, "Superfluous requests: " + num, this.styleDamage, this.variableGroup);
 		//buff DoS Resistance
 		if(num = this.buffManager.getResistance(id))
 			var resistanceSprite = game.add.text(150, 250, "DoS resistance: " + num * 100 + " %", this.styleResource, this.variableGroup);

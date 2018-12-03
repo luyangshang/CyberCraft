@@ -12,7 +12,7 @@
 				"speech": "Good morning, Christopher. Welcome back. An exellent job you have done."
 			},
 			{
-				"speech": "Your last cracking revealed that the country J is building a new AI controled war machine. ^The war machine can target enemies automatically, which is obviously not complaint with the Three Laws of Robotics. ^This is a serious issue then. We will never leave the lives of the human in the hand of machines. ^So this time, your mission is to infiltrate into the computer system of country J. ^Note that, we do not have access to the communication channel of the target. You need to perform \"MITM\" attack to gurantee the messages pass through us first."
+				"speech": "Your last cracking revealed that the country J is building a new AI-controlled war machine. ^The war machine can select its target by itself, which is obviously not complaint with the Three Laws of Robotics. ^This is a serious issue then. We will never leave the lives of the human in the hand of machines. ^So this time, your mission is to infiltrate into the computer system of country J. ^Note that, we do not have access to the communication channel of the target. You need to perform \"MITM\" attack to gurantee the messages pass through us first."
 			},
 			{
 				"speech": "` Are you ready for your intrusion?"
