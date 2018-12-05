@@ -139,7 +139,7 @@ var hall = {
 	*/
 	createDialogue: function()
 	{
-		this.multimedia = new MultimediaText(250, 470, 1, this.dialogueGroup, this.dismissDialogue, this, );
+		this.multimedia = new MultimediaText(250, 470, 1, this.dialogueGroup, this.dismissDialogue, this);
 	},
 	
 	/**

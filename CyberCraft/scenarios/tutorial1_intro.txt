@@ -6,6 +6,8 @@ In some scenarios, you will play as intruder, who exploits offensive acts to imp
 In some other scenarios, you will take the role as defender, who uses defensive techniques to protect company assets, while also keeping the company's server running.
 Note that, the game is only a simplified simulation, covering only a portion of the possible attacks or defenses. In the real life, the situation could be much more complex than what is presented here.^
 
+For more information besides the tutorials, you can read the user manual, especially from part 1.3 to part 1.8. User manual can be opened by appending "user manual.pdf" to the current url (delete "index.html" if it's there).^
+
 This piece of tutorial in particular, mainly concentrates on the control in the "hall", where you usually gather information or even hints about the upcoming challenge in the cyberspace.^
 
 There will be some NPCs (e.g. boss, technician, desk clerk) in the hall of the organization. You can talk to them by clicking on them.

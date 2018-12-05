@@ -8,7 +8,7 @@
 		"speeches":
 		[
 			{
-				"speech": "Good morning!\nYou are probably the security expert we just called for?\nYou can click on this dialogue to dismiss it.^ Our manager is thrilled hearing of your arrival. You can go to talk to him about your work. ^He is just in the top-left corner. \n(in lower voice)Yeah, the bald one."
+				"speech": "Good morning!\nYou are probably the security expert we just called for?\nYou can click on this dialogue to dismiss it.^ Our manager will be thrilled hearing of your arrival. You can go to talk to him about your work. ^He is just in the top-left corner. \n(in lower voice)Yeah, the bald one. \n\nClick on him."
 			},	
 			{
 				"speech": "Have your met our boss? He is in the left top corner. For the detail of your work, ask him. I'm just a desk clerk..."
@@ -42,7 +42,7 @@
 				"speech": "Ah, finally. You have arrived. I'm nearly driven mad by the recent security breaches. ^The exposure of the company's credential files as well as the clients identity information has amount to billions of dollars. ^The leakage still continues, but I cannot find anything wrong. You see, we have installed the newest intrusion prevention system. Shouldn't be a problem. ^The CEOs warned that if I still cannot find the problem, they will kick me out.. ^Well, what already lost is lost. If you could find why the data leakage still goes on, it will be greatly appreciated. ^Just go around our company, chatting with different persons. Maybe you will find some clues. ^Report to me only when you have found the problem. I still have my work to do."
 			},	
 			{
-				"speech": "So, have you talked to people around? Have you made some discoveries? Remember that people will never tell their secrets in the first chat."
+				"speech": "So, have you talked to people around? Have you found the cause of the data leakage? Remember that people will never tell their secrets in the first chat."
 			},
 			{
 				"prerequisites":
@@ -50,7 +50,7 @@
 					{"npc": "Bobby",
 					"state": 3}
 				],
-				"speech": "Ah, so be it. It's the little bastard who opened the door for the intruder. ^Ok, ok. I shall heed your words. I will not just concentrate on punishing him, but more on raising my employees' awareness on system security. ^They shall understand the importance of the defensive system also. ^This breach has taught me a good lesson, that technology alone will not protect us. ^Oh, you just said human factor has become the severest part of computer security? Hard to believe! ^Thank you so much for your excellent work here, and this is the payment. ^I'm glad that you helped."
+				"speech": "Ah, so be it. It's the little bastard Bobby who opened the door for the intruder. ^Ok, ok. I shall heed your words. I will not just concentrate on punishing him, but more on raising my employees' awareness on system security. ^They shall understand the importance of the defensive system also. ^This breach has taught me a good lesson, that technology alone will not protect us. ^Oh, you just said human factor has become the severest part of computer security? Hard to believe! ^Thank you so much for your excellent work here, and this is the payment. ^I'm glad that you helped."
 			},
 			{
 				"speech": "` So, are going to return home? I will call my driver."

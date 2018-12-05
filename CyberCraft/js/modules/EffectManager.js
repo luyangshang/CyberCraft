@@ -132,7 +132,7 @@ EffectManager.prototype.createActEffect = function(type)
 			break;
 		case 2: //intruder attack defended
 			movingTween = this.bullet();
-			movingTween.onComplete.add(this.shield, this, 0, 1);
+			movingTween.onComplete.add(this.shield, this, 0);
 			break;
 		case 3: //intruder unlucky
 				movingTween = this.bullet();
@@ -142,7 +142,11 @@ EffectManager.prototype.createActEffect = function(type)
 				movingTween = this.bullet();
 				movingTween.onComplete.add(this.shieldBreak, this, 0);
 			break;
-		case 5: //intruder compromise assets 
+		case 5: //intruder enforce buff
+				movingTween = this.bullet();
+				movingTween.onComplete.add(this.sticky, this, 0);
+			break;
+		case 6: //intruder compromise assets 
 				movingTween = this.bullet();
 				movingTween.onComplete.add(this.explosion, this, 0);
 				var damage = arguments[1];
@@ -169,13 +173,10 @@ EffectManager.prototype.bubble = function(sprite, pointer, role)
 };
 /**
 To display the shield pop up animation. Used at the defender's successful strenthen of his defence
-@param {Phaser.Sprite} sprite - the sprite that invokes this
-@param {Phaser.Pointer} pointer - the mouse pointer object
-@param {int} role - the role of the character on who the shield should pop up
 */
-EffectManager.prototype.shield = function(sprite, pointer, role)
+EffectManager.prototype.shield = function()
 {	
-	var still = game.add.image(this.X[role], this.Y[role], "shield", 0, this.fatherGroup);
+	var still = game.add.image(this.X[1], this.Y[1], "shield", 0, this.fatherGroup);
 	still.anchor.setTo(0.5);
 	still.scale.setTo(0.01);
 	var stillTween = game.add.tween(still.scale).to({x: 1, y: 1}, 1000, "Elastic.easeOut", true, 0, 0, false);
@@ -185,11 +186,8 @@ EffectManager.prototype.shield = function(sprite, pointer, role)
 };
 /**
 To display the shield break animation. Used at the intruder's successful breach of the defence
-@param {Phaser.Sprite} sprite - the sprite that invokes this
-@param {Phaser.Pointer} pointer - the mouse pointer object
-@param {int} role - the role of the character on who the shield should pop up
 */
-EffectManager.prototype.shieldBreak = function(sprite, pointer, role)
+EffectManager.prototype.shieldBreak = function()
 {	
 	var leftPiece = game.add.image(this.X[1], this.Y[1], "shieldLeft", 0, this.fatherGroup);
 	var rightPiece = game.add.image(this.X[1], this.Y[1], "shieldRight", 0, this.fatherGroup);
@@ -202,6 +200,18 @@ EffectManager.prototype.shieldBreak = function(sprite, pointer, role)
 	leftTween1.onComplete.add(function(){leftPiece.destroy();rightPiece.destroy();}, this, 0);
 
 	game.globals.audioManager.defenceBreak();
+};
+/**
+To display the sticky animation. Used at the intruder's successful enforce of negative buffs
+*/
+EffectManager.prototype.sticky = function()
+{
+	var still = game.add.image(this.X[1], this.Y[1], "splatter", 0, this.fatherGroup);
+	still.anchor.setTo(0.5);
+	var stillTween = game.add.tween(still).to({width: 75, height: 75}, 1000, "Elastic.easeOut", true, 0, 0, false);
+	stillTween.onComplete.add(function(){still.destroy();}, this, 0);
+	
+	game.globals.audioManager.sticky();
 };
 EffectManager.prototype.bullet = function()
 {

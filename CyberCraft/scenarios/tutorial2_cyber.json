@@ -169,7 +169,7 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "I will give you a jumpstart this time. Click on \"CDN\" on the screen, then click on \"learn\" (shortcut key \"E\"). After that, you can \"Apply\" it to our server (shortcut key \"A\"). ^When \"CDN\" is applied, you can end the turn."
+				"dialogue": "I will jumpstart you this time. Click on \"CDN\" on the screen, then click on \"learn\" (shortcut key \"E\"). After that, you can \"Apply\" it to our server (shortcut key \"A\"). ^When \"CDN\" is applied, you can end the turn."
 			}
 		],
 		"shouldApply": ["CDN"]
@@ -202,7 +202,12 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Hei, Godfried, dont' Jinx it. ^Intelligence tells that a group of hackers have targeted us. They used to launch DoS... Well, actually DDoS attack to paralyze the target server. ^CDN itself provides some defense against those like DoS attack, and that's one of the reasons why I suggested you CDN last time. ^However, CDN alone is supposed to be inadequate for the defense. ^Wait, the newest report says that they have already started DDoS attack on us! ^See that in the action logs (shortcut key \"L\")? ^We should immediately apply CAPTCHA to intercept as much spam requests as possible. Otherwise, our server will be totally flooded with their spam requests."
+				"dialogue": "Hei, Godfried, dont' Jinx it. ^Intelligence tells that a group of hackers have targeted us. They used to launch DoS (Denial Of Service)... Well, actually DDoS (Distributed Denial Of Service) attack to paralyze the target server. ^CDN itself provides some defense against those like DoS attack, and that's one of the reasons why I suggested you CDN last time. ^However, CDN alone is supposed to be inadequate for the defense. ^Wait, the newest report says that they have already started DDoS attack on us! ^Have you Seen that in the action logs (shortcut key \"L\")? ^We should immediately apply CAPTCHA to intercept as much superfluous requests as possible. Otherwise, our server will be totally flooded with their superfluous requests. ^When that happens, a good number of our important clients will complain, and you will earn less."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Oh, the accessibility to our server is related to my salary? Then I should take care of it."
 			}
 		],
 		"newActs":
@@ -224,7 +229,7 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "At ease, the CAPTCHA is already in use."
+				"dialogue": "At ease, the CAPTCHA is already in use. Yeah, probably we can talk about my salary increase now."
 			},
 			{
 				"name": 	"Senior",
@@ -249,7 +254,7 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Ok. Enough. ^I have searched the repository of our company. It's a pity that we cannot put up more defense for now. The only thing we can do is just to wait for them to stop... ^But at least we have kept the majority of spam requests out. ^By the way, if you check the buff \"CAPTCHA\", you will see it has an upkeep, which means you will earn a little less. ^This is because some clients don't like CAPTCHA, for it requires them to do one more validation. ^They just don't know, without CAPTCHA, our server will be engaged with spam requests, and they could not even connect to the server. ^So, no mission for the moment. Just keep an eye on the attacks."
+				"dialogue": "Ok. Enough. ^I have searched the repository of our company. It's a pity that we cannot put up more defense for now. The only thing we can do is just to wait for them to stop... ^But at least we have kept the majority of superfluous requests out. ^By the way, if you check the buff \"CAPTCHA\", you will see it has an upkeep, which means you will earn a little less. ^This is because some clients don't like CAPTCHA, for it requires them to do one more validation. ^They just don't know, without CAPTCHA, our server will be engaged with superfluous requests, and they could not even connect to the server. ^So, no mission for the moment. Just keep an eye on the attacks."
 			}
 		],
 		"newActs":
@@ -324,7 +329,7 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "The hackers of course! From their connection attempts we have obtained their IP address... ^Oh, I see, for the DDoS attack, the spam requests come from the manipulated machines, not the real hackers'. And for other attacks, intruders can also easily use IP spoofing to hide their real IP addresses."
+				"dialogue": "The hackers of course! From their connection attempts we have obtained their IP address... ^Oh, I see, for the DDoS attack, the superfluous requests come from the manipulated machines, not the real hackers'. And for other attacks, intruders can also easily use IP spoofing to hide their real IP addresses."
 			},
 			{
 				"name": 	"Senior",

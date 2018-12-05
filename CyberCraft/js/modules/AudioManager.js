@@ -16,6 +16,7 @@ function AudioManager()
 	this.explodeSound = game.add.audio("explosion");
 	this.defendSound = game.add.audio("sword");
 	this.shieldBreakSound = game.add.audio("shieldBreak");
+	this.stickySound = game.add.audio("sticky");
 	this.victorySound = game.add.audio("acceptSound");
 	this.defeatSound = game.add.audio("errorSound");
 
@@ -107,6 +108,14 @@ Crate the defence break sound effect
 AudioManager.prototype.defenceBreak = function()
 {
 	this.shieldBreakSound.play();
+	
+};
+/**
+Crate the sticky sound effect
+*/
+AudioManager.prototype.sticky = function()
+{
+	this.stickySound.play();
 	
 };
 /**

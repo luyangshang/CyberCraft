@@ -416,13 +416,18 @@ ActManager.prototype.applyAct = function(role, id, round)
 	}
 	if(role == 1)	//defender animation
 		this.effectManager.createActEffect(0);
-	else if(!act.rivalBuffs.length && !act.cleanRivalBuffs.length)
+	else 			//intruder animation
+	{
+		if(!act.rivalBuffs.length && !act.cleanRivalBuffs.length)
 			this.effectManager.createActEffect(1);	//intruder successful strengthen animation
 		else if(act.bonus)
-				this.effectManager.createActEffect(5, act.bonus);	//intruder compromise assets animation
-			else if(act.rivalBuffs && act.rivalBuffs[0] == this.buffManager.name2id("Denial of service attacked"))
-					this.effectManager.createActEffect(5, 0);	//dos category use compromise assets animation
-				else this.effectManager.createActEffect(4);	//intruder  break defence animation
+				this.effectManager.createActEffect(6, act.bonus);	//intruder compromise assets animation
+			/*else if(act.rivalBuffs && act.rivalBuffs[0] == this.buffManager.name2id("Denial of service attacked"))
+					this.effectManager.createActEffect(6, 0);	//dos category use compromise assets animation*/
+				else if(act.cleanRivalBuffs.length)
+						this.effectManager.createActEffect(4);	//intruder break defence animation
+					else this.effectManager.createActEffect(5);	//intruder enforce buff animation
+	}
 			
 //act successful
 	//enforce buffs
