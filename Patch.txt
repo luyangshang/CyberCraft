@@ -7,4 +7,5 @@ Patch 1.1
 --------------------------------------------------------------------------
 - An independent animation and sound effect is added for the offensive acts that enforce debuffs on the rival
 - rephrased some dialogues in tutorial 1 and tutorial 2
+- small adjustment on display
 - a minor bug fixed

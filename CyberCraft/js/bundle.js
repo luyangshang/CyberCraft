@@ -4739,6 +4739,8 @@ var cyberspace = {
 	showBuffs: function(sprite, pointer, targetRole)
 	{
 		this.hintBox.hide();
+		if(this.buffScroll)
+			this.buffScroll.destroy();
 		this.targetRole = targetRole;
 		//clean the sprites in popup window that are not shared by act, buffs and buff window
 		//this.variableGroup.removeAll(true);
@@ -4892,7 +4894,7 @@ var cyberspace = {
 	*/
 	openNotes: function()
 	{
-		//this.unpause();
+		this.hintBox.hide();
 		this.notes.createNotes();
 	},
 	/**
