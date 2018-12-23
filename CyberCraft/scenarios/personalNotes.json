@@ -12,7 +12,7 @@
 		},
 		{
 			"name":	"Bombe",
-			"desc":	"#image$800$260$bombeNotes#text$220$290$Bombe is a British electro-mechanical device built during the World War II to decrypt messages encrypted by German Enigma enciphering machine. Bombe was designed by Alan Turing at 1939, and improved by Gordon Welchman in 1949. Nevertheless, Turing's bombe is still based on the work of Polish cryptologist Marian Rejewski, which is called \"bomba\" instead. Bombe was used to crack the daily setting of the Enigma encipher machine, granting the Allies super knowledge over the German movements.$520",
+			"desc":	"#image$800$260$bombeNotes#text$220$290$Bombe is a British electro-mechanical device built during the World War II to decrypt messages encrypted by German Enigma enciphering machine. Bombe was designed by Alan Turing at 1939, and improved by Gordon Welchman in 1940. Nevertheless, Turing's bombe is still based on the work of Polish cryptologist Marian Rejewski, which is called \"bomba\" instead. Bombe was used to crack the daily setting of the Enigma encipher machine, granting the Allies super knowledge over the German movements.$520",
 			"sees":	["Encrypt with Enigma", "Gordon's improvement"],
 			"url1":	"https://en.wikipedia.org/wiki/Bombe",
 			"url2": "https://en.wikipedia.org/wiki/The_Imitation_Game"

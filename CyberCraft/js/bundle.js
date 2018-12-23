@@ -1682,7 +1682,7 @@ EffectManager.prototype.sticky = function()
 {
 	var still = game.add.image(this.X[1], this.Y[1], "splatter", 0, this.fatherGroup);
 	still.anchor.setTo(0.5);
-	var stillTween = game.add.tween(still).to({width: 75, height: 75}, 1000, "Elastic.easeOut", true, 0, 0, false);
+	var stillTween = game.add.tween(still).to({width: 110, height: 100}, 1000, "Elastic.easeOut", true, 0, 0, false);
 	stillTween.onComplete.add(function(){still.destroy();}, this, 0);
 	
 	game.globals.audioManager.sticky();
@@ -3718,7 +3718,7 @@ function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages, father
 	this.NPages = NPages;
 	this.fatherGroup = fatherGroup;
 	//constants
-	this.style = { font: "15px Segoe UI black", fontWeight: "bold", fill: "#FF3300", align: "right"};
+	this.style = { font: "20px Segoe UI black", fontWeight: "bold", fill: "#FF3300", align: "right"};
 	
 	this.currentPage = 0;
 	this.scrollGroup = game.add.group();

@@ -17,7 +17,7 @@ function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages, father
 	this.NPages = NPages;
 	this.fatherGroup = fatherGroup;
 	//constants
-	this.style = { font: "15px Segoe UI black", fontWeight: "bold", fill: "#FF3300", align: "right"};
+	this.style = { font: "20px Segoe UI black", fontWeight: "bold", fill: "#FF3300", align: "right"};
 	
 	this.currentPage = 0;
 	this.scrollGroup = game.add.group();

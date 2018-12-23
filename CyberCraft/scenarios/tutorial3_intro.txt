@@ -7,12 +7,15 @@ If the intruder has dealt enough damage to the assets before the number of round
 ^The defender however, will try to use defensive acts to fortify the defense. Therefore, the intruder may fail, especially if he/she just arbitrarily launches the attacks.
 Thereby, an intruder should pay special attention to the positive (defensive) buffs on the defender, avoiding those dead ends, and strike only where undefended.
 
-^You may have noticed the colorful words like "Self+", "Rival-" in the popup screen of the acts.
+^You may have noticed the colorful words like "Self +", "Rival -" in the popup screen of the acts.
 These are crucial information to estimate if the act will succeed. You plan your attack (or chain of attacks) based on these.
 The purple ones are the indicators for the act's requirements on buffs. If the requirements don't meet, the act will never succeed.
 The orange ones are the effects on buffs when the act succeeds. It tells what buff will be enforced to you or to your rival, and which buff will be cleaned.
 
 ^#image$500$250$selfRivalBuffsWithDescription
+
+^in short, "+" for "have buffs" or "add buffs".
+"-" for "not have buffs" or "remove buffs".
 
 ^1939,                                
 Bletchley Park, UK

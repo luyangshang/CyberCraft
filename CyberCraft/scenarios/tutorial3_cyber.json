@@ -10,7 +10,7 @@
 "defensive":				false,
 "characterName":
 [
-	"AlanTuring",
+	"Alan Turing",
 	"Enigma"
 ],
 "portrait":
@@ -93,7 +93,6 @@
 			"modifier":			"0:Brute-force attack:successRate:*:2;0:Known-plaintext attack:successRate:*:2;0:Chosen-plaintext attack:successRate:*:2",
 			"unlocked":			false
 		}
-		
 	],
 	[
 		{
@@ -116,7 +115,7 @@
 		"desc": "The German communication is encrypted with Enigma machine. It's really hard to break the ciphertext without know the key."
 	},
 	{	"name":	"Confidential message divulged",
-		"desc": "The Enigma encryption is cracked, and German's confidential messages for the day are divulged to the Allies. Great work!"
+		"desc": "The Enigma encryption is cracked, and German's confidential messages for the day are divulged to the Allies. Great work! \nYou can wait until the next day before launching another attack."
 	},
 	{	"name":	"Bombe",
 		"desc": "With the help of the machine, cracking becomes much quicker."
@@ -159,7 +158,7 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "Unbelievable! The polish cryptanalysts Marian Rejewski, Henryk Zygalski and Jerzy Różycki have already broken the unbreakable Enigma! ^It's only a pity that the German has improved the machine, making Rejewski's technique hardly effective. ^What's worse, now the whole Poland has fallen to German. ^I have to break the improved Enigma, so as to save Allies from the scourge of the Nazi. ^Our mission is to break the Enigma encryption, and then use \"Sniffing attack\" to get Nazi's secret messages in the same day. ^It's only that... Brute-force attack, the only currently available attack is too inefficient. ^Probably I should not launch any attacks before we have made more descoveries. \nWhen better techniques are developed, if we don't get enough resource to apply them, it will be a pity."
+				"dialogue": "Unbelievable! The polish cryptanalysts have already broken the unbreakable Enigma! ^It's only a pity that the German has improved the machine, making the polish technique hardly effective. ^What's worse, now the whole Poland has fallen to German. ^I have to break the improved Enigma, so as to save Allies from the scourge of the Nazi. ^Our mission is to break the Enigma encryption, and then use \"Sniffing attack\" to get Nazi's secret messages in the same day. ^It's only that... Brute-force attack, the only currently available attack is too inefficient. ^Probably I should not launch any attacks before we have made more descoveries. \nIt will be a pity when we develop better cracking techniques, only to find insufficient resource to apply them."
 			}
 		]
 	},
@@ -170,7 +169,7 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "The work of cracking Enigma is beyond the computation power of human. ^Inspired by the work of Rejewski, I strongly suggest us using machine to fight machine. ^Let's build a cracking machine called Bombe, and use it against Enigma."
+				"dialogue": "The work of cracking Enigma is beyond the computation power of human. ^Inspired by the Polish work , I strongly suggest us using machine to fight machine. ^Let's build a cracking machine called \"Bombe\", and use it against Enigma."
 			}
 		],
 		"newActs":
@@ -187,7 +186,7 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "The Nazi has become subtle. They change the Enigma setting at least once a day. ^This means, whenever we have succeed in cracking its key (e.g. with Brute-force attack), we should immediately use the key to obtain the confidential information (with \"Sniffing attack\"). ^By doing these, Nazi is compromised, and we will be awarded some more resources in honor of our success."
+				"dialogue": "The Nazi has become subtle. They change the Enigma setting at least once a day. ^This means, whenever we have succeed in cracking its key (e.g. with \"Brute-force attack\"), we should immediately use the key to obtain the confidential information (with \"Sniffing attack\"). ^By doing these, Nazi's secret messages are compromised, and we will be awarded some more resources in honor of our success."
 			}
 		]
 	},
@@ -214,12 +213,12 @@
 			{
 				"name":		"Gordon Welchman",
 				"portrait":	"GordonWelchman",
-				"dialogue":	"I have found some characteristics of Enigma. With these characteristics, we can use the diagonal board to substantially boost our cracking of Enigma. ^When you have applied my improvement, you will see the success rate of those cracking techniques like \"Brute-force attack\" or \"Known-plaintext attack\" increased."
+				"dialogue":	"I have found some characteristics of Enigma. With these characteristics, I have an idea to substantially boost our cracking of Enigma. ^When you have applied my improvement, you will see the success rate of those cracking techniques like \"Brute-force attack\" or \"Known-plaintext attack\" increased."
 			},
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "Terrific. With this improvement, the cracking on Enigma becomes realistic. ^We should remember to firstly crack the encryption, and, when successful, use \"Sniffing attack\" to obtain Nazi's top secrets. We can repeat this process each day, so as to always feed the Allies with newest information."
+				"dialogue": "Terrific. With this improvement, the cracking on Enigma becomes realistic. ^We should remember to firstly crack the encryption (e.g. with \"Known-plaintext attack\"). And, when successful, use \"Sniffing attack\" to obtain Nazi's top secrets. We can repeat this process each day, so as to always feed the Allies with newest information."
 			}
 		],
 		"newActs":

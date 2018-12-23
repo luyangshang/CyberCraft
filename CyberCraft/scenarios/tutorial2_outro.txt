@@ -5,4 +5,4 @@ Congratulations! You have defended the company from cyber threat!
 ^If you don't defend from those attacks of DoS category, you could have hard time with the clients, and you may not get enough resource to set up the defense. If you don't defend from attacks on the assets... You will loss.
 In formal game scenarios, there will be more than one path to attack the assets. If you have enough resources, you should block all the paths; if you have limited resource, then you can only take a bet.
 
-^Then, to obtain information about the rival's possible actions, you should ask the NPCs in the hall, or learn from the previous trial of that scenario.
+^Then, to obtain information about the rival's possible actions, you should ask the NPCs in the hall, or take a look at the computer during the rival's round.

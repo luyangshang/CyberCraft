@@ -208,7 +208,7 @@ EffectManager.prototype.sticky = function()
 {
 	var still = game.add.image(this.X[1], this.Y[1], "splatter", 0, this.fatherGroup);
 	still.anchor.setTo(0.5);
-	var stillTween = game.add.tween(still).to({width: 75, height: 75}, 1000, "Elastic.easeOut", true, 0, 0, false);
+	var stillTween = game.add.tween(still).to({width: 110, height: 100}, 1000, "Elastic.easeOut", true, 0, 0, false);
 	stillTween.onComplete.add(function(){still.destroy();}, this, 0);
 	
 	game.globals.audioManager.sticky();

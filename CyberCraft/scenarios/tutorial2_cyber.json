@@ -5,7 +5,7 @@
 "initialResource":			[0, 0],
 "constantIncome":			[40,0],
 "maxResource":				200,
-"maxRounds":				18,
+"maxRounds":				20,
 "assets":					150,
 "defensive":				true,
 "characterName":
@@ -138,7 +138,7 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Ah, get a little nervous for my first internship in network defense. Let's see what are there. ^In the top-left corner, there are menu button, my personal notes and the action log. A round indicator nearby is also telling that this is round 1 out of the 18 rounds. ^I love the action log. With it, I can know the detail information about actions performed by me and by the potential intruder, did they failed, and why they failed. For the current moment it's empty though. ^I can't wait to have a look at the computer provided by the company. Oh, it's just down here. On the screen, the possible acts I can perform is displayed. Now there is only a \"CDN\". ^Nevertheless, no mission is assigned for the moment, so for today I will just look around and not touch \"CDN\". ^When I have finished with my exploration, I will click on the \"End turn\" button near the top-left corner to end my turn."
+				"dialogue": "Ah, get a little nervous for my first internship in network defense. Let's see what are there. ^In the top-left corner, there are menu button, my personal notes and the action log. A round indicator nearby is also telling that this is round 1 out of the 18 rounds. ^I love the action log. With it, I can know the detail information about actions performed by me and by the potential intruder, did they failed, and why they failed. For the current moment it's empty though. ^I can't wait to have a look at the computer provided by the company. Oh, it's just down here. On the screen, the possible acts I can perform is displayed. Now only a \"CDN\" is displayed there. ^Nevertheless, no mission is assigned for the moment, so for today I will just look around. ^When I have finished with my exploration, I will click on the \"End turn\" button near the top-left corner to end my turn."
 			}
 		]
 	},
@@ -149,7 +149,7 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Hei, Godfried, come here. One important work for you. ^You should have known that, this is a network company, whose business is to serve incoming client requests. ^From our investigation, we discovered that the current number of requests has surpassed the capacity our server. Not to say the rush hours. ^Probably you have already see one or two unhappy faces popping out. Each unhappy face represent the failure to serve one client request, while each happy face for one served client request. ^One served client will grant you 10 resource, but one unserved client will result in 5 resource lose. ^Whenever any of the clients encounter problems getting served, they will report to us that they get the \"503 Server Unavailable\" page. ^A buff in this name is presented on you, to warn you of the problem. You can find buffs on you by clicking on your portrait, or by the \"S\" shortcut key. Yeah, try it now. Have you seen \"503 Server Unavailable\"? ^In such a buff list, if you click on one particular buff, you can view the buff detail. ^Moreover, at the buff detail page, the book-like button will directly lead you to the corresponding term in your personal notes. The shortcut key for personal notes is \"N\"."
+				"dialogue": "Hei, Godfried, come here. One important work for you. ^You should have known that, this is a network company, whose business is to serve incoming client requests. ^The clients all across the nation use our web services like sending emails, chatting online, posting blogs, online purchases. We provide these services by respond to their requests sent over the network. ^From our investigation, we discovered that the current number of requests has surpassed the capacity our server. Not to say the rush time like black friday. ^Probably you have already see one or two unhappy faces popping out. Each unhappy face represent the failure to serve one client request, while each happy face for one served client request. ^One served client will grant you 10 resource, but one unserved client will result in 5 resource lose. ^Whenever any of the clients encounter problems getting served, they will report to us that they get the \"503 Server Unavailable\" page. ^A buff in this name is presented on you, to warn you of the problem. You can find buffs on you by clicking on your portrait, or by the \"S\" shortcut key. Yeah, try it now. Have you seen \"503 Server Unavailable\"? ^In such a buff list, if you click on one particular buff, you can view the buff detail. ^Moreover, at the buff detail page, the book-like button will directly lead you to the corresponding term in your personal notes. The shortcut key for personal notes is \"N\"."
 			},
 			{
 				"name": 	"Godfried",
