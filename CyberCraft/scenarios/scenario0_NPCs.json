@@ -60,13 +60,13 @@
 					{"npc": "Hank",
 					"state": 1}
 				],
-				"speech": "It's quite likely that your rival will use encryption to hide the secrets. The buff of \"shared secret\" means the country J exchanges encryption key with its supporters. That is to say, the messages will be encrypted with the key, and a \"sniffing attack\" alone will not reveal the messages. ^Neverthelss, if they exchange the key only with a technique called \"DH\", then the MITM (Man-In-The-Middle) attack can be used to easily fool this protocol."
+				"speech": "It's quite likely that your rival will use encryption to hide the secrets. The buff of \"shared secret\" means the country J exchanges encryption key with its supporters. ^That is to say, the messages will be encrypted with the key, and a \"sniffing attack\" alone will not reveal the messages. ^Neverthelss, if they exchange the key only with a technique called \"DH\", then the MITM (Man-In-The-Middle) attack can be used to easily fool this protocol."
 			},
 			{
-				"speech": "If you have problem cracking their encryption, remember that Replay attack is your alternative, and it does not require the knowledge of encryption key."
+				"speech": "If you have problem cracking their encryption, remember that Replay attack is your alternative. It does not require you to steal the encryption key."
 			},
 			{
-				"speech": "We are developing a Quantum computer: a super computer of the next era. When it comes, the whole field of cryptography (whether encryption or hash) will tremble in front of the overwhelming computational power of quantum computer."
+				"speech": "We are developing a Quantum computer: a super computer of the next era. ^When it comes, the field of cryptography (whether encryption or hashing algorithm) will tremble in front of its overwhelming computational power."
 			}
 		]
 	},
@@ -87,7 +87,7 @@
 					{"npc": "Hank",
 					"state": 1}
 				],
-				"speech": "You can send spam emails to overload the mailbox of ArtificialCore with scrambled messages. ^But be careful, its defensive AI may adopt some techniques to thwart your attack, so remember to check the rival's buffs (Clicking on the rival or use shortcut key \"R\")"
+				"speech": "You can send spam emails to overload the mailbox of the target with scrambled messages. ^But be careful, its defensive AI may adopt some techniques to thwart your attack. Do remember to always check the rival's buffs (Clicking on his portrait or use shortcut key \"R\")."
 			},
 			{
 				"speech": "You can buy more botnet machines on the deep net to increase the power of your spam email. There is no limitation on how many botnet machines you can buy, but you should know that, it costs."

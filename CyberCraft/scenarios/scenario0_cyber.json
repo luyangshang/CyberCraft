@@ -41,7 +41,7 @@
 		},
 		{
 			"name":				"MITM",
-			"desc":				"A Man-In-The-Midele attack will gurantee the victim's messages to pass through the attacker. It could fail in face of authentication mechanisms.",
+			"desc":				"Supporting category \nA Man-In-The-Midele attack will gurantee the victim's messages to pass through the attacker. It could fail in face of authentication mechanisms.",
 			"noRivalBuffs":		["MQV", "RSA key exchange", "Quantum key distribution"],
 			"cost":				15,
 			"rivalBuffs":		["MITM"],
@@ -51,7 +51,7 @@
 		{
 			"name":				"Quantum computing",
 			"learningCost":		15,
-			"desc":				"Use a quantum computer to crack DH, MQV and RSA key exchange. But it's useless against quantum key distribution",
+			"desc":				"Supporting category \nUse a quantum computer to crack DH, MQV and RSA key exchange. But it's useless against quantum key distribution",
 			"noRivalBuffs":		["Quantum key distribution"],
 			"cost":				50,
 			"cleanRivalBuffs":	["Key exchange", "MQV", "RSA key exchange"],

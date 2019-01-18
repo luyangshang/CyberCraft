@@ -3,7 +3,7 @@
 	[
 		{
 			"name":			"IP spoofing",
-			"desc":			"Send packages with the faked IP address. Counter those techniques based on IP addresses.",
+			"desc":			"Supporting category \nSend packages with the faked IP address. Counter those techniques based on IP addresses.",
 			"cost":			10,
 			"selfBuffs":	["IP spoofed"],
 			"buffLength":	-1
@@ -28,7 +28,7 @@
 		},
 		{
 			"name":				"MITM",
-			"desc":				"A Man-In-The-Midele attack will gurantee the victim's messages to pass through the attacker. It could fail in face of authentication mechanisms.",
+			"desc":				"Supporting category \nA Man-In-The-Midele attack will gurantee the victim's messages to pass through the attacker. It could fail in face of authentication mechanisms.",
 			"cost":				15,
 			"rivalBuffs":		["MITM"],
 			"buffLength":		2
@@ -36,7 +36,7 @@
 		{
 			"name":				"Deauth attack",
 			"needRivalBuffs":	["Shared channel", "Wi-Fi channel"],
-			"desc":				"Deauthenticate in place of the victim in the Wi-Fi network. This Kicks the victim's personal computer offline, so that the victim cannot perform acts in his round. Offline is also a buff required for \"Rogue access point\".",
+			"desc":				"Supporting category \nDeauthenticate in place of the victim in the Wi-Fi network. This Kicks the victim's personal computer offline, so that the victim cannot perform acts in his round. Offline is also a buff required for \"Rogue access point\".",
 			"cost":				30,
 			"rivalBuffs":		["Offline"],
 			"buffLength":		2
@@ -51,7 +51,7 @@
 		},
 		{
 			"name":			"DoS",
-			"desc":			"DoS category. Denial of Service attack. Send endless requests to serverer to paralyze it. Rival will have problem serving requests, and therefore, gains much less resouces. Consumes much resources on the attacker side.",
+			"desc":			"DoS category. \nDenial of Service attack. Send endless requests to serverer to paralyze it. Rival will have problem serving requests, and therefore, gains much less resouces. Consumes much resources on the attacker side.",
 			"cost":			30,
 			"rivalBuffs":	["Denial of service attacked"],
 			"buffLength":	2,
@@ -70,7 +70,7 @@
 		{
 			"name":			"Botnet machines",
 			"prerequisites":	["DDoS"],
-			"desc":			"buy 2 botnet machines to increase the strength of the DDoS attack",
+			"desc":			"Improvement. \nbuy 2 botnet machines to increase the strength of the DDoS attack",
 			"cost":			40,
 			"modifier":		"0:DDoS:superfluousRequests:+:2"
 		},
@@ -78,7 +78,7 @@
 		{
 			"name":			"Shadow server",
 			"prerequisites":	[],
-			"desc":			"A fake server replicating the appearance and feel of another server. Usually created to lure the unaware clients to enter sensitive data.",
+			"desc":			"Supporting category \nA fake server replicating the appearance and feel of another server. Usually created to lure the unaware clients to enter sensitive data.",
 			"noSelfBuffs":	["Shadow server"],
 			"cost":			20,
 			"selfBuffs":	["Shadow server"],
@@ -127,13 +127,13 @@
 		{
 			"name":			"Symmetric cryptography",
 			"learningCost":	5,
-			"desc":			"Also calle private-key cryptography. Prerequist for nearly all the encryption techniques.",
+			"desc":			"Also called private-key cryptography. Prerequist for nearly all the encryption techniques.",
 			"cost":			0
 		},
 		{
 			"name":			"Asymmetric cryptography",
 			"learningCost":	10,
-			"desc":			"Also calle public-key cryptography. Prerequist for PKI and RSA key exchange.",
+			"desc":			"Also called public-key cryptography. Prerequist for PKI and RSA key exchange.",
 			"cost":			0
 		},
 		{
@@ -151,7 +151,7 @@
 			"desc":			"Create Content Delivering Network. The server becomes more resistant to the burst of requests and to DoS attacks as well.",
 			"cost":			50,
 			"selfBuffs":	["CDN"],
-			"buffLength":	10
+			"buffLength":	12
 		},
 		{
 			"name":			"SYN monitor/SYN interceptor"
@@ -173,7 +173,7 @@
 	},
 	{
 		"name":		"Credential compromised",
-		"desc":		"The important assets are divulged. \nAn intruder should apply no more \"Finishing move\" in this round."
+		"desc":		"The important assets are divulged to the intruder. \nIt means the intruder has successfully applied a \"Finishing move\" in his/her round, and he/she is not able to apply \"Finishing move\" again at this buff's duration."
 	},
 	{
 		"name": 	"Denial of service attacked",

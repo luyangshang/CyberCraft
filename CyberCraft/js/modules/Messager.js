@@ -48,16 +48,15 @@ function Messager(messageGroup, hintBox)
 }
 
 /**
-Create message that for the player. Similar to alert or prompt.
+Create message for the player. Similar to alert or prompt.
 The message is immediately displayed if there is no other messages;
 it's cached in queue if there are other messages.
 @param {string} texts - the message to be displayed
 @param {function} callback - callback function to be called when the player has entered data. If the message is alert message instead of prompt, this value is null. N.B. the context of the callback function is already given at the constructor
 */
-Messager.prototype.createMessage = function(texts/*, callback*/)
+Messager.prototype.createMessage = function(texts)
 {
 	this.messageQueue.push(texts);
-	//this.callbackQueue.push(callback);
 	if(this.messageGroup.visible == false)
 		this.display();
 };
@@ -68,8 +67,6 @@ Extract one message from the queue and display it
 Messager.prototype.display = function()
 {
 	var message = this.messageQueue.shift();
-	//var callback = this.callbackQueue.shift();
-	//this.lastCallback = callback;
 	this.messageText.setText(message);
 	if(message.length<60)	//auto adjust text size depending on text length
 		this.messageText.setStyle(this.style);
@@ -78,6 +75,8 @@ Messager.prototype.display = function()
 	//popout animation
 	this.messageGroup.scale.setTo(0.01);
 	var tween = game.add.tween(this.messageGroup.scale).to({x: 1, y: 1}, 1000, "Elastic.easeOut", true, 0, 0, false);
+	//noticing audio
+	game.globals.audioManager.notice();
 };
 
 /**
@@ -86,8 +85,6 @@ Close the current message. May start a pending message
 */
 Messager.prototype.exit = function()
 {
-	/*if(this.lastCallback)	//prompt message only
-		this.lastCallback(this.context, this.data);*/
 	this.messageGroup.visible = false;
 	this.hintBox.hide();
 	//go to display the next message

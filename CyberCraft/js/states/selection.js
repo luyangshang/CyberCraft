@@ -64,9 +64,10 @@ var selection = {
 	},
 	
 	/**
-	update the page to the one indicated by currentPage
+	update the page to the one indicated by targetPage
+	@param {int} targetPage - the page to scroll to
 	*/
-	toPage: function(currentPage)
+	toPage: function(targetPage)
 	{
 		var i;
 		//clean buttons of the previous page
@@ -87,8 +88,8 @@ var selection = {
 		if(this.type == 0)	//tutorial selection
 			var itemsThisPage = 3;
 		else if(this.type == 1)//if left items are more than one page, set to secenarios per page; it left items less than one page, set to the number of items left
-			var itemsThisPage = Math.min(game.globals.scenarioCybers.length - currentPage*this.scePerPage, this.scePerPage);
-			else var itemsThisPage = Math.min(this.NDoubleScenarios - currentPage*this.scePerPage, this.scePerPage);
+			var itemsThisPage = Math.min(game.globals.scenarioCybers.length - targetPage*this.scePerPage, this.scePerPage);
+			else var itemsThisPage = Math.min(this.NDoubleScenarios - targetPage*this.scePerPage, this.scePerPage);
 		var x,y;
 		var SB;	//alias of scenarioButtons[i], just to speed up
 		//used by double player mode, this index is the actual index of the scenario
@@ -97,7 +98,7 @@ var selection = {
 		{
 			x = 200 + 300 * (i % 3);
 			y = 180 + 200 * Math.floor(i / 3);
-			var index = currentPage * this.scePerPage + i;	//displayed index
+			var index = targetPage * this.scePerPage + i;	//displayed index
 			
 			if(this.type == 0)	//tutorials
 			{				
@@ -128,7 +129,7 @@ var selection = {
 			//create texts over the button
 			if(this.type == 0)	//tutorials
 			{
-				this.scenarioTexts[i] = game.add.text(x, y, "Tutorial "+index+"\n", this.style, this.group);
+				this.scenarioTexts[i] = game.add.text(x, y, "Tutorial "+(parseInt(index)+1)+"\n", this.style, this.group);
 				switch(index)
 				{	//set tutorial name
 					case 0: this.scenarioTexts[i].text += "Hall\n";
@@ -208,6 +209,7 @@ var selection = {
 	selectOne: function(button, pointer)
 	{
 		game.globals.audioManager.accessGranted();
+		game.globals.memory.clearMemory();
 		if(this.type == 0)
 			game.state.start("intro", true, false, 0, 0-parseInt(button.index));	//tutorial
 		else if(this.type == 1)

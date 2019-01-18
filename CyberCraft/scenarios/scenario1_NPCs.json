@@ -8,7 +8,7 @@
 		"speeches":
 		[
 			{
-				"speech": "Welcome to our company. ^I heard that you are trained in cyber defence. We just need someone of your kind. ^You probably know that we are a company providing network services, especially the email. ^Unfortunately, we keep experiencing cyber attacks these days. The attackers seems interested in the secret messages of our VIP customers. ^Our security advisor is busy with other defences, so we need your help. ^If you have questions, you can ask other employee, but if you ask the security advisor... I don't know if he will piss you off."
+				"speech": "Welcome to our company. ^I heard that you are trained in cyber defence. We just need someone of your kind. ^You probably know that we are a company providing network services, especially the email. ^Unfortunately, we keep experiencing cyber attacks these days. The attackers seems interested in the secret messages of our VIP customers. ^Our security advisor is busy with other defences, so we need your help. ^If you have questions, you can ask my employees, but if you ask the security advisor... I don't know if he will piss you off."
 			},
 			{
 				"speech": "` Are you ready for the fight?"
@@ -24,7 +24,7 @@
 		"speeches":
 		[	
 			{	
-				"speech": "Use one of the key change algorithm: DH, MQV or RSA key exchange, then you will create a secret key, shared by the message sender and receiver. ^Any future messages will be encrypted with this key, and if lucky, they will not be uncovered by the intruder. Nevertheless,  DH is still susceptible to MITM attack, so if you have enough resource, you should use one of the other two algorithms."
+				"speech": "You should apply one of these key change algorithms: DH, MQV or RSA key exchange. By doing that then you will create a secret encryption key, shared between the message sender and receiver. ^The future messages will be encrypted with this key. The intruder, without the secret key, will have problem understanding the message. ^Nevertheless, DH is still susceptible to MITM attack, so if you got enough resource, you'd better choose between the other two algorithms."
 			},
 			{
 				
@@ -35,7 +35,7 @@
 				"speech": "The intruder may launch replay attack. Remember to use nonce against it."
 			},
 			{
-				"speech": "Our email service could be disturbed with numerous spam emails. Greylisting is one of the defensive technique we can adopt."
+				"speech": "Our email service could be disturbed with numerous spam emails. Greylisting is one of the defensive technique we can use against it."
 			}
 		]
 	},
@@ -51,13 +51,13 @@
 				"speech": "I'm busy."
 			},
 			{
-				"speech": "Oh, sorry. I was overloaded with the work, and had no mood to talk. ^So, you are the cyber defender our boss have called for, right? Finally someone comes to offload my work."
+				"speech": "Oh, sorry. I was overloaded with my work, and had no mood to talk. ^So, you are the cyber defender our boss have called for, right? Finally someone comes to offload my work."
 			},
 			{
-				"speech": "The intruders may not actually stay far from our company. They seems capable of wiretapping. ^That's why we say to you, use data encryption. Keeping an intruder off the communication channel is not so much a feasible choice."
+				"speech": "The intruders may not actually stay far from our company. They seems capable of wiretapping. ^That's why we say to you, use data encryption. After all, keeping the intruders off the communication channel is not so much of a feasible choice."
 			},
 			{
-				"speech": "I'm worried that the first quantum computer will be built soon. It will be a disaster for cryptography. ^One of the methods to defend from quantum computing is to use quantum cryptography."
+				"speech": "I'm worried that the first quantum computer will be built soon. It will be a disaster for the field of cryptography. ^One of the methods to defend from quantum computing is to use quantum cryptography."
 			}
 		]
 	}

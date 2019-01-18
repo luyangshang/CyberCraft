@@ -5,8 +5,8 @@
 "initialResource":			[60, 40],
 "constantIncome":			[15,0],
 "maxResource":				200,
-"maxRounds":				24,
-"assets":					300,
+"maxRounds":				28,
+"assets":					350,
 "defensive":				false,
 "doublePlayer":				true,
 "characterName":
@@ -29,63 +29,63 @@
 	[
 		{
 			"name":				"IP spoofing",
-			"desc":				"Send packages with the faked IP address. Counter those techniques based on IP addresses.",
-			"cost":				10,
+			"desc":				"Supporting category \nSend packages with the faked IP address. Counter those techniques based on IP addresses.",
+			"cost":				5,
 			"selfBuffs":		["IP spoofing"],
 			"cleanRivalBuffs":	["Cookie bind to IP", "Manual DNS setting"],
 			"buffLength":		-1
 		},
 		{
 			"name":				"ARP cache poisoning",
-			"desc":				"Send fake ARP response to fool the victim. Can be used to perform MITM attack. Defended by ARP firewall.",
+			"desc":				"Supporting category \nSend fake ARP response to fool the victim. Can be used to perform MITM attack. Defended by ARP firewall.",
 			"needSelfBuffs":	["Shared channel"],
 			"noRivalBuffs":		["ARP firewall", "MITM"],
 			"cost":				5,
 			"rivalBuffs":		["MITM"],
-			"buffLength":		4,
+			"buffLength":		2,
 			"bonus":			15
 		},
 		{
 			"name":				"Rogue access point",
-			"desc":				"Set up a fake access point and lure the vicitms to connect. The first step towards MITM attack.",
+			"desc":				"Supporting category \nSet up a fake access point and lure the vicitms to connect. The first step towards MITM attack.",
 			"needRivalBuffs":	["Shared channel", "Wi-Fi channel", "Offline"],
 			"noRivalBuffs":		["Tip:cautious for free Wi-Fi"],
 			"cost":				20,
 			"successRate":		0.95,
 			"rivalBuffs":		["Connected to rogue AP"],
 			"buffLength":		4,
-			"bonus":			10
+			"bonus":			5
 		},
 		{
 			"name":				"Rogue DHCP server",
-			"desc":				"with also rogue DHCP server on it. default gateway and DNS set as the attackers.",
+			"desc":				"Supporting category \nwith also rogue DHCP server on it. default gateway and DNS set as the attackers.",
 			"needRivalBuffs":	["Shared channel", "Connected to rogue AP"],
 			"noRivalBuffs":		["DHCP snooping"],
 			"cost":				10,
 			"successRate":		0.9,
 			"rivalBuffs":		["DHCP hijacked", "MITM"],
 			"buffLength":		4,
-			"bonus":			15
+			"bonus":			10
 		},
 		{
 			"name":				"Rogue DNS server",
-			"desc":				"Use a fake DNS server to reply to victim's DNS request wrongly. Lure the victim to the attacker's websites.",
+			"desc":				"Supporting category \nUse a fake DNS server to reply to victim's DNS request wrongly. Lure the victim to the attacker's websites.",
 			"needRivalBuffs":	["DHCP hijacked"],
 			"noRivalBuffs":		["Manual DNS setting", "DNSSEC"],
 			"cost":				10,
 			"rivalBuffs":		["DNS hijacked", "MITM"],
 			"buffLength":		4,
-			"bonus":			20
+			"bonus":			15
 		},
 		{
 			"name":				"DNS cache poisoning",
-			"desc":				"Spead out wrong DNS response to poison the cache of hosts and DNS servers of a large area. Lure the victim to the attacker's websites.",
+			"desc":				"Supporting category \nSpead out wrong DNS response to poison the cache of hosts and DNS servers of a large area. Lure the victim to the attacker's websites.",
 			"noRivalBuffs":		["DNSSEC"],
 			"cost":				45,
 			"successRate":		0.75,
 			"rivalBuffs":		["DNS hijacked", "MITM"],
 			"buffLength":		4,
-			"bonus":			20
+			"bonus":			15
 		},
 		{
 			"name":				"XSS",
@@ -99,8 +99,8 @@
 		},
 		{
 			"name":				"CSRF",
-			"desc":				"Finishing move. \nAn attack to forge client request without the consents of the client. Can be thwarted by Tip:open no unauthorized link.",
-			"noRivalBuffs":		["Tip:open no unauthorized link", "Credential compromised"],
+			"desc":				"Finishing move. \nAn attack to forge client request without the consents of the client. Can be thwarted by Tip:open no unverified link.",
+			"noRivalBuffs":		["Tip:open no unverified link", "Credential compromised"],
 			"cost":				20,
 			"successRate":		0.85,
 			"rivalBuffs":		["Credential compromised"],
@@ -111,10 +111,10 @@
 	],
 	[
 		{
-			"name":				"Tip:open no unauthorized link",
+			"name":				"Tip:open no unverified link",
 			"desc":				"A principle to thwart attacks like CSRF.",
 			"cost":				20,
-			"selfBuffs":		["Tip:open no unauthorized link"],
+			"selfBuffs":		["Tip:open no unverified link"],
 			"buffLength":		4
 		},
 		{
@@ -140,14 +140,14 @@
 		},
 		{
 			"name":				"Manual DNS setting",
-			"desc":				"To manually configure DNS mappings on each machines in the network. Provide some protection against Rogue DNS server. IP-based technique.",
+			"desc":				"To manually configure DNS mappings on each machines in the network. Provide some protection against Rogue DNS server. IP-based technique: vulnerable to IP spoofing.",
 			"cost":				25,
 			"selfBuffs":		["Manual DNS setting"],
-			"buffLength":		6
+			"buffLength":		8
 		},
 		{
 			"name":				"Cookie bind to IP",
-			"desc":				"Bind the cookies to the IP address, so that attackers who have stolen other's cookies can not easily use the cookie for impersonation. IP-based technique.",
+			"desc":				"Bind the cookies to the IP address, so that attackers who have stolen other's cookies can not easily use the cookie for impersonation. IP-based technique: vulnerable to IP spoofing.",
 			"cost":				15,
 			"selfBuffs":		["Cookie bind to IP"],
 			"buffLength":		6
@@ -188,7 +188,7 @@
 		"desc":	"An important concept in security for web applications. Scripts cannot refer to data from other origin. However, some offensive techniques like XSS and CSRF can by pass same-origin policy."
 	},
 	{
-		"name":	"Tip:open no unauthorized link",
+		"name":	"Tip:open no unverified link",
 		"desc":	"A principle to thwart attacks like CSRF."
 	},
 	{
@@ -287,7 +287,7 @@
 		"pattern":	["Cookie bind to IP"],
 		"chance":	0.2	},
 	{
-		"pattern":	["Tip:open no unauthorized link"],
+		"pattern":	["Tip:open no unverified link"],
 		"chance":	0.25
 	},
 	{
@@ -298,7 +298,7 @@
 "scripts":
 [
 	{
-		"round":		9,
+		"round":		11,
 		"dialogues":
 		[
 			{
@@ -314,7 +314,7 @@
 		]
 	},
 	{
-		"round":		13,
+		"round":		15,
 		"dialogues":
 		[
 			{

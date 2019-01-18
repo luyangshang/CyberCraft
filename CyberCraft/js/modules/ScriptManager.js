@@ -10,12 +10,13 @@ The AI however, is managed by AIManager.
 @param {Phaser.Group} dialogueGroup - the group to create the dialogues in
 @constructor
 */
-function ScriptManager(index, cyberspace, actManager, aiManager, dialogueGroup)
+function ScriptManager(index, cyberspace, actManager, aiManager, effectManager, dialogueGroup)
 {
 	this.index = index;
 	this.cyberspace = cyberspace;
 	this.actManager = actManager;
 	this.aiManager = aiManager;
+	this.effectManager = effectManager;
 	
 	if(index < 0)	//tutorials
 		this.cyber = game.globals.tutorialCybers[0-parseInt(index)];
@@ -87,28 +88,6 @@ ScriptManager.prototype.checkScript = function(round)
 						game.state.start('error', true, false, errorMessage);
 					}
 					this.actManager.unlockAct(role, id);
-					/*id = this.actManager.createAct.call(this.actManager, this.scripts[round].newActs[role][a], role);
-					act = this.actManager.acts[role][id];
-					//conver the new acts' prerequist act names to act ids
-					for(var p in act.prerequists)
-					{
-						id = this.actManager.name2id(role, act.prerequists[p]);
-						if(id == -1)
-						{				
-							var errorMessage = "Error! The prerequist \"" + act.prerequists[p] + "\" of act \"" + act.name + "\" activated for this scenario (scenario " + index + ") is wrong!";
-							game.state.start('error', true, false, errorMessage);
-						}
-						act.prerequists[p] = id;
-					}
-					//convert new act's buff names to buff ids
-					this.actManager.convertBuff(act.needSelfBuffs);
-					this.actManager.convertBuff(act.needRivalBuffs);
-					this.actManager.convertBuff(act.noSelfBuffs);
-					this.actManager.convertBuff(act.noRivalBuffs);
-					this.actManager.convertBuff(act.selfBuffs);
-					this.actManager.convertBuff(act.rivalBuffs);
-					this.actManager.convertBuff(act.cleanSelfBuffs);
-					this.actManager.convertBuff(act.cleanRivalBuffs);*/
 				}
 			//update display
 			this.cyberspace.updateActs(0);
@@ -127,11 +106,23 @@ ScriptManager.prototype.showDialogue = function(dialogueObj)
 	this.name = dialogueObj.name;
 	this.portrait = dialogueObj.portrait;
 	this.texts = dialogueObj.dialogue.split("^");
-	this.NPages = this.texts.length;
+	this.focusing = dialogueObj.focusing;	//optional
 	this.currentPage = 0;
 	
 	this.multimedia.dynamicTextWithPortrait(this.texts[0], this.portrait, this.name);
+	//try to record the dialogue in Memory
+	var obj = {name: this.name,
+				portrait: this.portrait,
+				texts: this.texts};
+	game.globals.memory.addDialogue(obj);
+	//try to start focusing animation
+	if(this.focusing)
+		this.effectManager.focusOn(this.focusing[0],this.focusing[1],this.focusing[2],this.focusing[3]);
 };
+/**
+When player click on the dialogue.
+The dialogue may go to the next page, the dialogue box may be dismissed
+*/
 ScriptManager.prototype.dismissDialogue = function()
 {
 	this.currentPage++;
@@ -139,25 +130,16 @@ ScriptManager.prototype.dismissDialogue = function()
 		this.multimedia.dynamicTextWithPortrait(this.texts[this.currentPage], this.portrait, this.name);
 	else 	//page exhausted
 	{
+		//stop focusing animation
+		this.effectManager.focusOff();
+		
 		this.dialogueIndex++;
-		//continue with the next dialogue (e.g. from the next speacker)
+		//continue with the next dialogue (e.g. from the next speaker)
 		if(this.dialogueIndex < this.roundDialogues.length)
 			this.showDialogue(this.roundDialogues[this.dialogueIndex]);
 		else this.multimedia.hideDialogue();
 	}
 };
-
-/**
-If the script for this round prevents the user to end the turn without certain buffs, return the array of buffs. GameManager will work on it.
-@param {int} round - the round that the player tries to end
-@returns {Array} - the array of two arrays storing buffs that the intruder and the defender should have before ending the turn. null if there is no restriction. 
-*/
-/*ScriptManager.prototype.lockingBuffs = function(round)
-{
-	if(!this.scripts[round] || !this.scripts[round].lockingBuffs || this.scripts[round].lockingBuffs.length != 2)
-		return null;
-	return this.scripts[round].lockingBuffs;
-};*/
 
 /**
 return the property shouldApply of scripts for the current round

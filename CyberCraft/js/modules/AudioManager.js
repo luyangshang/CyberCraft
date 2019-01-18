@@ -6,6 +6,7 @@ function AudioManager()
 	//constants
 	this.volumeH = 0.3;
 	this.volumeL = 0.1;
+	this.currentVolume = this.volumeH;	//volume for the music now
 	this.NCyberBGMs = 4;
 	
 	this.typing = game.add.audio("typing");
@@ -39,7 +40,7 @@ Start the typing sound
 */
 AudioManager.prototype.typingOn = function()
 {
-	this.typing.play("", 0, this.volumH, true);
+	this.typing.play("", 0, this.volume, true);
 };
 /**
 Stop the typing sound
@@ -145,7 +146,7 @@ AudioManager.prototype.mainMusic = function()
 	if(this.BGM)
 		this.BGM.pause();
 	this.BGM = this.mainBGM;
-	this.BGM.play("", 0, this.volumeH, true);
+	this.BGM.play("", 0, this.currentVolume, true);
 };
 /**
 Play the intruder's hall BGM
@@ -155,7 +156,7 @@ AudioManager.prototype.intruderHallMusic = function()
 	if(this.BGM)
 		this.BGM.pause();
 	this.BGM = this.intruderBGM;
-	this.BGM.play("", 0, this.volumeH, true);
+	this.BGM.play("", 0, this.currentVolume, true);
 };
 /**
 Play the defender's hall BGM
@@ -165,7 +166,7 @@ AudioManager.prototype.defenderHallMusic = function()
 	if(this.BGM)
 		this.BGM.pause();
 	this.BGM = this.defenderBGM;
-	this.BGM.play("", 0, this.volumeH, true);
+	this.BGM.play("", 0, this.currentVolume, true);
 };
 /**
 Play the the BGMs randomly for cyberspace
@@ -178,7 +179,7 @@ AudioManager.prototype.cyberMusic = function()
 	//[0, NCyberBGMs)
 	var integer = Math.floor(Math.random()*this.NCyberBGMs);
 	this.BGM = this.cyberBGM[integer];
-	this.BGM.play("", 0, this.volumeH);
+	this.BGM.play("", 0, this.currentVolume);
 };
 /**
 Play the the review's BGM
@@ -199,7 +200,14 @@ Set the volume to low or high
 AudioManager.prototype.lowVolume = function(low)
 {
 	if(low)
-		this.BGM.volume = this.volumeL;
-	else this.BGM.volume = this.volumeH;
+	{
+		this.currentVolume = this.volumeL;
+		this.BGM.volume = this.currentVolume;
+	}
+	else
+	{
+		this.currentVolume = this.volumeH;
+		this.BGM.volume = this.currentVolume;
+	}
 };
 module.exports = AudioManager;

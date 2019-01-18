@@ -135,6 +135,10 @@
 		"url":	"assets/images/lock.png"
 	},
 	{
+		"key":	"rectangle",
+		"url":	"assets/images/rectangle.png"
+	},
+	{
 		"key":	"bullet",
 		"url":	"assets/images/bullet.png"
 	},
@@ -165,6 +169,10 @@
 	{
 		"key":	"selfRivalBuffsWithDescription",
 		"url":	"assets/images/self_rival_buffs_with_description.PNG"
+	},
+	{
+		"key":	"selfRivalBuffsTable",
+		"url":	"assets/images/self_rival_buffs_table.PNG"
 	},
 	
 	{
@@ -267,7 +275,34 @@
 		"key":	"dialogueBox",
 		"url":	"assets/images/dialogue_box.png"
 	},
-	
+	{
+		"key":	"dialoguePop",
+		"url":	"assets/images/dialoguePop.png"
+	},
+	{
+		"key":	"prerequistitesCapture",
+		"url":	"assets/images/notes/prerequistitesCapture.PNG"
+	},
+	{
+		"key":	"improvementCapture",
+		"url":	"assets/images/notes/improvementCapture.PNG"
+	},
+	{
+		"key":	"finishingMoveCapture",
+		"url":	"assets/images/notes/finishingMoveCapture.PNG"
+	},
+	{
+		"key":	"breakDefenseCapture",
+		"url":	"assets/images/notes/breakDefenseCapture.PNG"
+	},
+	{
+		"key":	"asymmetricKeysNotes",
+		"url":	"assets/images/notes/asymmetric_keys.png"
+	},
+	{
+		"key":	"digitalSignatureNotes",
+		"url":	"assets/images/notes/digital_signature.png"
+	},
 	{
 		"key":	"arpSpoofingNotes",
 		"url":	"assets/images/notes/ARP_Spoofing.png"
@@ -541,6 +576,12 @@
 		"url":	"assets/images/cross.png",
 		"frameWidth":	61,
 		"frameHeight":	62
+	},
+	{
+		"key":	"memory",
+		"url":	"assets/images/memory.png",
+		"frameWidth":	103,
+		"frameHeight":	103
 	},
 	{
 		"key":	"book",

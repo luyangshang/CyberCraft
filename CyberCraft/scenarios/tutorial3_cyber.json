@@ -40,7 +40,7 @@
 		},
 		{
 			"name":				"Brute-force attack",
-			"desc":				"The most basic form of attack on the cipher code. It tries all possible combinations until succeeds. It turn out nearly infeasible in face of strong encryption.",
+			"desc":				"Supporting category \nThe most basic form of attack on the cipher code. It tries all possible combinations until succeeds. It turn out nearly infeasible in face of strong encryption.",
 			"needRivalBuffs":	["Encrypt with Enigma"],
 			"cost":				20,
 			"successRate":		0.05,
@@ -51,7 +51,7 @@
 			"name":				"Known-plaintext attack",
 			"prerequisites":	["Brute-force attack"],
 			"learningCost":		10,
-			"desc":				"With some or all of the plaintext already known, a big amount of possible situations is eliminated. Therefore, the cracking process is greatly boosted.",
+			"desc":				"Supporting category \nWith some or all of the plaintext already known, a big amount of possible situations is eliminated. Therefore, the cracking process is greatly boosted.",
 			"needRivalBuffs":	["Encrypt with Enigma"],
 			"cost":				20,
 			"successRate":		0.19,
@@ -63,7 +63,7 @@
 			"name":				"Chosen-plaintext attack",
 			"prerequisites":	["Known-plaintext attack"],
 			"learningCost":		15,
-			"desc":				"deliberately enforce some of the plaintexts in favor of the cracking of security key. More effective than Known-plaintext attack",
+			"desc":				"Supporting category \ndeliberately enforce some of the plaintexts in favor of the cracking of security key. More effective than Known-plaintext attack",
 			"needRivalBuffs":	["Encrypt with Enigma"],
 			"cost":				25,
 			"successRate":		0.24,
@@ -158,7 +158,29 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "Unbelievable! The polish cryptanalysts have already broken the unbreakable Enigma! ^It's only a pity that the German has improved the machine, making the polish technique hardly effective. ^What's worse, now the whole Poland has fallen to German. ^I have to break the improved Enigma, so as to save Allies from the scourge of the Nazi. ^Our mission is to break the Enigma encryption, and then use \"Sniffing attack\" to get Nazi's secret messages in the same day. ^It's only that... Brute-force attack, the only currently available attack is too inefficient. ^Probably I should not launch any attacks before we have made more descoveries. \nIt will be a pity when we develop better cracking techniques, only to find insufficient resource to apply them."
+				"dialogue": "Unbelievable! The polish cryptanalysts have already broken the unbreakable Enigma! ^It's only a pity that the German has improved the machine, making the polish technique hardly effective. ^What's worse, now the whole Poland has fallen to German. ^I have to break the improved Enigma, so as to save Allies from the scourge of the Nazi."
+			},
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "Our mission is to break the Enigma encryption, and then use \"Sniffing attack\" to get Nazi's secret messages in the same day. ^The main challenge here is how to break. Brute-force attack, the only currently available attack is too inefficient."
+			},
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "I should not launch any attacks before we have descovered better techniques. \nIt will be a pity when we develop better cracking techniques, only to find insufficient resource to apply them."
+			},
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "Fellows, there is no mission for today, just get familar with your tools. \nOur dialogues are recorded in the memory.",
+				"focusing": [205, 40, 103, 103]
+			},
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "By the way, for what an intruder should do in his/her round, see \"Play as intruder\" in personal notes.",
+				"focusing": [110, 40, 92, 77]
 			}
 		]
 	},
@@ -169,7 +191,12 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "The work of cracking Enigma is beyond the computation power of human. ^Inspired by the Polish work , I strongly suggest us using machine to fight machine. ^Let's build a cracking machine called \"Bombe\", and use it against Enigma."
+				"dialogue": "The work of cracking Enigma is beyond the computational power of human. ^Inspired by the Polish work , I strongly suggest us using machine to fight machine. ^Let's build a cracking machine called \"Bombe\", and use it against Enigma."
+			},
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "Um, the success rate of cracking is 10%. Still too inefficient."
 			}
 		],
 		"newActs":
@@ -186,7 +213,13 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "The Nazi has become subtle. They change the Enigma setting at least once a day. ^This means, whenever we have succeed in cracking its key (e.g. with \"Brute-force attack\"), we should immediately use the key to obtain the confidential information (with \"Sniffing attack\"). ^By doing these, Nazi's secret messages are compromised, and we will be awarded some more resources in honor of our success."
+				"dialogue": "The Nazi has become subtle. They change the Enigma setting at least once a day. ^You can see a buff \"Encrypt with Enigma\" on them, which indicates a new  Enigma setting.",
+				"focusing": [850, 50, 124, 116]
+			},	
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "This means that, if we have ever succeed in cracking its key (e.g. with \"Brute-force attack\"), we should immediately use the key to obtain the confidential information (with \"Sniffing attack\"). ^By doing these, Nazi's secret messages are compromised. Moreover, we will be awarded some more resources in honor of our success."
 			}
 		]
 	},
@@ -198,6 +231,11 @@
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
 				"dialogue": "It's discovered that, we can actually guess a part of the plaintext in the german messages. ^Sentences like \"nothing to report\", \"Hail Hitler\" could be conjectured in some places of the message. I call them \"crib\". ^With this knowledge, we can use the \"Known-plaintext attack\", instead of \"Brute-force attack\". It will greatly speed up our cracking process."
+			},
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "Ur, 38% success rate... We could try, but it's still not efficient. I personally prefer to wait until we reach 50% success rate."
 			}
 		],
 		"newActs":
@@ -218,7 +256,12 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "Terrific. With this improvement, the cracking on Enigma becomes realistic. ^We should remember to firstly crack the encryption (e.g. with \"Known-plaintext attack\"). And, when successful, use \"Sniffing attack\" to obtain Nazi's top secrets. We can repeat this process each day, so as to always feed the Allies with newest information."
+				"dialogue": "Terrific. With this improvement, the cracking on Enigma finally becomes realistic."
+			},
+			{
+				"name": 	"Alan Turing",
+				"portrait":	"AlanTuring",
+				"dialogue": "We should remember to firstly crack the encryption (e.g. with \"Known-plaintext attack\"). And, when successful, use \"Sniffing attack\" to obtain Nazi's top secrets. ^We can repeat this process each day, so as to always feed the Allies with newest information."
 			}
 		],
 		"newActs":
@@ -235,17 +278,17 @@
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "\"Known-plaintext attack\" still a little slow in cracking. We have instructed the Royal Air Force to lay mines at some positions which German has no abbreviation or alternative names. ^If only the German will send warning messages for the mines with Enigma encryption, and send \"all clear\" message with Enigma encrypted after removing the mines... We will obtain more messages, whose plaintext and ciphertext are both known."
+				"dialogue": "\"Known-plaintext attack\" is still a little slow in cracking Enigma. I'd like to use \"Chosen-plaintext attack\". ^We will instruct the Royal Air Force to lay mines at some positions which Germans have no abbreviation or alternative names. ^Germans may send warning messages when discovering the mines and \"all clear\" messages after removing the mines, all encrypted with Enigma. ^In this case, because we have substantial control over the plaintexts, we can properly choose those in favor of our cracking."
 			},
 			{
 				"name": 	"Juan Pujol García",
 				"portrait":	"JuanPujolGarcía",
-				"dialogue": "I will do it! \nYou may know me as Juan Pujol García, the double agent against Nazi. I will gurantee your messages to be encrypted with Enigma."
+				"dialogue": "I will join in with you! \nYou may have known me as Juan Pujol García, the double agent against Nazi. I will guarantee your crafted messages to be encrypted with Enigma."
 			},
 			{
 				"name": 	"Alan Turing",
 				"portrait":	"AlanTuring",
-				"dialogue": "Excellent! Now we can use chosen-plaintext attack, which increase our cracking probability even more. ^Churchill will be amazed for our daily provision of Nazi's top secrets."
+				"dialogue": "Excellent! Now we can use chosen-plaintext attack, which have a even higher cracking probability. ^Churchill will be amazed for our daily provision of Nazi's top secrets."
 			}
 		],
 		"newActs":

@@ -14,6 +14,7 @@ function EffectManager(fatherGroup, X, Y, logX, logY, roundX, roundY)
 	this.styleSpout = { font: "28px Courier New, monospace", fontWeight: "bold", fill: "#FF5011"};
 	this.styleSpark = { font: "31px Courier New, monospace", fontWeight: "bold", fill: "#11DD11", align:"center"};
 	this.styleDamage = { font: "33px Courier New, monospace", fontWeight: "bold", fill: "#FF0000"};
+	this.focusDuration = 3000;	//the time to play focusing animation
 	
 	this.fatherGroup = fatherGroup;
 	this.X = X;
@@ -92,7 +93,7 @@ EffectManager.prototype.createWord = function(texts, role, time)
 	this.offset = !this.offset;
 	//create adjacent sprites with different y, avoiding word overlaping
 	if(this.offset)	spoutSprite.y += 30;
-	var spoutTween = game.add.tween(spoutSprite).to({x: this.logX, y: this.logY}, time, Phaser.Easing.Linear.None, true, 0, 0, false);
+	var spoutTween = game.add.tween(spoutSprite).to({x: this.logX, y: this.logY}, time, Phaser.Easing.Circular.In/*"Elastic.easeIn"*/, true, 0, 0, false);
 	spoutTween.onComplete.add(function(){spoutSprite.destroy();}, this, 0);
 };
 
@@ -100,16 +101,17 @@ EffectManager.prototype.createWord = function(texts, role, time)
 Create a indicator that a round is starting
 @param {int} round - the round that is starting
 @param {int} role - whose turn is the starting round. 0: intruder, 1: defender
-@param {int} time - the time for the enlarging animation as well as the shrunking animation. The time of the whole animation will be double.
+@param {int} enlargingTime - the time for the enlarging animation
+@param {int} shrunkingTime - the time for the shrunking animation. The time of the whole animation will be double.
 */
-EffectManager.prototype.createRoundSpark = function(round, role, time)
+EffectManager.prototype.createRoundSpark = function(round, role, enlargingTime, shrunkingTime)
 {
 	var spark = game.add.text(500, 300, round, this.styleSpark, this.fatherGroup);
 	spark.anchor.setTo(0.5);
-	var enlargeTween = game.add.tween(spark.scale).to({x: 4, y: 4}, time, Phaser.Easing.Sinusoidal.EaseOut, true, 0, 0, false);
+	var enlargeTween = game.add.tween(spark.scale).to({x: 5, y: 5}, enlargingTime, /*Phaser.Easing.Sinusoidal.EaseOut*/Phaser.Easing.Circular.Out, true, 0, 0, false);
 	enlargeTween.onComplete.add(function(){
-		var moveTween = game.add.tween(spark).to({x: this.X[role], y: this.Y[role]}, time, Phaser.Easing.Linear.None, true, 0, 0, false);
-		var shrunkTween = game.add.tween(spark.scale).to({x: 1, y: 1}, time, Phaser.Easing.Sinusoidal.EaseIn, true, 0, 0, false);
+		var moveTween = game.add.tween(spark).to({x: this.X[role], y: this.Y[role]}, shrunkingTime, Phaser.Easing.Linear.None, true, 0, 0, false);
+		var shrunkTween = game.add.tween(spark.scale).to({x: 1, y: 1}, shrunkingTime, Phaser.Easing.Sinusoidal.EaseIn, true, 0, 0, false);
 		moveTween.onComplete.add(function(){spark.destroy();}, this, 0);
 		}, this, 0);
 };
@@ -271,11 +273,40 @@ EffectManager.prototype.lastAnimation = function(win)
 		var spriteKey = "DEFEAT";
 		var audioFun = game.globals.audioManager.defeat;
 	}
-	var gameoverSprite = game.add.image(game.world.centerX, game.world.centerY, spriteKey, 0);
+	var gameoverSprite = game.add.image(game.world.centerX, game.world.centerY, spriteKey, 0, this.fatherGroup);
 	gameoverSprite.anchor.setTo(0.5);
 	gameoverSprite.scale.setTo(0.01);
 	var gameoverTween = game.add.tween(gameoverSprite.scale).to({x: 1, y: 1}, 1500, "Elastic.easeOut", true, 0, 0, false);
 	
 	audioFun.call(game.globals.audioManager);
 };
+
+/**
+Create a focusing animation to highlight a button. Useful for the tutorial
+@param {int} x - the x coordinate of the highlight area
+@param {int} y - the y coordinate of the highlight area
+@param {int} width - the width of the highlight center
+@param {int} height - the height of the highlight center
+*/
+EffectManager.prototype.focusOn = function(x, y, width, height)
+{
+	//create a rectangle circling the whole screen
+	this.focusSprite = game.add.image(x, y, "rectangle", 0, this.fatherGroup);
+	this.focusSprite.width = game.width*1.5;
+	this.focusSprite.height = game.height*1.5;
+	this.focusSprite.anchor.setTo(0.5);
+	//create a repetitive effect of shrunking to the focus area
+	this.focusTween = game.add.tween(this.focusSprite).to({width: width, height: height}, this.focusDuration, Phaser.Easing.Circular.Out, true, 0, -1, false).start();
+};
+/**
+Stop last focusing anmiation
+*/
+EffectManager.prototype.focusOff = function(x, y, width, height)
+{
+	if(this.focusSprite)
+	{
+		this.focusTween.pause();
+		this.focusSprite.destroy();
+	}
+}
 module.exports = EffectManager;

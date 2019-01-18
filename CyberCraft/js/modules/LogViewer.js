@@ -114,6 +114,7 @@ LogViewer.prototype.noExit = function()
 
 /**
 Callback function to update the page in action log.
+@param {int} targetPage - the page to scroll to
 */
 LogViewer.prototype.updateLogs = function(targetPage)
 {
@@ -143,9 +144,9 @@ LogViewer.prototype.updateLogs = function(targetPage)
 		//parameters passed through button
 		frameSprite.index = nextItem;
 		frameSprite.anchor.setTo(0.5);
-		/*//add tweening animation
-		frameSprite.events.onInputOver.add(this.resultOnOver, this, 0);
-		this.resultSprite.events.onInputOut.add(this.resultOnOut, this, 0);*/
+		//add tweening animation for the frame
+		frameSprite.events.onInputOver.add(this.enlarge, this, 0);
+		frameSprite.events.onInputOut.add(this.normal, this, 0);
 		
 		//round
 		game.add.text(200, y, round, this.style, this.entryGroups[i]);
@@ -164,6 +165,21 @@ LogViewer.prototype.updateLogs = function(targetPage)
 		this.entryGroups[i].callAll("anchor.setTo", "anchor", 0.5);
 		this.logGroup.add(this.entryGroups[i]);
 	}
+};
+
+/**
+Enlarge the scenario button when the mouse hover over it
+@param {Phaser.Sprite} sprite - the sprite that invokes this
+@param {Phaser.Pointer} pointer - the mouse pointer object
+@param {int} i - the index of the scenario button in the current page
+*/
+LogViewer.prototype.enlarge = function(sprite, pointer)
+{
+	game.add.tween(sprite.scale).to({x: 1.05, y: 1.2}, 400, Phaser.Easing.Linear.None, true);
+};
+LogViewer.prototype.normal = function(sprite, pointer)
+{
+	game.add.tween(sprite.scale).to({x: 1, y: 1}, 400, Phaser.Easing.Linear.None, true);
 };
 
 /**
@@ -238,14 +254,14 @@ LogViewer.prototype.showReason = function(button, pointer)
 	}
 	//need luck
 	if(entry.unlucky)
-		game.add.text(game.world.centerX, y, "Need more luck", this.style, this.reasonGroup);
+		game.add.text(game.world.centerX, game.world.centerY, "Need more luck", this.styleFailed, this.reasonGroup);
 	/*//click to close
 	this.reasonGroup.callAll('events.onInputDown.add', 'events.onInputDown', this.deleteReason, this);*/
 	this.reasonGroup.callAll("anchor.setTo", "anchor", 0.5);
 };
 
 /**
-@param {boolean} scrollup - true: page-up key, false, page-down key
+@param {boolean} scrollup - true: page-up key; false: page-down key
 */
 LogViewer.prototype.scrollFun = function(key)
 {

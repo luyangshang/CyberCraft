@@ -30,7 +30,6 @@
 		{
 			"name":				"Sniffing attack",
 			"prerequisites":	["Promiscuous mode"],
-			"learningCost":		5,
 			"desc":				"Finishing move. \nObtain rival's username and password, as well as other data, if the rival's network communication is not encrypted or hashed.",
 			"needRivalBuffs":	["MITM"],
 			"noRivalBuffs":		["Password hashed", "OTP", "Credential compromised"],
@@ -52,8 +51,7 @@
 		{
 			"name": 			"Dictionary attack",
 			"prerequisites":	["Brute-force attack"],
-			"learningCost":		30,
-			"desc":				"An upgrade of brute-force attack. Try only the limited subset of the password, which is composed of words from the dictionary. Higher successRate.",
+			"desc":				"Supporting category \nAn upgrade of brute-force attack. Try only the limited subset of the password, which is composed of words from the dictionary. Higher successRate.",
 			"needRivalBuffs":	["Password hashed"],
 			"noRivalBuffs":		["Salt", "OTP"],
 			"cost":				15,
@@ -63,7 +61,6 @@
 		{
 			"name": 			"Rainbow table",
 			"prerequisites":	["Dictionary attack"],
-			"learningCost":		20,
 			"desc":				"Improvement. \nUse the rainbow table to assist the dictionary attack on long password. Increase the success rate of Dictionary attack.",
 			"noSelfBuffs":		["Rainbow table"],
 			"cost":				20,
@@ -121,8 +118,9 @@
 		},
 		{
 			"name":				"Salt",
-			"learningCost":		10,
+			"learningCost":		5,
 			"desc":				"A random number to put with the password before it's hashed. Resistent against Dicionary attack.",
+			"needSelfBuffs":	["Password hashed"],
 			"cost":				10,
 			"selfBuffs":		["Salt"],
 			"buffLength":		6
@@ -132,7 +130,8 @@
 			"desc":				"Resistent to Brute-force attack, but open door for Password DoS attack.",
 			"cost":				5,
 			"selfBuffs":		["Password error limit"],
-			"cleanSelfBuffs":	["Password error delay"]
+			"cleanSelfBuffs":	["Password error delay"],
+			"buffLength":		8
 		},
 		{
 			"name":				"Password error delay",
@@ -142,11 +141,10 @@
 			"cost":				10,
 			"selfBuffs":		["Password error delay"],
 			"cleanSelfBuffs":	["Password error limit"],
-			"buffLength":		6
+			"buffLength":		8
 		},
 		{
 			"name":				"Timestamp",
-			"learningCost":		5,
 			"desc":				"To put a time in the message, in order to fight the replay attack.",
 			"cost":				10,
 			"selfBuffs":		["Timestamp"],
@@ -154,7 +152,7 @@
 		},
 		{
 			"name":				"OTP",
-			"learningCost":		25,
+			"learningCost":		15,
 			"desc":				"Use one time password to provide perfect security. Invincible when having the buff.",
 			"cost":				40,
 			"selfBuffs":		["OTP"],
@@ -173,6 +171,7 @@
 			"prerequisites":	["Timestamp"],
 			"learningCost":		25,
 			"desc":				"An authentication protocol based on ticket. With built-in timestamp, it prevents replay attack. It also reduce sniffing attack probability. Besides, you gains resource each round because it provides multi-domain Single Sign-On.",
+			"noSelfBuffs":		["Kerberos"],
 			"cost":				30,
 			"selfBuffs":		["Kerberos"],
 			"cleanSelfBuffs":	["Password auto-filled"],
@@ -227,7 +226,7 @@
 	},
 	{
 		"name":		"Password auto-filled",
-		"desc":		"Clients are happy for not having to insert passwords everytime.",
+		"desc":		"Clients are happier for not having to insert everytime the complex passwords by themselves.",
 		"upkeep":	-3
 	},
 	{
@@ -298,7 +297,7 @@
 			{
 				"name":		"Scientist",
 				"portrait":	"headScientistPo",
-				"dialogue":	"We have developed a system called Kerberos! It's exellent for the functionality of single sign on. ^Password manager avoids inserting password for each single website, but kerberous does it for the whole domain! ^The clients will surely be more happy. ^Also, because no password is transmitted after ticket is granted, kerberous provides some defence against sniffing attack. ^What's more, Kerberos makes use of the timestamp, making it resistent to replay attack."
+				"dialogue":	"We have developed a system called Kerberos! It's exellent for the functionality of single sign on. ^Password manager saves the effort to insert password for each single website, but kerberous does it for the whole domain! ^With Kerberos built, the clients will surely be more happy. ^Also, because no password is transmitted after ticket is granted, kerberous provides some defence against sniffing attack. ^What's more, Kerberos makes use of the timestamp, making it resistent to replay attack."
 			}
 		],
 		"newActs":
@@ -314,7 +313,7 @@
 			{
 				"name":		"Scientist",
 				"portrait":	"headScientistPo",
-				"dialogue":	"A bad news! An attack called privilege escalation is discovered. \nThe attack is performed after a successfully compromise of the credential. In addition to credential of a normal user, the attacker will obtain the administrative privilege, so that our service will be even further damanged. ^If the terrorists become administrator, who knows if they will denote our neclear plant."
+				"dialogue":	"A bad news! An attack called privilege escalation is discovered. \nThe attack is performed after a successfully compromise of the credential. ^In addition to stealing a credential of a normal user, the attacker will take the administrative privilege, so that our service will be even further damanged. ^If the terrorists become administrators, who knows whether they will denote our nuclear plant."
 			}
 		],
 		"newActs":

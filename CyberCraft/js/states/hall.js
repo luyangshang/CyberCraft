@@ -23,25 +23,37 @@ var hall = {
 		this.createMap();
 		//this.groundGroup = game.add.group();
 		this.npcGroup = game.add.group();
+		this.memoryGroup = game.add.group();
 		this.dialogueGroup = game.add.group();
 		this.notesGroup = game.add.group();
+		
 		this.createNPCs();
 		this.createDialogue();
-		
 		this.hintBox = new HintBox("box");
+		game.globals.memory.createInterface(this.memoryGroup, this.dialogueGroup, this.hintBox);
 		
 		this.gateSprite = game.add.button(950, 96, "gate", function(){game.state.start("startMenu", true, false);}, this, 1, 0, 3, 0, this.npcGroup);
 		this.gateSprite.anchor.setTo(0.5);
+		//notes button
 		this.notesButton = game.add.button(50, 40, "book", this.createNotes, this, 0, 0, 1, 0, this.npcGroup);
 		this.hintBox.setHintBox(this.notesButton, "   Open personal notes (N)");
 		this.notesButton.anchor.setTo(0.5);
-		
+		//memory button
+		this.memoryButton = game.add.button(150, 40, "memory", this.createMemory, this, 0, 0, 1, 0, this.npcGroup);
+		this.memoryButton.anchor.setTo(0.5);
+		this.hintBox.setHintBox(this.memoryButton, "Recollect the memory of dialogues(M)");
 		
 		this.notes = new Notes(this.notesGroup);
 		
 		//shortcut key for personal notes
 		var notesKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
 		notesKey.onDown.add(this.createNotes, this);
+		//shortcut key for memory
+		var memoryKey = game.input.keyboard.addKey(Phaser.Keyboard.M);
+		memoryKey.onDown.add(this.createMemory, this);
+		//shortcut key for closing memory
+		var escKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+		escKey.onDown.add(this.escFun, this);
 		
 		//BGM
 		if(this.index < 0 || game.globals.scenarioCybers[this.index].defensive)	//tutorial 1
@@ -119,6 +131,18 @@ var hall = {
 	},
 	
 	/**
+	Try to open memory when player click on notesButton or when pressing "M" key
+	Check if there is a mask (yes/no question) before opening personal notes
+	*/
+	createMemory: function(button, pointer)
+	{
+		if(this.mask && this.mask.alive == true)
+			return;
+		this.hintBox.hide();
+		game.globals.memory.showInterface();
+	},
+	
+	/**
 	A recursive function that calls itself (after a random delay) to constantly play the turning animation of NPC sprite
 	@param {Phaser.Sprite} sprite - the NPC sprite whose animation is been set
 	*/
@@ -139,7 +163,7 @@ var hall = {
 	*/
 	createDialogue: function()
 	{
-		this.multimedia = new MultimediaText(250, 470, 1, this.dialogueGroup, this.dismissDialogue, this);
+		this.multimedia = new MultimediaText(250, 420, 1, this.dialogueGroup, this.dismissDialogue, this);
 	},
 	
 	/**
@@ -183,9 +207,17 @@ var hall = {
 			this.yesButton.anchor.setTo(0.5);
 			this.noButton = game.add.button(game.world.centerX+150, game.world.centerY, "noButton", this.noFun, this, 0, 0, 1, 0);
 			this.noButton.anchor.setTo(0.5);
+			//don't try to record this dialogue in Memory
 		}
 		else //start the first page of the dialogue
+		{
 			this.multimedia.dynamicTextWithPortrait(this.texts[0], this.portrait, this.name);
+			//try to record the dialogue in Memory
+			var dialogueObj = {name: this.name,
+								portrait: this.portrait,
+								texts: this.texts};
+			game.globals.memory.addDialogue(dialogueObj);
+		}
 	},
 	
 	/**
@@ -202,6 +234,22 @@ var hall = {
 		}
 		//more pages to show
 		this.multimedia.dynamicTextWithPortrait(this.texts[this.currentPage], this.portrait, this.name);
+	},
+	
+	/**
+	Try to close the memory, when notes is not opened
+	*/
+	escFun: function()
+	{
+		if(this.mask && this.mask.alive == true)
+			return;
+		if(this.notes.exitButton && this.notes.exitButton.alive == false)
+		{
+			delete this.notes.exitButton;
+			return;
+		}
+		this.hintBox.hide();
+		this.memoryGroup.visible = false;
 	},
 	
 	/**
@@ -227,7 +275,7 @@ var hall = {
 		this.mask.destroy();
 		this.yesButton.destroy();
 		this.noButton.destroy();	
-	},	
+	},
 	shutdown: function()
 	{
 		delete this.npcManager;

@@ -42,7 +42,7 @@
 				"speech": "Ah, finally. You have arrived. I'm nearly driven mad by the recent security breaches. ^The exposure of the company's credential files as well as the clients identity information has amount to billions of dollars. ^The leakage still continues, but I cannot find anything wrong. You see, we have installed the newest intrusion prevention system. Shouldn't be a problem. ^The CEOs warned that if I still cannot find the problem, they will kick me out.. ^Well, what already lost is lost. If you could find why the data leakage still goes on, it will be greatly appreciated. ^Just go around our company, chatting with different persons. Maybe you will find some clues. ^Report to me only when you have found the problem. I still have my work to do."
 			},	
 			{
-				"speech": "So, have you talked to people around? Have you found the cause of the data leakage? Remember that people will never tell their secrets in the first chat."
+				"speech": "So, have you talked to people around? Have you found the cause of the data leakage? Remember that people will never tell their secrets in the first chat. ^If you have forgotten your mission, the thought-like button in the top left (shortcut key \"M\" will remind you)"
 			},
 			{
 				"prerequisites":
@@ -105,7 +105,7 @@
 					{"npc": "Manager",
 					"state": 0}
 				],
-				"speech": "I am just a saleswoman. I know nothing about what \"data loss\" means."
+				"speech": "I am just a saleswoman. I know nothing about what \"data loss\" means. \nMy daily routine is just to... flirt with handsome boys. Do you mind watching a movie together?"
 			},
 			{
 				"speech": "Maybe we can go out for the lunch? It will be even better if we go for dinner."

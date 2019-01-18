@@ -31,7 +31,6 @@
 		{
 			"name":				"Sniffing attack",
 			"prerequisites":	["Promiscuous mode"],
-			"learningCost":		5,
 			"desc":				"Finishing move. \nObtain rival's username and password, as well as other data, if the rival's network communication is not encrypted or hashed.",
 			"needRivalBuffs":	["MITM"],
 			"noRivalBuffs":		["Password hashed", "OTP", "Credential compromised"],
@@ -53,8 +52,7 @@
 		{
 			"name": 			"Dictionary attack",
 			"prerequisites":	["Brute-force attack"],
-			"learningCost":		30,
-			"desc":				"An upgrade of brute-force attack. Try only the limited subset of the password, which is composed of words from the dictionary. Higher successRate.",
+			"desc":				"Supporting category \nAn upgrade of brute-force attack. Try only the limited subset of the password, which is composed of words from the dictionary. Higher successRate.",
 			"needRivalBuffs":	["Password hashed"],
 			"noRivalBuffs":		["Salt", "OTP"],
 			"cost":				15,
@@ -64,7 +62,6 @@
 		{
 			"name": 			"Rainbow table",
 			"prerequisites":	["Dictionary attack"],
-			"learningCost":		20,
 			"desc":				"Improvement. \nUse the rainbow table to assist the dictionary attack on long password. Increase the success rate of Dictionary attack.",
 			"noSelfBuffs":		["Rainbow table"],
 			"cost":				20,
@@ -122,8 +119,9 @@
 		},
 		{
 			"name":				"Salt",
-			"learningCost":		10,
+			"learningCost":		5,
 			"desc":				"A random number to put with the password before it's hashed. Resistent against Dicionary attack.",
+			"needSelfBuffs":	["Password hashed"],
 			"cost":				10,
 			"selfBuffs":		["Salt"],
 			"buffLength":		6
@@ -133,7 +131,8 @@
 			"desc":				"Resistent to Brute-force attack, but open door for Password DoS attack.",
 			"cost":				5,
 			"selfBuffs":		["Password error limit"],
-			"cleanSelfBuffs":	["Password error delay"]
+			"cleanSelfBuffs":	["Password error delay"],
+			"buffLength":		8
 		},
 		{
 			"name":				"Password error delay",
@@ -143,11 +142,10 @@
 			"cost":				10,
 			"selfBuffs":		["Password error delay"],
 			"cleanSelfBuffs":	["Password error limit"],
-			"buffLength":		6
+			"buffLength":		8
 		},
 		{
 			"name":				"Timestamp",
-			"learningCost":		5,
 			"desc":				"To put a time in the message, in order to fight the replay attack.",
 			"cost":				10,
 			"selfBuffs":		["Timestamp"],
@@ -155,7 +153,7 @@
 		},
 		{
 			"name":				"OTP",
-			"learningCost":		25,
+			"learningCost":		15,
 			"desc":				"Use one time password to provide perfect security. Invincible when having the buff.",
 			"cost":				40,
 			"selfBuffs":		["OTP"],
@@ -174,6 +172,7 @@
 			"prerequisites":	["Timestamp"],
 			"learningCost":		25,
 			"desc":				"An authentication protocol based on ticket. With built-in timestamp, it prevents replay attack. It also reduce sniffing attack probability. Besides, you gains resource each round because it provides multi-domain Single Sign-On.",
+			"noSelfBuffs":		["Kerberos"],
 			"cost":				30,
 			"selfBuffs":		["Kerberos"],
 			"cleanSelfBuffs":	["Password auto-filled"],
@@ -228,7 +227,7 @@
 	},
 	{
 		"name":		"Password auto-filled",
-		"desc":		"Clients are happy for not having to insert passwords everytime.",
+		"desc":		"Clients are happier for not having to insert everytime the complex passwords by themselves.",
 		"upkeep":	-3
 	},
 	{
@@ -313,9 +312,9 @@
 		"dialogues":
 		[
 			{
-				"name":		"Hank",
-				"portrait":	"Drunkard",
-				"dialogue":	"A good news! We have descovered privilege escalation. When we have successfully compromised the credential, we can follow it with a privilege escaltion. ^By doing so, we could obtain the administrative privilege, so that the rival is further damaged."
+				"name":		"Calvin",
+				"portrait":	"pirate4",
+				"dialogue":	"A good news! I have descovered privilege escalation. When you have successfully compromised the credential, you can follow it with a privilege escaltion. ^By doing so, you could obtain the administrative privilege, so that the rival is further damaged."
 			}
 		],
 		"newActs":

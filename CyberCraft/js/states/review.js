@@ -72,7 +72,7 @@ var review = {
 			{
 				loadSave.saveSaveData(this.index, this.record);
 				this.messager.createMessage("Progress saved!");
-				if(!game.globals.scenarioCybers[this.index+1] || !game.globals.scenarioCybers[this.index+2])	//when finishing one of the last two scenarios
+				if(!game.globals.scenarioCybers[this.index+1] && game.globals.records[this.index-1] || !game.globals.scenarioCybers[this.index+2] && game.globals.records[this.index+1])	//when finishing one of the last two scenarios, when the other already finished
 				{	//create and send the learning data
 					var learningData = {};
 					//add playerName as username

@@ -5,7 +5,7 @@
 "initialResource":			[0, 0],
 "constantIncome":			[40,0],
 "maxResource":				200,
-"maxRounds":				20,
+"maxRounds":				22,
 "assets":					150,
 "defensive":				true,
 "characterName":
@@ -37,7 +37,7 @@
 		},
 		{
 			"name":				"MITM",
-			"desc":				"Perform a Man-In-The-Middle attack. If no authentication or encryption of any kind, give the buff \"MITM\".",
+			"desc":				"Supporting category \nPerform a Man-In-The-Middle attack. If no authentication or encryption of any kind, give the buff \"MITM\".",
 			"cost":				15,
 			"rivalBuffs":		["MITM"],
 			"buffLength":		2,
@@ -63,7 +63,7 @@
 			"desc":			"Completely Automated Public Turing test to tell Computers and Humans Apart. Grant 60% defense against DDoS attacks.",
 			"cost":			20,
 			"selfBuffs":	["CAPTCHA"],
-			"buffLength":	10,
+			"buffLength":	12,
 			"unlocked":		false
 		},
 		{
@@ -88,7 +88,7 @@
 			"desc":			"One symmetric encryption method to encrypt with DES three times to achieve the satisfying security strength.",
 			"cost":			15,
 			"selfBuffs":	["Encrypted"],
-			"buffLength":	4,
+			"buffLength":	6,
 			"unlocked":		false
 		}
 	]
@@ -138,7 +138,43 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Ah, get a little nervous for my first internship in network defense. Let's see what are there. ^In the top-left corner, there are menu button, my personal notes and the action log. A round indicator nearby is also telling that this is round 1 out of the 18 rounds. ^I love the action log. With it, I can know the detail information about actions performed by me and by the potential intruder, did they failed, and why they failed. For the current moment it's empty though. ^I can't wait to have a look at the computer provided by the company. Oh, it's just down here. On the screen, the possible acts I can perform is displayed. Now only a \"CDN\" is displayed there. ^Nevertheless, no mission is assigned for the moment, so for today I will just look around. ^When I have finished with my exploration, I will click on the \"End turn\" button near the top-left corner to end my turn."
+				"dialogue": "Ah, get a little nervous for my first internship in network defense. Let's see what are there. ^Many useful tools are put in the top-left corner."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Firstly, I have left my personal notes there (shortcut key \"N\"). In my personal notes, the third label \"Play as defender\" contains information about what defender should do in his/her round.",
+				"focusing": [110, 40, 92, 77]
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "By clicking on the thought-like button or shortcut key \"M\", I can recall the memory of historic dialogues. Yeah, including this one.",
+				"focusing": [205, 40, 103, 103]
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "And I love the action log. With it, I can know the detail information about actions performed by me and by the potential intruder, did they failed, and why they failed. For the current moment it's empty though.",
+				"focusing": [300, 40, 103, 103]
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "A round indicator nearby is also telling that this is round 1 out of the 22 rounds.",
+				"focusing": [105, 130, 200, 80]
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "I can't wait to have a look at the computer provided by the company. Oh, it's just down here. On the screen, the possible acts I can perform is displayed. Now only a \"CDN\" is displayed there.",
+				"focusing": [620, 300, 500, 150]
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Nevertheless, no mission is assigned for the moment, so for today I will just look around. ^When I have finished with my exploration, I will click on the \"End turn\" button to end my turn.",
+				"focusing": [95, 150, 170, 78]
 			}
 		]
 	},
@@ -149,12 +185,45 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Hei, Godfried, come here. One important work for you. ^You should have known that, this is a network company, whose business is to serve incoming client requests. ^The clients all across the nation use our web services like sending emails, chatting online, posting blogs, online purchases. We provide these services by respond to their requests sent over the network. ^From our investigation, we discovered that the current number of requests has surpassed the capacity our server. Not to say the rush time like black friday. ^Probably you have already see one or two unhappy faces popping out. Each unhappy face represent the failure to serve one client request, while each happy face for one served client request. ^One served client will grant you 10 resource, but one unserved client will result in 5 resource lose. ^Whenever any of the clients encounter problems getting served, they will report to us that they get the \"503 Server Unavailable\" page. ^A buff in this name is presented on you, to warn you of the problem. You can find buffs on you by clicking on your portrait, or by the \"S\" shortcut key. Yeah, try it now. Have you seen \"503 Server Unavailable\"? ^In such a buff list, if you click on one particular buff, you can view the buff detail. ^Moreover, at the buff detail page, the book-like button will directly lead you to the corresponding term in your personal notes. The shortcut key for personal notes is \"N\"."
+				"dialogue": "Hei, Godfried, come here. One important work for you. ^You should have known that, this is a network company, whose business is to serve incoming client requests. ^The clients all across the nation use our web services like sending emails, chatting online, posting blogs or online purchases. We provide these services by respond to their requests sent over the network. ^From our investigation, we discovered that the current number of requests has surpassed the capacity our server. Not to say the rush time like black friday."
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Um, so, similarly to my portrait, rival's portrait will lead to the list of buffs on him/her also?"
+				"dialogue": "Yeah, I understand. Online purchases on Black friday. After that day, my girlfriend's wardrobe would be filled with clothes she never wear."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Probably you have already noticed one or two unhappy faces popping out. \nEach unhappy face represent the failure to serve one client request, while each happy face for one served client request."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "One served client will grant you 10 resource, but one unserved client will result in 5 resource lose.",
+				"focusing": [220, 550, 170, 60]
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Whenever any of the clients encounter problems getting served, they will report to us that they get the \"503 Server Unavailable\" page. ^A buff in this name is presented on you, to warn you of the problem."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "You can find buffs on you by clicking on your portrait, or by the \"S\" shortcut key. \nYeah, try it now. Have you seen \"503 Server Unavailable\"?",
+				"focusing": [100, 550, 124, 116]
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Then, if you click on \"503 Server Unavailable\" there, you can view the buff detail. ^Moreover, at the buff detail page, another book-like button will directly lead you to the explaination for that particular buff in your personal notes."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Um, so, similarly to my portrait, rival's portrait will lead to the list of buffs on him/her also?",
+				"focusing": [850, 50, 124, 116]
 			},
 			{
 				"name": 	"Senior",
@@ -164,7 +233,7 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "(Yeah, of course. There is only a \"CDN\" on my computer. What else do you expect me to do...) ^By the way, I firstly heard of \"CDN\" back in the university. How I miss the days when we were young... We played basketball on the court, we chased beautiful girls... ^Oh, sorry for getting sidetracked. Anyway, there is an entry of CDN in my personal notes. I will refer to it when I need more information. ^However, theory is one thing, and practice is another. I haven't really built one with my own hands yet. I have to firstly study what practically should be done."
+				"dialogue": "(Yeah, of course. There is only a \"CDN\" on my computer. What else do you expect me to do...) ^By the way, I firstly heard of \"CDN\" back in the university. How I miss the days when we were young... We played basketball on the court, we chased beautiful girls in the canteen, we received passing grades for the exams... ^Oh, sorry for getting sidetracked. Anyway, there is an entry of CDN in my personal notes, which can be opened directly from the act detail. ^Open \"CDN\" on the screen, click on the book-like button in its bottom left corner, and I will go directly to \"CDN\" in my personal notes. ^Um, it's nice to refresh the knowledge. However, theory is one thing, and practice is another. I haven't really built one with my own hands yet. I have to firstly study what practically should be done."
 			},
 			{
 				"name": 	"Senior",
@@ -181,7 +250,25 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "With the CDN built, our server capacity has increased, and our business booms. no clients complains, and I earns more. ^Now there is a buff called \"CDN\" on me. And because the server capacity is high enough, no \"503 Server Unavailable\" buff anymore. ^My action of applying CDN is also recorded in the action log. ^No mission is assigned today, I will take a nap... \nLet's go to the next round."
+				"dialogue": "With the CDN built, our server capacity has increased, and our business booms. no client complains, and I earn more.",
+				"focusing": [220, 550, 170, 60]
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Let's click on my portrait. Now a buff called \"CDN\" is created on me. Besides, because the server capacity is high enough to serve all client requests, the buff \"503 Server Unavailable\" vanished.",
+				"focusing": [100, 550, 124, 116]
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "My action of applying CDN is also recorded in the action log.",
+				"focusing": [300, 40, 103, 103]
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "No mission is assigned today, I will take a nap... \nLet's go to the next round."
 			}
 		],
 		"newActs":
@@ -202,12 +289,23 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Hei, Godfried, dont' Jinx it. ^Intelligence tells that a group of hackers have targeted us. They used to launch DoS (Denial Of Service)... Well, actually DDoS (Distributed Denial Of Service) attack to paralyze the target server. ^CDN itself provides some defense against those like DoS attack, and that's one of the reasons why I suggested you CDN last time. ^However, CDN alone is supposed to be inadequate for the defense. ^Wait, the newest report says that they have already started DDoS attack on us! ^Have you Seen that in the action logs (shortcut key \"L\")? ^We should immediately apply CAPTCHA to intercept as much superfluous requests as possible. Otherwise, our server will be totally flooded with their superfluous requests. ^When that happens, a good number of our important clients will complain, and you will earn less."
+				"dialogue": "Hei, Godfried, dont' Jinx it. ^Intelligence tells that a group of hackers get interested in us. They used to launch DoS (Denial Of Service)... Well, actually DDoS (Distributed Denial Of Service) attack to paralyze the target server. ^For attacks of DoS category, the hackers send huge number of fake requests (known as superfluous requests) to exhaust all the computational or communicational power of the server. ^Consequently, the server can hardly spare any effort for the legitimate client requests, resulting in a Denial of Service. ^CDN itself provides some resistance against attacks of this category, and that was one of the reasons why I suggested you CDN last time. ^However, CDN alone is not supposed to be adequate for the defense. ^Wait, the newest report says that they have already started DDoS attack on us!"
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "When you check the buffs on you, you will see a \"Denial of service attacked\".",
+				"focusing": [100, 550, 124, 116]
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "We should immediately apply CAPTCHA to intercept as much superfluous requests as possible. ^Otherwise, our server will be totally flooded with these requests. A good number of our important clients will complain, and you will earn less."
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Oh, the accessibility to our server is related to my salary? Then I should take care of it."
+				"dialogue": "Oh, the accessibility to our server is related to my salary? Then I should pay more attention to it."
 			}
 		],
 		"newActs":
@@ -244,7 +342,7 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Not like other types of attack, DoS attack is quite unlikely to be totally resolved. What we do is only to alleviate its harm. Don't you know that? Go back and check your personal notes!"
+				"dialogue": "Not like other types of attack, DoS attack is quite unlikely to be totally resolved. What we do is only to alleviate its harm. Don't you know that? Go back and review your course!"
 			},
 			{
 				"name": 	"Godfried",
@@ -254,7 +352,7 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Ok. Enough. ^I have searched the repository of our company. It's a pity that we cannot put up more defense for now. The only thing we can do is just to wait for them to stop... ^But at least we have kept the majority of superfluous requests out. ^By the way, if you check the buff \"CAPTCHA\", you will see it has an upkeep, which means you will earn a little less. ^This is because some clients don't like CAPTCHA, for it requires them to do one more validation. ^They just don't know, without CAPTCHA, our server will be engaged with superfluous requests, and they could not even connect to the server. ^So, no mission for the moment. Just keep an eye on the attacks."
+				"dialogue": "Ok. Enough. ^I have searched the repository of our company. It's a pity that we cannot put up more defense for now. The only thing we can do is just to wait for them to stop... ^At least we have kept the majority of superfluous requests out. ^By the way, if you check the buff \"CAPTCHA\", you will see it has an upkeep, which means you will earn a little less. ^This is because some clients don't like CAPTCHA, for it requires them to do one more validation. ^They just don't know, without CAPTCHA, our server will be engaged with superfluous requests, and they could not even connect to the server. ^Anyway, no mission for the moment. Just keep an eye on the attacks."
 			}
 		],
 		"newActs":
@@ -270,12 +368,29 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "An urgent report! ^The hackers started to intercept messages between our server and our clients. ^Some clients have reported that their login passwords are uncovered. ^I will not tell them that our connections with them are actually unencrypted... ^You may have already noticed that some of our assets are already lost due to this leakage. A buff called \"Credential compromised\" is also created on you to indicate the data leakage. ^Godfried, quickly find a solution to encrypt our messages!"
+				"dialogue": "An urgent report! ^The hackers started to intercept messages between our server and our clients. ^Some clients have reported that their login passwords are uncovered. ^I will not tell them that our connections with them are actually unencrypted..."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "You may have already noticed that some of our assets are already lost due to this leakage. \nWhen the all assets are compromised, we lose.",
+				"focusing": [130, 455, 220, 40]
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "A buff called \"Credential compromised\" is also created on you to indicate the data leakage. ^N.B. When checking the buffs on you, the list may expands across pages. You may need to use the scroll arrows (or shortcutkey PageUp, and PageDown) to navigate between the pages.",
+				"focusing": [100, 550, 124, 116]
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Godfried, quickly find a solution to encrypt our messages!"
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "eh, encryption... ^My memory of cryptography has faded with time. I have nearly forgotten everything just one month after the exam... ^I need to review the knowledge of \"symmetric cryptography\" first. It's the prerequisite for message encryption. ^Nevertheless, after symmetric cryptography, I need to select a specific encryption technique and \"apply\" it."
+				"dialogue": "eh, encryption... ^My memory of cryptography has faded with time. I have nearly forgotten everything just one month after the exam... ^I need to review the knowledge of \"symmetric cryptography\" first. It's the prerequisite for all message encryption. ^Nevertheless, after symmetric cryptography, I need to select a specific encryption technique and \"apply\" it."
 			}
 		],
 		"newActs":
@@ -302,18 +417,40 @@
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "Nice work. ^Now there is another issue. Our contract with the ISP supporting our CDN service has expired. ^Our CDN is inactive again. Remember to renew the service."
+				"dialogue": "Nice work. \nWith a proper encryption, the hacker's sniffing attack failed. See that in the action log (shortcut key \"L\")? Also, your acts and rival's acts are marked with different colour.",
+				"focusing": [300, 40, 103, 103]
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "When an attack failed, the action log will be exceptionally useful. By clicking on the failed entry, you will see the reasons for the failure. Yeah, try it now. ^If you are curious, you can also click on the act name in the action log. You will see its description in your personal notes."
 			},
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "Yes, I have also noticed the problem with CDN... The buff vanished, and more clients complains. ^Um, to solve the problem, I don't have to re-learn CDN, I will just re-apply it. ^N.B. The list of buffs on me may expand across pages. I may need to use scroll arrow to see all the buffs."
+				"dialogue": "(Yawn) There seems to be nothing else to do. And it's the time for clock off. I will return to my position tomorrow."
+			}
+		]
+	},
+	{
+		"round": 15,
+		"dialogues":
+		[
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "Godfried, we made a mistake. Our contract with the ISP supporting our CDN service has already expired today. ^Our CDN is inactive again. Remember to renew the service."
+			},
+			{
+				"name": 	"Godfried",
+				"portrait":	"Godfried",
+				"dialogue": "Yes, I have also noticed the problem with CDN this morning... The buff vanished, and more clients complain. ^Um, to solve the problem, I don't have to re-learn CDN, I will just re-apply it."
 			}
 		],
 		"shouldApply":	["CDN"]
 	},
 	{
-		"round": 15,
+		"round": 17,
 		"dialogues":
 		[
 			{
@@ -329,12 +466,22 @@
 			{
 				"name": 	"Godfried",
 				"portrait":	"Godfried",
-				"dialogue": "The hackers of course! From their connection attempts we have obtained their IP address... ^Oh, I see, for the DDoS attack, the superfluous requests come from the manipulated machines, not the real hackers'. And for other attacks, intruders can also easily use IP spoofing to hide their real IP addresses."
+				"dialogue": "The hackers of course! From their connection attempts we have obtained their IP addresses... ^Oh, I see, for the DDoS attack, the superfluous requests come from the manipulated machines, not the real hackers'. And for other attacks, intruders can also easily use IP spoofing to hide their real IP addresses."
 			},
 			{
 				"name": 	"Senior",
 				"portrait":	"youngbusinessman",
-				"dialogue": "At least this time you have realized the point by yourself. ^A tip here: it's possible that you re-apply a defensive act before its related buff expires. The buff length will be refreshed. ^It's not so much cost-effective, but you may need such kind of operation in the future. ^By the way, except for CDN, you should also care about the expiration of other buffs. ^You don't want our server be exposed to attacks again, do you? ^It should be known that, as defender, you should frequently check the positive buffs on you. Except that you can remember the expiration day of all the buffs. ^Just keep going. It's almost done. I believe you can sustain the last days."
+				"dialogue": "At least this time you have realized the point by yourself. ^A tip here: it's possible that you re-apply a defensive act before its related buff expires. The buff length will be refreshed. ^It's not so much cost-effective, but you may need such kind of operation in the future."
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "By the way, except for CDN, you should also care about the expiration of other buffs. ^You don't want our server be exposed to attacks again, do you?"
+			},
+			{
+				"name": 	"Senior",
+				"portrait":	"youngbusinessman",
+				"dialogue": "As a matter of fact, a defender should frequently check positive buffs on himself, leaving as little holes in defense as possible. ^Carry on. It's almost the end. I believe you can sustain the last days yourself."
 			}
 		]
 	}

@@ -44,7 +44,7 @@ function ScrollButtons(maxX, minY, maxY, updateFunction, context, NPages, father
 	this.pageIndicator.anchor.setTo(1, 0.5);
 }
 /**
-(Used by the description of personal notes or by acts when new acts are added by the script)
+(Used by the description of personal notes or by acts when new acts are dynamically added by the script)
 Set a new value for the number of pages at runtime
 */
 ScrollButtons.prototype.setNPages = function(NPages)

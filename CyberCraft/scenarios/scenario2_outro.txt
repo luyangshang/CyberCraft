@@ -1,4 +1,4 @@
 Congratulations! You have successfully defended the system. Now the company is safe for another day.
 
 tips: sniffing attack can be defended by encryption.
-DDos attack cannot be fully defended. It can only be relieved, e.g. by forcing time out.
+DDos attack cannot be fully defended. It can only be relieved, e.g. by forcing a time out.

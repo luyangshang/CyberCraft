@@ -17,23 +17,32 @@ function PersonalNotes(parsedNotes)
 	if(parsedNotes.desc == undefined)
 		parsedNotes.desc = "";
 	this.noteDescs.push(parsedNotes.desc);
+	if(parsedNotes.sees)
+	{
+		this.sees[0] = [];
+		for(j in parsedNotes.sees)
+			this.sees[0].push(parsedNotes.sees[j]);
+	}
 
-
+	//"game" element
+	if(parsedNotes.game != undefined)
+	{
+		for(g in parsedNotes.game)
+			if(parsedNotes.game[g].name != undefined)
+			{
+				this.createEntry(parsedNotes.game[g]);
+			}
+	}
 	if(parsedNotes.acts != undefined)
 	{
-		//"Offensive acts" entry (if present)
-		if(parsedNotes.acts.offDesc != undefined)
-		{
-			this.noteNames.push("Offensive acts");
-			this.noteDescs.push(parsedNotes.acts.offDesc);
-		}
-		
+		//"Offensive acts" entry (if present)		
 		if(parsedNotes.acts.offensive)
 			//add those offensive acts
 			for(i=0; i< parsedNotes.acts.offensive.length; i++)	
 				if(parsedNotes.acts.offensive[i].name != undefined)
 				{
-					id = this.noteNames.push(parsedNotes.acts.offensive[i].name);
+					this.createEntry(parsedNotes.acts.offensive[i]);
+					/*id = this.noteNames.push(parsedNotes.acts.offensive[i].name);
 					this.noteDescs.push(parsedNotes.acts.offensive[i].desc);
 					//internal links
 					if(parsedNotes.acts.offensive[i].sees)
@@ -44,21 +53,17 @@ function PersonalNotes(parsedNotes)
 					}
 					//if url1 or url2 not defined in the json file, they will just be undefined in the class.
 					var urls = [parsedNotes.acts.offensive[i].url1, parsedNotes.acts.offensive[i].url2];
-					this.urls[id-1]= urls;
+					this.urls[id-1]= urls;*/
 				}
 		
 		//"Defensive acts" entry (if present)
-		if(parsedNotes.acts.defDesc != undefined)
-		{
-			this.noteNames.push("Defensive acts");
-			this.noteDescs.push(parsedNotes.acts.defDesc);
-		}
 		if(parsedNotes.acts.defensive)
 			//add those defensive acts
 			for(i=0; i< parsedNotes.acts.defensive.length; i++)	
 				if(parsedNotes.acts.defensive[i].name != undefined)
 				{
-					id = this.noteNames.push(parsedNotes.acts.defensive[i].name);
+					this.createEntry(parsedNotes.acts.defensive[i]);
+					/*id = this.noteNames.push(parsedNotes.acts.defensive[i].name);
 					this.noteDescs.push(parsedNotes.acts.defensive[i].desc);
 					//internal links
 					if(parsedNotes.acts.defensive[i].sees)
@@ -69,22 +74,18 @@ function PersonalNotes(parsedNotes)
 					}
 					//if url1 or url2 not defined in the json file, they will jsut be undefined in the class.
 					var urls = [parsedNotes.acts.defensive[i].url1, parsedNotes.acts.defensive[i].url2];
-					this.urls[id-1]= urls;
+					this.urls[id-1]= urls;*/
 				}
 	}
+	//"Buffs" entry (if present)
 	if(parsedNotes.buffs != undefined)
 	{
-		//"Buffs" entry (if present)
-		if(parsedNotes.buffs.buffDesc != undefined)
-		{
-			this.noteNames.push("Buffs");
-			this.noteDescs.push(parsedNotes.buffs.buffDesc);
-		}
-		//add buffs themselves
-		for(i=0; i< parsedNotes.buffs.buffs.length; i++)	
-			if(parsedNotes.buffs.buffs[i].name != undefined)
+
+		for(i=0; i< parsedNotes.buffs.length; i++)	
+			if(parsedNotes.buffs[i].name != undefined)
 			{
-				id = this.noteNames.push(parsedNotes.buffs.buffs[i].name);
+				this.createEntry(parsedNotes.buffs[i]);
+				/*id = this.noteNames.push(parsedNotes.buffs.buffs[i].name);
 				this.noteDescs.push(parsedNotes.buffs.buffs[i].desc);
 				//internal links
 					if(parsedNotes.buffs.buffs[i].sees)
@@ -95,10 +96,34 @@ function PersonalNotes(parsedNotes)
 					}
 				//if url1 or url2 not defined in the json file, they will jsut be undefined in the class.
 				var urls = [parsedNotes.buffs.buffs[i].url1, parsedNotes.buffs.buffs[i].url2];
-				this.urls[id-1]= urls;
+				this.urls[id-1]= urls;*/
 			}
 	}
 }
+
+/**
+private
+Create an ordinary entry in personal notes
+@param {Object} src - an source object from the parsed notes
+*/
+PersonalNotes.prototype.createEntry = function(src)
+{
+	//push and get id
+	id = this.noteNames.push(src.name);
+	//description
+	this.noteDescs.push(src.desc);
+	//internal links. data type: string 
+	if(src.sees)
+	{
+		this.sees[id-1] = [];
+		for(j in src.sees)
+			this.sees[id-1].push(src.sees[j]);
+	}
+	//if url1 or url2 not defined in the json file, they will just be undefined in the class.
+	var urls = [src.url1, src.url2];
+	this.urls[id-1]= urls;
+};
+
 
 /**
 get the number of entries in the personal notes
@@ -120,6 +145,7 @@ PersonalNotes.prototype.getNames = function()
 /**
 Return the entry's description
 @param {int} id - the id of the entry (usually security term)
+@returns {string} - the description
 */
 PersonalNotes.prototype.getDesc = function(id)
 {

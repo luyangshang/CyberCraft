@@ -27,6 +27,7 @@ game.globals ={		//global data loaded from json and txt files
 	credits: null,
 	personalNotes: null,
 	audioManager: null,
+	memory: null,
 	records: [],
 	playerName: null
 };

@@ -59,7 +59,7 @@ function MultimediaText(x, y, pattern, fatherGroup)
 		this.callbackFun = arguments[4];
 		this.callbackContext = arguments[5];
 
-		this.dialogueFrame = this.dialogueGroup.create(x-150, y-60, "dialogueBox");
+		this.dialogueFrame = this.dialogueGroup.create(x-160, y-60, "dialogueBox");
 		this.nameSprite = game.add.text(x-130, y-30, "", this.styleName, this.dialogueGroup);		//the speaker name awaits
 		//this.nameSprite.anchor.setTo(0.5, 0.5);
 		//game.world.bringToTop(this.nameSprite);
@@ -120,7 +120,7 @@ MultimediaText.prototype.dynamicTextWithPortrait = function(pureText, portrait, 
 		always has to be created*/
 		if(this.portraitSprite)
 			this.portraitSprite.destroy();
-		this.portraitSprite = this.dialogueGroup.create(this.x-130, this.y+20, portrait);
+		this.portraitSprite = this.dialogueGroup.create(this.x-135, this.y+20, portrait);
 		//this.portraitSprite.anchor.setTo(0.5, 0.5);
 		
 		this.nameSprite.setText(name);

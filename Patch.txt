@@ -7,5 +7,17 @@ Patch 1.1
 --------------------------------------------------------------------------
 - An independent animation and sound effect is added for the offensive acts that enforce debuffs on the rival
 - rephrased some dialogues in tutorial 1 and tutorial 2
-- small adjustment on display
 - a minor bug fixed
+
+--------------------------------------------------------------------------
+Patch 1.2
+--------------------------------------------------------------------------
+- A new functionality and its interface called "Memory" is added. Players can recollect historic dialogues from the hall or cyberspace
+- focusing animation added to the tutorial, to highlight the elements been explained
+- A shadow is added to personal notes to lowlight what is below
+- Minor UI modification
+- Sound effect also for the notice messages
+- Instructions on how to play added to personal notes
+- The data of acts balanced
+- Dialogues rephrased, especially in tutorials, to more clearly instruct the players
+- Other minor change on texts or UI

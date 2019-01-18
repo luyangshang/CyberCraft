@@ -50,20 +50,22 @@ var cyberspace = {
 	//layer 0
 		this.panelGroup = game.add.group();
 	//layer 1
-		this.dialogueGroup = game.add.group();
+		this.memoryGroup = game.add.group();
 	//layer 2
-		this.buffsGroup = game.add.group();	
+		this.dialogueGroup = game.add.group();
 	//layer 3
+		this.buffsGroup = game.add.group();	
+	//layer 4
 		this.popupGroup = game.add.group();
-	//layer 4: the group for action logs
+	//layer 5: the group for action logs
 		this.logGroup = game.add.group();
-	//layer 5
-		this.notesGroup = game.add.group();
 	//layer 6
-		this.pauseGroup = game.add.group();
+		this.notesGroup = game.add.group();
 	//layer 7
-		this.confirmGroup = game.add.group();
+		this.pauseGroup = game.add.group();
 	//layer 8
+		this.confirmGroup = game.add.group();
+	//layer 9
 		this.messageGroup = game.add.group();
 		//create the managers and personal notes
 		if(this.cyber.defensive)
@@ -82,14 +84,16 @@ var cyberspace = {
 		this.notes = new Notes(this.notesGroup);
 		this.messager = new Messager(this.messageGroup, this.hintBox);
 		game.globals.messager = this.messager;
+		//initialize memory of dialogues
+		game.globals.memory.createInterface(this.memoryGroup, this.dialogueGroup, this.hintBox);
 		
 		this.logViewer = new LogViewer(this.logs, this.role, this.doublePlayer, this.notes, this.messager, this.logGroup);
-		this.effectManager = new EffectManager(this.logGroup, X, Y, 200, 50, 50, 110);
+		this.effectManager = new EffectManager(this.logGroup, X, Y, 300, 50, 50, 110);
 		this.buffManager = new BuffManager(index, this.messager);
 		this.actManager = new ActManager(index, this.doublePlayer, this.buffManager, this.effectManager, this.messager, this.logs, this.role);
 		if(!this.doublePlayer)	//no aiManager if double player
 			this.aiManager = new AIManager(index, this.actManager, this.buffManager, 1-this.role);
-		this.scriptManager = new ScriptManager(index, this, this.actManager, this.aiManager, this.dialogueGroup);
+		this.scriptManager = new ScriptManager(index, this, this.actManager, this.aiManager, this.effectManager, this.dialogueGroup);
 		this.gameManager = new GameManager(index, this.doublePlayer, this.buffManager, this, this.aiManager, this.scriptManager, this.effectManager, this.messager, this.logs);
 		//give actManger the reference to GameManager
 		this.actManager.setGameManager(this.gameManager);
@@ -138,24 +142,28 @@ var cyberspace = {
 		this.assetsSprite.anchor.setTo(0.5);
 		this.updateAssets();
 		
-		//attack log
-		this.logButton = game.add.button(205, 40, "logButton", this.showLog, this, 0, 0, 0, 0, this.panelGroup);
-		this.hintBox.setHintBox(this.logButton, "Open action logs (L)");
-		this.logButton.anchor.setTo(0.5);
 		//round indicator
 		this.roundSprite = game.add.text(100, 110, "", this.styleName, this.panelGroup);
 		this.roundSprite.anchor.setTo(0.5);
 		//create end-turn button
 		this.endTurnButton = game.add.button(0, 150, "endTurnButton", this.nextRound, this, 0, 0, 1, 0, this.panelGroup);
 		this.endTurnButton.anchor.setTo(0, 0.5);
+		//pause button
+		this.pauseButton = game.add.button(35, 40, "cross", this.pauseScreen, this, 0, 0, 1, 0, this.panelGroup);
+		this.hintBox.setHintBox(this.pauseButton, "    Menu (ESC)");
+		this.pauseButton.anchor.setTo(0.5);
 		//personal notes button
 		this.notesButton = game.add.button(110, 40, "book", this.openNotes, this, 0, 0, 1, 0, this.panelGroup);
 		this.hintBox.setHintBox(this.notesButton, "Open personal notes (N)");
 		this.notesButton.anchor.setTo(0.5);
-		//pause button
-		this.pauseButton = game.add.button(35, 40, "cross", this.pauseScreen, this, 0, 0, 1, 0, this.panelGroup);
-		this.hintBox.setHintBox(this.pauseButton, "    menu (ESC)");
-		this.pauseButton.anchor.setTo(0.5);
+		//memory button
+		this.memoryButton = game.add.button(205, 40, "memory", this.memoryFun, this, 0, 0, 1, 0, this.panelGroup);
+		this.hintBox.setHintBox(this.memoryButton, "Recollect the memory of dialogues(M)");
+		this.memoryButton.anchor.setTo(0.5);
+		//attack log
+		this.logButton = game.add.button(300, 40, "logButton", this.showLog, this, 0, 0, 0, 0, this.panelGroup);
+		this.hintBox.setHintBox(this.logButton, "Open action logs (L)");
+		this.logButton.anchor.setTo(0.5);		
 		
 	//act list frame and scroll button
 		this.actsGroup = game.add.group();
@@ -167,8 +175,8 @@ var cyberspace = {
 		this.actScroll = new ScrollButtons(950, 280, 450, this.updateActs, this, 0, this.panelGroup);	
 			//act list
 		this.updateActs(0);
-	//layer 1: dialogue group. Put the dialogue in this group	
-	//layer 2: buffs group
+	//layer 2: dialogue group. Put the dialogue in this group	
+	//layer 3: buffs group
 		//frame
 		var popupFrame = this.buffsGroup.create(game.world.centerX, game.world.centerY, "PNFrame");
 		//intercept clicking events through it to the lower layer buttons
@@ -186,7 +194,7 @@ var cyberspace = {
 		//sub group of buffsGroup, stores the list of sprites of existing buffs
 		this.buffsListGroup = game.add.group();
 		
-	//layer 3: popup group for act/buff
+	//layer 4: popup group for act/buff
 		/*variableGroup: a child group of popupGroup,
 		including only sprites not shared among act/buff window.
 		So variableGroup is to be destroyed whenever creating these windows.
@@ -206,9 +214,9 @@ var cyberspace = {
 		this.exitButton.anchor.setTo(0.5);
 		this.popupGroup.visible = false;
 		
-	//layer 4: the group for action logs
-	//layer 5: the group for notes
-	//layer 6: pause group: restart cyber battle + back to menu + resume button
+	//layer 5: the group for action logs
+	//layer 6: the group for notes
+	//layer 7: pause group: restart cyber battle + back to menu + resume button
 		//to display clicking events for all lower level buttons
 		this.pauseShadow = game.add.sprite(game.world.centerX, game.world.centerY, "black", 0, this.pauseGroup);
 		this.pauseShadow.alpha = 0.5;
@@ -237,7 +245,7 @@ var cyberspace = {
 		this.pauseGroup.callAll("anchor.setTo", "anchor", 0.5);
 		this.pauseGroup.visible = false;
 		
-	//layer 7: the group for "are you sure to quit?"
+	//layer 8: the group for "are you sure to quit?"
 		//mask lower clicks
 		this.mask = game.add.sprite(game.world.centerX, game.world.centerY, "black", 0, this.confirmGroup);
 		this.mask.alpha = 0.7;
@@ -249,7 +257,7 @@ var cyberspace = {
 		
 		this.confirmGroup.callAll("anchor.setTo", "anchor", 0.5);
 		this.confirmGroup.visible = false;
-	//layer 8: the group for messages
+	//layer 9: the group for messages
 		
 		this.setKeys();
 		
@@ -373,7 +381,7 @@ var cyberspace = {
 		var roundText = "Round: " + this.currentRound + " / " + this.gameManager.maxRounds;
 		this.roundSprite.setText(roundText);
 		var role = this.currentRound % 2;
-		this.effectManager.createRoundSpark("Round:\n"+ this.currentRound, role, 400);
+		this.effectManager.createRoundSpark("Round:\n"+ this.currentRound, role, 500, 300);
 	},
 /* -------------------- update functions ends -----------------------*/		
 	
@@ -623,7 +631,7 @@ var cyberspace = {
 			if(this.actManager.getAct(this.controllerRole, id).cost)
 				/*refresh act popup screen by mimicing a click
 			1st parameter sprite and 2nd parameter pointer is not used by showAct.
-			So altough the values are not actually right, it doesn't matter */
+			So altough they are not actually right, it doesn't matter */
 				this.showAct(button, pointer, id, i);
 			else //close act detail if the act is not to be used
 				this.popupGroup.visible = false;
@@ -669,7 +677,7 @@ var cyberspace = {
 		this.buffsGroup.visible = true;
 		//caption
 		this.buffsCaption.setText("Buffs on " + this.cyber.characterName[targetRole]);
-			///now there's only buff length. what if buff picture is added?
+			///now there's only buff length. Will you add buff picture?
 		this.buffs = this.buffManager.getLengths(targetRole);
 		//N.B. existingBuffs have index inconsistent with buff ids
 		this.existingBuffs = this.buffManager.getExistingBuffs(targetRole);
@@ -679,10 +687,11 @@ var cyberspace = {
 	},
 	/**
 	Callback functions to scroll the pages of the buffs to the right page
+	@param {int} targetPage - the page to scroll to
 	*/
 	updateBuffs: function(targetPage)
 	{
-		///clean old buffs
+		//clean old buffs
 		this.buffsListGroup.removeAll(true);
 		var frameSprite, nameSprite, lengthSprite;
 		var lengthText;
@@ -695,10 +704,11 @@ var cyberspace = {
 		{				
 			id = this.existingBuffs[nextItem];
 			//buff frame
-			frameSprite = game.add.button(game.world.centerX, y, "itemFrames", this.showBuff, this, 0, 0, 0, 0, this.buffsListGroup);
+			frameSprite = game.add.button(game.world.centerX - 20, y, "itemFrames", this.showBuff, this, 0, 0, 0, 0, this.buffsListGroup);
 			//parameters passed through button
 			frameSprite.role = this.targetRole;
 			frameSprite.id = id;
+			this.hintBox.setHintBox(frameSprite, "Click to see buff detail");
 			///want buff picture?
 			//buff name
 			nameSprite = game.add.text(350, y, this.buffManager.id2name(id), this.style, this.buffsListGroup);
@@ -710,7 +720,7 @@ var cyberspace = {
 				frameSprite.setFrames(1, 1, 1, 1);
 			if(lengthText == -1)
 				lengthText = "Infinite";
-			lengthSprite = game.add.text(700, y, "remaining: "+lengthText, this.style, this.buffsListGroup);
+			lengthSprite = game.add.text(680, y, "Length: "+lengthText, this.style, this.buffsListGroup);
 			
 			this.buffsListGroup.callAll("anchor.setTo", "anchor", 0.5);
 			y+=50;
@@ -727,6 +737,7 @@ var cyberspace = {
 	{
 		var role = button.role;
 		var id = button.id;
+		this.hintBox.hide();
 		
 		var num;
 		var texts;
@@ -844,6 +855,7 @@ var cyberspace = {
 	{
 		if(this.aiManager)
 			this.aiManager.stopAct();	//stop all pending AI operations
+		game.globals.memory.clearMemory();
 		if(!this.doublePlayer)
 			this.state.start("intro", true, false, 0, this.index, false);
 		else //restart double player mode
@@ -899,6 +911,9 @@ var cyberspace = {
 		var notesKey = game.input.keyboard.addKey(Phaser.Keyboard.N);
 		notesKey.onDown.add(this.notesFun, this);
 		
+		var memoryKey = game.input.keyboard.addKey(Phaser.Keyboard.M);
+		memoryKey.onDown.add(this.memoryFun, this);
+		
 		var learnKey = game.input.keyboard.addKey(Phaser.Keyboard.E);
 		learnKey.onDown.add(this.learnFun, this);
 		var applyKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -914,7 +929,6 @@ var cyberspace = {
 		//when personal notes is opened, it may race with personal notes for esc key.
 		if(this.notes.exitButton && this.notes.exitButton.alive == false)
 		{	//just been destroyed, but the pointer still remain for a while
-			this.notesGroup;
 			delete this.notes.exitButton;
 			return;
 		}
@@ -944,6 +958,11 @@ var cyberspace = {
 			this.buffScroll.destroy();
 			return;
 		}
+		if(this.memoryGroup.visible == true)
+		{
+			this.memoryGroup.visible = false;
+			return;
+		}
 		//open menu window
 		this.pauseScreen();	
 	},
@@ -957,7 +976,7 @@ var cyberspace = {
 		if(this.messageGroup.visible == true || this.confirmGroup.visible == true || this.notesGroup.visible == true || this.pauseGroup.visible == true ||  this.popupGroup.visible == true)
 			return;
 		//this is not the intended handler
-		if(this.logGroup.getAt(0).length || this.notesGroup.visible == true)
+		if(this.logGroup.getAt(0).length || this.notesGroup.visible == true || this.memoryGroup.visible == true)
 			return;
 		//buffs window open, scroll the buffs
 		if(this.buffsGroup.visible == true)
@@ -977,7 +996,7 @@ var cyberspace = {
 	*/
 	notesFun: function()
 	{
-	if(this.messageGroup.visible == true || this.confirmGroup.visible == true || this.notesGroup.visible == true/*this.notes.exitButton*/|| this.pauseGroup.visible == true)
+		if(this.messageGroup.visible == true || this.confirmGroup.visible == true || this.notesGroup.visible == true/*this.notes.exitButton*/|| this.pauseGroup.visible == true)
 			return;
 		//open notes with specified entry
 		if(this.popupGroup.visible == true)
@@ -987,6 +1006,17 @@ var cyberspace = {
 		}
 		//open notes with default entry
 		this.openNotes();
+	},
+	/**
+	When the player presses the key "M". Open the personal notes with or without target entry
+	*/
+	memoryFun: function()
+	{
+		if(this.messageGroup.visible == true || this.confirmGroup.visible == true || this.notesGroup.visible == true/*this.notes.exitButton*/|| this.pauseGroup.visible == true)
+			return;
+		
+		//this.hintBox.hide();
+		game.globals.memory.showInterface();
 	},
 	/**
 	When the player presses the "E" key

@@ -26,10 +26,10 @@
 				"speech": "Multiple Factor of Authentication is an superb technique for the defence. ^It does not fight one form of attack only, but all of them. The intruder may break one factor of authenticate, but they will cry to see another one."
 			},
 			{
-				"speech": "Our income here is quite limited. You should find a way to get more resource. ^I suggests you to use something like Password wallet, in order to facilitate the login in process. Maybe the client will be happy for it, and grant you a little gratuity."
+				"speech": "Our income here is quite limited. You should find a way to get more resource. ^I suggests you to use something like Password manager, in order to facilitate clients' login in process. Maybe the clients will be happy, and grant you a little gratuity."
 			},
 			{
-				"speech": "One-time-pad is fabulous and uncrackable! It just costs much. You can use it at the last rounds so that you can rest easy."
+				"speech": "One-time password is fabulous and uncrackable! It just costs much. You can use it at the last rounds so that you can rest easy."
 			},
 			{
 				"speech": "The terrorists want not just a ordinary account to access to our plant. They want the administrator role! ^That means, when credential is divulged to them, they could perform privilege escalation, which jeopardizes us even more."
@@ -47,7 +47,7 @@
 				"speech": "After you have learnt the hash algorithm, hashing the password is extremely easy. So it's recommended to hash the password. Whereas, hashing alone is not enough. ^The terrorists will undoubtedly try to crack your hash, even with the help of a rainbow table. ^Adding \"salt\" to the password before hashing will make the (precomputed) dictionary attack infeasible."
 			},
 			{
-				"speech": "I believe the terrorists knows a lot about Replay attack. Use MID to protect you from Replay attack."
+				"speech": "I believe the terrorists knows a lot about Replay attack. Use Timestamp to protect you from Replay attack."
 			},
 			{
 				"speech": "The terrorist would constantly try out passwords. You should adopt a technique to refrain this attempt."

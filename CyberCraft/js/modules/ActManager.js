@@ -376,7 +376,7 @@ ActManager.prototype.applyAct = function(role, id, round)
 			return 0;
 		}
 	//animation
-	this.effectManager.createWord(act.name, role, 4000);
+	this.effectManager.createWord(act.name, role, 2500);
 			
 //self condition fullfiled, the act will be applied
 	this.gameManager.consumeResource(role, act.cost);

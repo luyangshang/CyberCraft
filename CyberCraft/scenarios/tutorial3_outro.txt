@@ -1,12 +1,13 @@
 Thanks to the legendary work of Turing's team. The Germany naval Enigma is cracked (again). The super knowledge of Allies about German's military movements has greatly helped Allies in the battlefield. The work of Turing is considered having accelerated the pace of war in Europe by more than two years, saving fourteen millions of lives.
 
-^Playing as an intruder, you have to find the weak points, and strike where undefended. In this tutorial, Nazi didn't apply any defense except for always encrypting the messages with Enigma. This is because they were too much confident in Enigma, thinking that it was unbreakable. However, in the formal scenarios, the defender's action will not be so predictable, and you may be frustrated in various ways. So, be adaptive.
+^Playing as an intruder, you have to find the weak points, and strike where undefended. In this tutorial, Nazi applied no other defense than always encrypting the messages with Enigma. This is because they were too much confident in Enigma, thinking that it was unbreakable. However, in the formal scenarios, the defender's action will not be so predictable, and you may be frustrated in various ways. So, be adaptive.
 
 ^There are four categories of attacks:
-Category 1 is marked with "Last straw" in their descriptions, which deals significant damage to the assets (with explosion animation). E.g. Sniffing attack.
-Category 2 is not marked with anything special. These acts may have "Rival -" in their effects, which break the defense of the defender. E.g. Known-plaintext attack. They may also have "Rival +" in the effects, which open doors for other attacks. Usually, intruders will firstly impair the defense with category 2, and then launch direct attack on assets with category 1 in the same round.
+Category 1 is marked with "Finishing move" in their descriptions, which deals significant damage to the assets (with explosion animation). E.g. Sniffing attack.
+Category 2 is marked with "Supporting category". These acts may have "Rival -" in their effects, which break the defense of the defender. E.g. Known-plaintext attack. They may also have "Rival +" in the effects, which open doors for other attacks. Usually, intruders will firstly impair the defense with "Supporting category", and then launch direct attack on assets with category 1 in the same round.
 ^Category 3 is marked with "DoS category", which targets the defender's server. These attacks will hamper the server's ability to serve client requests, and eventually, make the defender earning less in the next round. The "DDoS" you encountered in tutorial 2 is one of them.
 Category 4 is marked with "Improvement", which strengthens you. These attaks may have "Self +". Examples of this category include "Bombe" and "Gordon's improvement".
+This information can also be found in personal notes, under "Offensive acts".
 
 ^If your attack where defended, you spend the resource in vain. On the contrary, if you succeeded in dealing damage to the assets, you are one step closer to victory, and you gain bounty for the damage dealt.
 You shouldn't be too timid either. The majority of damage comes from "Finishing move" (category 1 attack), but usually you can only succeed in one "Finishing move" each round. Therefore, it's wise to organize an attack (or a chain of attacks) on the assets whenever there is a chance.

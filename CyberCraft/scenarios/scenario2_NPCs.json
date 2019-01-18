@@ -12,7 +12,7 @@
 				"speech": "Good morning, Christopher. Welcome back. An exellent job you have done."
 			},
 			{
-				"speech": "Your last cracking revealed that the country J is building a new AI-controlled war machine. ^The war machine can select its target by itself, which is obviously not complaint with the Three Laws of Robotics. ^This is a serious issue then. We will never leave the lives of the human in the hand of machines. ^So this time, your mission is to infiltrate into the computer system of country J. ^Note that, we do not have access to the communication channel of the target. You need to perform \"MITM\" attack to gurantee the messages pass through us first."
+				"speech": "Your last cracking revealed that the country J is building a new AI-controlled war machine. ^The war machine can select its target by itself, which is obviously not complaint with the Three Laws of Robotics. ^This is a serious issue then. We will never leave the lives of the human in the hand of machines. ^So this time, your mission is to infiltrate into the computer system of country J. ^Unfortunately, our secret agent is seized and executed. We lost the access to the target's communication channel. ^Thereby, it's most likely that you also need to perform \"MITM\" attack to gurantee the messages pass through you."
 			},
 			{
 				"speech": "` Are you ready for your intrusion?"
@@ -36,13 +36,13 @@
 					{"npc": "Hank",
 					"state": 1}
 				],
-				"speech": "Sniffing attack is the major form of attack that we will use. At success, you will get the credential of ArtificialCore partner. ^Nevertheless, your rival may use hash or other techniques to hamper your sniffing. ^Dictionary attack is one of the ways you can use to crack the hashing. With the hashing cracked, you can sniff the credential successfully. ^The rainbow table will takes up a large storage space on your computer, but it will accelerate the your speed of dictionary attack."
+				"speech": "Sniffing attack is the major form of attack that we will use. At success, you will get the credential of Country J's partner. ^Nevertheless, your rival could use hash to hamper your sniffing attack. ^In that case, you need to firstly use \"Dictionary attack\" to crack the hashing. ^You can also buy a \"Rainbow table\" to improve your \"Dictionary attack\"."
 			},
 			{
-				"speech": "You might just want to use Brtute-force attack to try out the password in an try-and-error manner, independent of our Man-In-The-Middle. ^It's not recommended. After all, Brute-force attack is inefficient. What's more, the defensive AI may apply some techniques against this effort."
+				"speech": "You can use Brtute-force attack to try out the password in an try-and-error manner, and it does not require MITM (Man-In-The-Middle). ^However, Brute-force attack is relatively inefficient, and the defensive AI may apply some techniques against this attempt."
 			},
 			{
-				"speech": "One of the possible method against our repetitive password trial is to enforce an limit for wrong passwords. ^However, we can then make use of it, to delibrately insert wrong passwords so as to lock the account of the innocent victim."
+				"speech": "One of the possible methods against our repetitive password trial is to enforce an limit for wrong passwords. However, we can reversely make use of it. ^By delibrately inserting wrong passwords, we can lock down the account of the innocent victim, which frustrates the clients as much as a DoS attack."
 			}
 		]
 	},
@@ -63,7 +63,7 @@
 					{"npc": "Hank",
 					"state": 1}
 				],
-				"speech": "Zero-day attack is overwhelming! You exploit a flaw in code that no one have ever discovered, and therefore, no one is ready to defend. ^The problem of apply Zero-day attack is that you have to find a new flaw yourself. ^This process will take much of your effort, so, use it if necessary."
+				"speech": "I'm searching for a way to make the most of cracked login credential. I shall tell you when I get something of interest."
 			}
 		]
 	},
@@ -84,7 +84,7 @@
 					{"npc": "Hank",
 					"state": 1}
 				],
-				"speech": "When you find it hard to sniff the partner's credential, there is an alternative. ^Replay attack is one that requires no cracking. ^You just intercept the message, assuming its content is as expected, and send the message again, as it was. ^It has not grant you as much valuable information as sniffing attack though, but it still deals damange to the target, and you earns."
+				"speech": "When you find it hard to sniff the partner's credential, there is an alternative. ^Replay attack is one that requires no cracking. ^You just intercept the message, assuming its content is what you expected, and send the message again, as it was. ^It has not grant you as much valuable information as sniffing attack though, but it still deals damange to the target, and you earn."
 			}
 		]
 	}

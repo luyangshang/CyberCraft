@@ -2,6 +2,7 @@ var AjaxFileReader = require('../modules/AjaxFileReader')();
 var loadSave =  require("../modules/loadSave");
 var PersonalNotes = require("../modules/PersonalNotes");
 var AudioManager = require("../modules/AudioManager");
+var Memory = require("../modules/Memory");
 /**
 The loading state
 */
@@ -88,6 +89,7 @@ var load = {
 		if(!arg)
 			this.reportErrorLoading("The loading functionality is not supported. Maybe change for another browser");
 		game.globals.audioManager = new AudioManager();
+		game.globals.memory = new Memory();
 		//start with singlton files.
 		this.parseSingletons(0);
 	},

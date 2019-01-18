@@ -32,6 +32,9 @@ function Notes(fatherGroup)
 	//the number of pages of the names
 	this.nameNPage = Math.ceil(this.noteNames.length/this.namesPerPage);
 	
+	//underlining shadow to lowlight what is below
+	this.shadow = game.add.image(0, 0, "black", 0, this.fatherGroup);
+	this.shadow.alpha = 0.7;
 	//general frame
 	this.PNFrame = game.add.sprite(1000, 0, "notes", 0, this.fatherGroup);
 	this.PNFrame.anchor.setTo(1,0);
@@ -174,8 +177,8 @@ Notes.prototype.readNote = function(id)
 		{
 			var internalText = game.add.text(300, 590-(length -i)*25, internalLinks[i], this.styleLink, this.internalGroup);
 			internalText.inputEnabled = true;
-			var newId = this.name2id(internalLinks[i]);
-			internalText.events.onInputDown.add(this.internal, this, 0, newId);
+			var targetId = this.name2id(internalLinks[i]);
+			internalText.events.onInputDown.add(this.internal, this, 0, targetId);
 			this.hintBox.setHintBox(internalText, "Click to jump to");
 		}
 	}

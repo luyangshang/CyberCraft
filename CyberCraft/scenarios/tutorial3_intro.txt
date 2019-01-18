@@ -13,9 +13,10 @@ The purple ones are the indicators for the act's requirements on buffs. If the r
 The orange ones are the effects on buffs when the act succeeds. It tells what buff will be enforced to you or to your rival, and which buff will be cleaned.
 
 ^#image$500$250$selfRivalBuffsWithDescription
+^#image$500$300$selfRivalBuffsTable
 
-^in short, "+" for "have buffs" or "add buffs".
-"-" for "not have buffs" or "remove buffs".
+
+^If you can't remember these signs, the first entries of personal notes will help you.
 
 ^1939,                                
 Bletchley Park, UK

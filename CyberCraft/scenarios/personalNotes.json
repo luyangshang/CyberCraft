@@ -1,9 +1,42 @@
-{"desc":	 	"#text$220$140$This is your personal note in cyber security. It was made and continuously improved, back to the day when you were a university student. It's a nice practice to frequently refer to it whenever you have forgotten something. #image$530$430$hackerWithTitleNotes$440$220",
+{"desc":	 	"#text$220$120$This is your personal note in cyber security. It was made and continuously improved, back to the day when you were a university student. It's a nice practice to frequently refer to it whenever you have forgotten something. #image$550$360$hackerWithTitleNotes$680$370",
+"sees": ["Digital signature"],
+"game":
+[
+	{
+		"name": "Play as intruder",
+		"desc": "Your goal is to jeopardize all the assets before the number of rounds end. \nAt your round, you should do the following: \n1. Check the defensive buffs on your rival, see where is well defended and where still gets vulnerabilities \n2. Design an attack path, and try to launch one attack belonging to \"Finishing move\" category. The \"Finishing move\" could be preceded by zero or more attack of \"Supporting category\" in order to success. To know the categories of attack, use the link below to \"Offensive acts\". To know whether an attack will be successful, use the link below to \"Act details\". ^3. (optional) launch an attack of \"DoS category\" trying to reduce rival's income in his round. \n4. (optional) Use a \"Improvement\" to strengthen you own attacks.",
+		"sees": ["Play as defender", "Offensive acts", "Act details"]
+	},
+	{
+		"name": "Play as defender",
+		"desc": "Your goal is to protect the assets until the number of rounds end. \nAt your round, you should do this: \nCheck (defensive) buffs on you, finding the holes in your defense, and fix them by piling up (defensive) buffs. If you have insifficient resource, then fix those deadly vulnerabilities first. ^An defensive act usually gives yourself a (defensive) buff of the same name (listed as \"Self +\"). It's also possible that it gives a buff of different names, or it gives multiple buffs. \nSome buffs are exclusive to each other, so you will see \"Self -\" in their corresponding acts. \nTrying to add a buff when it has not expired will refresh the buff length. \n\nTo know those like \"Self +\", use the link \"Act details\" below.",
+		"sees": ["Play as intruder", "Defensive acts", "Act details"]
+	},
+	{
+		"name": "Act details",
+		"desc": "#text$220$150$Before an act is learnt, the blue \"prerequisites for learning\" lists the acts needed to be learnt before this one. There are also some acts which lay foundation in its field, which are not to be used (directly). #image$600$350$prerequistitesCapture$430$300 ^#image$530$350$selfRivalBuffsTable$400$290#text$220$110$When an act is learnt, there is a orange list(s) telling the effect on buffs when the acts succeeds. There could also be purple lists telling the reqirement on buffs in order successfully apply the act. ^#image$600$190$selfRivalBuffsWithDescription$500$280#text$220$430$\"+\" or \"-\" put before \"Self\" or \"Rival\" (words in purple) means the buffs should or should not be on the character, in order for the act to be successful. \n\"+\" or \"-\" put after \"Self\" or \"Rival\" (words in orange) indicates the buffs will be enforced or cleaned on the character when the act succeeds. ^#text$220$150$In some acts, \"- Self\" and \"Self +\" (or \"- Rival\" and \"Rival +\") contains the same buff. That means the act adds you (rival) a buff, and the buff itself prevents you from applying the act again. It indicates a one-time act, not repeatable until the buff expires. Some \"Improvement\" and all \"Finishing Move\" are examples of this. #image$390$380$improvementCapture$320$200#image$730$380$finishingMoveCapture$320$200^#text$220$130$Some offensive acts as \"Supporting category\" has \"Rival -\". It means the act will clean (usually defensive) buffs on the rival. They are power tools to break the defense, extraordinary useful when facing airtight defense. #image$630$270$breakDefenseCapture$320$200#text$220$420$The book-like button at the act detail (shortcut key \"N\") directly lead to the entry about that act in personal notes.",
+		"sees": ["Play as intruder", "Play as intruder", "Special buffs"]
+	},
+	{
+		"name": "Buff details",
+		"desc": "- Upkeep or gain: An upkeep tells how much resource the owner, at the start of his/her round, has to spend to maintain the buff, while gain is more much he/she earns from the buff. \nA buff that has upkeep indicates that such technology costs some amount of computational power, or the clients get somewhat bothered by this technology. After all, security costs. The more secure, the heavier load is enforced to the device and to the user. Contrarily, a buff with gain means that the technology provides computational power, or most possibly, facilitates the user. ^- Extra capacity: The CDN provides extra capacity to the server. That's to say, the server can stand more requests, wether legitimate client requests or superfluous requests from DoS attacks. \n- Superfluous request: It tells how much superfluous request was brought by the DoS attack represented by this buff. \n- DoS resistance: It shows how much superfluous requests from DoS attack will be filtered out by this buff. Only those requests passing through this filtering will reach the server. \n\nThe book-like button at the buff detail (shortcut key \"N\") directly lead to the entry about that buff in personal notes.",
+		"sees": ["Buffs", "Special buffs"]
+	},
+	{
+		"name": "Special buffs",
+		"desc": "There are some special buffs: \n- 503 Server Unavailable: this buff is created on the defender to warn that he/she just failed to serve at least one client requests. It could be that the server gets a too small capacity, or the server is under DoS (Denial of Service attack) (In which case, there's also a \"Denial of Service attacked\" buff) \n- Credential compromised / Confidential message divulged: these buffs are created on the defender when the intruder has successfully launched \"Finishing move\", stealing credential and dealing great damange to the assets. The intruder can use no more \"Finishing move\" in it duration, because there's no more to steal for the moment. ^- Denial of Service attacked: the intruder has launched one kind of DoS attack on the server. Defender will suffer income decrease due to the failure to serve client requests. \n\nFor details of these buffs, use the link below.",
+		"sees": ["Buffs", "503 Server Unavailable", "Credential compromised", "Confidential message divulged", "Denial of service attacked"]
+	}
+],
 "acts":
 {
-	"offDesc":	"Offensive acts are performed by the intruder. Many of them target the victim host. The intruder will get more resource as bounty as much as the damage dealt to the assets. There are four categories of attacks: \n1. Those marked with \"Finishing move\" deal great damage to the assets. However, in the majority of cases, an intruder will only successfully launch these attacks once each round. Moreover, these attacks are usually preceded with attacks of the next category, otherwise, it may fail. \n2. Those attacks without any mark in the act description deal little or no damage to the assets. However, they are important methods to break the defense or to prepare for the final \"Finishing move\". ^3. Those attacks marked with \"DoS category\" belong to DoS attacks. They enforce pressure to the victim's server, so that the rival may have a problem with resource income in the next round. \n4. Those marked with \"Improvement\" strengthen the intruder. Some of these reinforcements can be performed only once, some other multiple times. \nIn one round, an intruder usually launches one \"Finishing move\", preceded by a certain number of category 2 attacks, and optionally \"DoS category\" or \"Improvement\". \nSome defenses can be overridden by attacks of category 2, but some cannot. In face of these defenses, the intruder should turn to other vulnerabilities.",
 	"offensive":
 	[
+		{
+			"name": "Offensive acts",
+			"desc":	"Offensive acts are performed by the intruder. Many of them target the victim host. The intruder will get more resource as bounty as much as the damage dealt to the assets. There are four categories of attacks: \n1. Those marked with \"Finishing move\" deal great damage to the assets. However, in the majority of cases, an intruder will only successfully launch these attacks once each round. Moreover, these attacks are usually preceded with attacks of the next category, otherwise, it may fail. \n2. Those marked with \"Supporting category\" deal little or no damage to the assets. However, they are important methods to break the defense or to prepare for the final \"Finishing move\". ^3. Those attacks marked with \"DoS category\" belong to DoS attacks. They enforce pressure to the victim's server, so that the rival may have a problem with resource income in the next round. \n4. Those marked with \"Improvement\" strengthen the intruder. Some of these reinforcements can be performed only once, some other multiple times. \nIn one round, an intruder usually launches one \"Finishing move\", preceded by a certain number of category 2 attacks, and optionally \"DoS category\" or \"Improvement\". \nSome defenses can be overridden by attacks of category 2, but some cannot. In face of these defenses, the intruder should turn to other vulnerabilities.",
+			"sees": ["Play as intruder", "Defensive acts"]
+		},
 		{
 			"name":	"ARP cache poisoning",
 			"desc":	"#image$600$200$arpSpoofingNotes$400$330#image$510$450$arpCachePoisoningNotes^ARP cache poisoning, together with ARP spoofing, ARP poison routing, is an offensive technique in a LAN (Local Area Network) that the attacker sends spoofed ARP message, to fool the victim(s) of his IP address. The target victim(s) then take the attacker's IP address to belong to, for example, the default gateway. As a result, a large number of messages are sent to the attacker instead of the real designated host, opening the door for MITM (Man-In-The-Middle) attack, session hijacking or denial of service attack. Being based on ARP protocol, this attack totally cannot be used outside the same Local Area Network. \n\nSome defensive techniques are there against ARP cache poisoning: ^One possibility is to manually set the ARP entries statically, and instruct the machine to totally ignore any ARP replies. This method does not scale to large networks, however, as the manual configuration of all the possible combination of connections has n-square complexity. \nThe other defensive technique is the use of ARP firewall. It addresses the problem that ARP reply is not authenticated, and make the use of cross-checking or certification of some kind to detect spoofed ARP messages. \nOperating system can provide some defenses against ARP poisoning. e.g. ignoring ARP replies if it's not preceded by ARP request from the host or if the ARP entry in the machine has not expired.",
@@ -37,8 +70,8 @@
 		},
 		{
 			"name":	"CSRF",
-			"desc":	"Cross-site Request Forgery, one-click attack or session riding is an attack approach to \"forge\" requests from the client trusted by the web server. This can be obtained by crafted image tags, invisible forms or some Javascript request. While XSS (Cross-site scripting), which exploits user's trust for the website, CSRF exploits server's trust on the client's browser. ^Though not many, there are already some technical methods to fight against cross-site request forgery. But the users can also do something to reduce the likelihood of attacks: \n1. Avoid opening any casual links sent from unauthorized person. These links are one of the major ways how CSRF distributes. \n2. Log off important accounts or at least use a different browser when opening any suspicious link.",
-			"sees":	["XSS", "Tip:open no unauthorized link"],
+			"desc":	"Cross-site Request Forgery, one-click attack or session riding is an attack approach to \"forge\" requests from the client trusted by the web server. This can be obtained by crafted image tags, invisible forms or some Javascript request. While XSS (Cross-site scripting), which exploits user's trust for the website, CSRF exploits server's trust on the client's browser. ^Though not many, there are already some technical methods to fight against cross-site request forgery. But the users can also do something to reduce the likelihood of attacks: \n1. Avoid opening any casual links sent from unverified person. These links are one of the major ways how CSRF distributes. \n2. Log off important accounts or at least use a different browser when opening any suspicious link.",
+			"sees":	["XSS", "Tip:open no unverified link"],
 			"url1": "https://en.wikipedia.org/wiki/Cross-site_request_forgery"
 		},
 		{
@@ -80,7 +113,7 @@
 		},
 		{
 			"name":	"IP spoofing",
-			"desc":	"IP spoofing or IP address spoofing is the behavior of creating IP packages with a force source address. By doing this, the attacker can impersonate others or hide its only identity. IP spoofing is extremely easy, and it has been a commonly used together with many other attacks, so that the administrator will find difficulty tracing detecting the attacker. IP spoofing can easily fool those services use IP address for authentication (therefore, there are little services left still using this kind of authentication). ^One of the techniques to defend IP spoofing is the use of packet filters. Ingress filters drop IP packets coming from its outer interface but with inner source addresses; egress filters drop IP packets coming from its inner interface but with outer source address. However, they are not able to detect attackers from the outside of the network, trying to spoof IP addresses outside, or attackers inside the network, trying to spoof IP addresses inside. \nThe upper layers can also provide some defenses against IP spoofing.",
+			"desc":	"IP spoofing or IP address spoofing is the behavior of creating IP packages with a false source address. By doing this, the attacker can impersonate others or hide its only identity. IP spoofing is extremely easy, and it has been a commonly used together with many other attacks, so that the administrator will find difficulty tracing detecting the attacker. IP spoofing can easily fool those services use IP address for authentication (therefore, there are little services left still using the IP address for authentication). ^One of the techniques to defend IP spoofing is the use of packet filters. Ingress filters drop IP packets coming from its outer interface but with inner source addresses; egress filters drop IP packets coming from its inner interface but with outer source address. However, they are not able to detect attackers from the outside of the network, trying to spoof IP addresses outside, or attackers inside the network, trying to spoof IP addresses inside. \nThe upper layers can also provide some defenses against IP spoofing.",
 			"url1": "https://en.wikipedia.org/wiki/IP_address_spoofing"
 		},
 		{
@@ -91,7 +124,7 @@
 		},
 		{
 			"name":	"MITM",
-			"desc": "#image$510$500$mitmNotes#text$220$260$Man-In-The-Middle attack is a collection of attacks, where the attacker secretly inserts himself/herself between two parties, forwarding their messages, reading and possibly manipulating the messages, with the two parties unaware, thinking they were communicating directly. With MITM attack, all the messages exchanged between the two parties are accessible to the attacker, and if unencrypted, every secret is revealed to the attacker. What's more, the attacker can alter the messages as he/she wants, while the two parties, if without no authentication mechanism, are never aware. \nSome protocols like DH (Diffie-Hellman key exchange) can be easily fooled by MITM. ^Encryption is the way against sniffing attack following MITM (but be aware, DH itself will be compromised by MITM). All kinds of authentication will guarantee the attacker's manipulation will be detected. Transmission latency also gives some clues to the possibility of MITM attack. There are also other ways, each targeting each specific kind of MITM attack, based on the principles and properties of each attack.",
+			"desc": "Man-In-The-Middle attack is a collection of attacks, where the attacker secretly inserts himself/herself between two parties, with the two parties unaware. \nNormally, the messages exchanged between the two parties could follow other paths, but this attack guarantees them passing through the attacker's machine. Because the attacker forwards the messages just like a normal router, the two parties would find nothing different and think that they were communicating directly. ^#image$510$400$mitmNotes#text$220$180$Nevertheless, With MITM attack, all the messages exchanged between the two parties are accessible to the attacker. That means if the messages are unencrypted, every secret is revealed to the attacker. What's more, the attacker can alter the messages as he/she wants, while the two parties, if without no authentication mechanism, are never aware. \nSome protocols like DH (Diffie-Hellman key exchange) can be easily fooled by MITM. ^Encryption is the way against sniffing attack following MITM (but be aware, DH itself will be compromised by MITM). All kinds of authentication will guarantee the attacker's manipulation will be detected. Transmission latency also gives some clues to the possibility of MITM attack. There are also other ways, each targeting each specific kind of MITM attack, based on the principles and properties of each attack.",
 			"sees":	["DH", "Sniffing attack", "Replay attack"],
 			"url1":	"https://en.wikipedia.org/wiki/Man-in-the-middle_attack"
 		},
@@ -188,7 +221,7 @@
 		},
 		{
 			"name":	"XSS",
-			"desc":	"Cross-site scripting is a computer system vulnerability that is usually found in web applications. The attacker can use XSS to inject client-side scripts into webpages, so that they will run on the machines of other users. In this manner, access controls like same-origin policy can be bypassed. It's one of the greatest vulnerability for web applications. Different from CSRF, which exploits the server's trust in the client browser, XSS exploits the client's trust in the server. ^The injection techniques like HTTP header injection and the SQL injection are closely related to XSS. The defensive approach of them is generally the sanitization of the related tags. \nXSS can be used to steal cookies from the victim client. Counter measures on this include binding cookie to IP or set the HTTP-only flag in the cookie, making the cookie intangible for the scripts. ^#image$550$280$xssNotes",
+			"desc":	"Cross-site scripting is a computer system vulnerability that is usually found in web applications. The attacker can use XSS to inject client-side scripts into webpages, so that they will run on the machines of other users. In this manner, access controls like same-origin policy can be bypassed. It's one of the greatest vulnerability for web applications. Different from CSRF, which exploits the server's trust in the client browser, XSS exploits the client's trust in the server. ^The injection techniques like HTTP header injection and the SQL injection are closely related to XSS. The defensive approach of them is generally the sanitization of the related tags. \nXSS can be used to steal cookies from the victim client. Counter measures on this include binding cookie to IP, setting the HTTP-only flag or secure flag in the cookie. For details of these approaches, see links below. ^#image$550$280$xssNotes",
 			"sees":	["CSRF", "Same-Origin policy", "Cookie bind to IP", "HTTP-only cookie", "Secure cookie"],
 			"url1": "https://en.wikipedia.org/wiki/Cross-site_scripting"
 		},
@@ -198,9 +231,13 @@
 			"url1":	"https://en.wikipedia.org/wiki/Zero-day_(computing)"
 		}
 	],
-	"defDesc": "Defensive acts are performed by the defender. Nearly all the defensive acts enforce positive buffs on the character. The positive buffs then, usually act as hurdles for the intruder to launch attacks on the vulnerabilities. \nSome defensive buffs have upkeep, consuming resource each defender's round. This implies the applications consumes non-trivial computational power or adds non-trivial complexity to the users. However, it's usually better to sacrifice some computational power or simplicity for a higher level of security. Contrarily, some other buffs could contribute to resource gain, providing resource each defender's round. This indicates that the applications will provide computational power or facilitate the users.",
 	"defensive":
 	[
+		{
+			"name": "Defensive acts",
+			"desc": "Defensive acts are performed by the defender. Nearly all the defensive acts enforce positive buffs on the character. The positive buffs then, usually act as hurdles for the intruder to launch attacks on the vulnerabilities. \nSome defensive buffs have upkeep, consuming resource each defender's round. This implies the applications consumes non-trivial computational power or adds non-trivial complexity to the users. However, it's usually better to sacrifice some computational power or simplicity for a higher level of security. Contrarily, some other buffs could contribute to resource gain, providing resource each defender's round. This indicates that the applications will provide computational power or facilitate the users.",
+			"sees": ["Play as defender", "Offensive acts"]
+		},
 		{
 			"name":	"3DES",
 			"desc":	"3DES or Triple DES is a symmetric-key block cipher that uses DES algorithm three times to each block. It could use two different DES keys: encryption with key1, decryption with key2, and then encryption with key1. Or it could use three different DES keys: encryption with key1, decryption with key2, and then encryption with key3. It's developed to cope with the problem of DES being unable to stand the attack of modern computers. No one uses Double DES. This is because the attacker with both plaintext and ciphertext in hands, can crack Double DES from both sizes (DES encryption of the plaintext and DES decryption of the ciphertext), and of the Meet-In-The-Middle attack. As a result, Double DES, as compared to DES, doubles the encryption time, but only increase the security by one bit (rather than 56bits).",
@@ -213,8 +250,8 @@
 		},
 		{
 			"name":	"Asymmetric cryptography",
-			"desc":	"Asymmetric cryptography or public-key cryptography is a way of cryptography using a pair of two keys: a public key and a private key. The public key is to be distributed as widely as possible, while the private key has to be kept secret. ^There is a relationship between these two keys: the message encrypted with the public key can and can only be decrypted with the private key; the messages encrypted with the private key can and can only be decrypted with the public key. As a result, message encrypted with the public key becomes a secret: only the private key holder can read (this provides secrecy). The message that can be decrypted with the public key is supposed to be encrypted with the related private key: only the private key holder can do this (this provides authentication and non-repudiation). ^Even with same key length, Asymmetric cryptography is far slower than symmetric cryptography, as a consequence, it's not used to encrypt the whole message, but only an important part related to it. For example, for secrecy, the message is still encrypted with a symmetric key, but the key is sent, encrypted with the receiver's public key (asymmetric key). And for authentication, instead of the whole message, only the hash value of the message (which is  much smaller) is encrypted with the sender's private key.",
-			"sees":	["Key exchange", "Symmetric cryptography", "RSA key exchange", "DH", "MQV"],
+			"desc":	"Asymmetric cryptography or public-key cryptography is a way of cryptography using a pair of two keys: a public key and a private key. The public key is to be distributed as widely as possible, while the private key has to be kept secret. \nThere is a relationship between these two keys: the message encrypted with the public key can and can only be decrypted with the private key; the messages encrypted with the private key can and can only be decrypted with the public key. ^#text$220$150$As a result, message encrypted with the public key becomes a secret: only the private key holder can read (this provides secrecy). The message that can be decrypted with the public key is supposed to be encrypted with the related private key: only the private key holder can do this (this provides authentication and non-repudiation). #image$600$360$asymmetricKeysNotes$600$280^Even with same key length, Asymmetric cryptography is far slower than symmetric cryptography, as a consequence, it's not used to encrypt the whole message, but only an important part related to it. For example, for secrecy, the message is still encrypted with a symmetric key, but the key is sent, encrypted with the receiver's public key (asymmetric key). And for authentication, instead of the whole message, only the hash value of the message (which is  much smaller) is encrypted with the sender's private key.",
+			"sees":	["Digital signature", "Key exchange", "Symmetric cryptography", "RSA key exchange", "DH", "MQV"],
 			"url1":	"https://en.wikipedia.org/wiki/Public-key_cryptography"
 		},
 		{
@@ -229,7 +266,7 @@
 		},
 		{
 			"name":	"Encrypt with Enigma",
-			"desc":	"#image$800$80$enigmaLogo$200$88#image$800$350$enigmaNotes#text$220$270$The Enigma machines were a series of electro-mechanical rotor cipher machines developed and used in the early and mid-20th century for the encryption of commercial, diplomatic and military purposes. It was invented by the German engineer Arthur Scherbius at the end of the World War 1, and is more widely used by Nazi Germany before and during the World War 2. Especially, the German military model Enigma machine, with also a plugboard, is the much more complex than other versions of the machine.$520 ^In 1932, a Polish mathematician and cryptanalyst Marian Rejewski, aided by Jerzy Różycki and Henryk Zygalski, has taken advantage of the operator mistakes and the misconfiguration of German military Enigma machine, to break the Enigma machine. They also built an electro-mechanical machine referred to as \"Bomba\" to help the search for the encryption key. ^In 1938, the Germans increased the complexity of Enigma machine, change the number of rotors of the machine from 3 to 5, increasing the time to crack the key ten times, making the Polish cryptanalyst not anymore able to crack the code.",
+			"desc":	"#image$800$80$enigmaLogo$200$88#image$800$350$enigmaNotes#text$220$270$The Enigma machines were a series of electro-mechanical rotor cipher machines developed and used in the early and mid-20th century for the encryption of commercial, diplomatic and military purposes. It was invented by the German engineer Arthur Scherbius at the end of the World War 1, and is more widely used by Nazi Germany before and during the World War 2. Especially, the German military model Enigma machine, with also a plugboard, is the much more complex than other versions of the machine.$520 ^In 1932, a Polish mathematician and cryptanalyst Marian Rejewski, aided by Jerzy Różycki and Henryk Zygalski, has taken advantage of the operator mistakes and the misconfiguration of German military Enigma machine, to break the Enigma machine. They also built an electro-mechanical machine referred to as \"Bomba\" to help the search for the encryption key. \nIn 1938, the Germans increased the complexity of Enigma machine, change the number of rotors of the machine from 3 to 5, increasing the time to crack the key ten times, making the Polish cryptanalyst not anymore able to crack the code. ^In 1939, Alan Turing start to work on less fragile approach, which does not rely on a repetition that Polish approach requires. He designed a British machine called \"Bombe\" specializing in cracking the daily setting of Enigma. In 1940, Gordon Welchman added diagnal board to Bombe, greatly increasing the effectiveness of Bombe.",
 			"sees":	["Bombe", "Encrypted"],
 			"url1":	"https://en.wikipedia.org/wiki/Enigma_machine",
 			"url2":	"https://en.wikipedia.org/wiki/Cryptanalysis_of_the_Enigma"
@@ -257,6 +294,12 @@
 			"desc":	"DHCP snooping is a group of defensive techniques on the security of DHCP infrastructure. DHCP can be configured to block unfavorable DHCP messages. It also has a database of \"bindings\" for hosts with DHCP transaction complete, which is useful for other security or accounting purposes. \nDHCP snooping is counters the use of rogue DHCP server.",
 			"sees":	["Rogue DHCP server"],
 			"url1":	"https://en.wikipedia.org/wiki/DHCP_snooping"
+		},
+		{
+			"name":	"Digital signature",
+			"desc":	"Digital signature is a mathematical scheme used to verify the authenticity of digital messages or digital documents. A valid digital signature proves that, the related message was created by the claimed sender (authentication), not modified by the third party (integrity), and the sender cannot deny having created the message (non-repudiation). \nDigital signatures are commonly used for software distribution, finacial transactions as well as many other situations, where unwanted changes or manipulations should be detected. ^Digital signature is usually attached to the message or document being transmitted. It exploit asymmetric cryptograghy for its purpose. Due to the cost of asymmetric cryptography, digital signature is calculated only on the hash value of the message, instead of on the message itself. The hashed value is encrypted with the private key of the sender. The receiver, upon receiving the digital signature, decrypt it with the public key of the sender, and recover the hash value of the message. The receiver also calculate the hash value from the message itself, and then compare the two hash values. If they match, we say that the message has a valid digital signature. ^#text$220$100$The following graph shows how to transmit a message with digital signature AND in secret: #image$580$300$digitalSignatureNotes$670$330",
+			"sees":	["Asymmetric cryptography"],
+			"url1": "https://en.wikipedia.org/wiki/Digital_signature"
 		},
 		{
 			"name":	"DNSSEC",
@@ -338,7 +381,7 @@
 		{
 			"name":	"Password hashed",
 			"desc":	"Although the (cryptographic) hashing function is more widely used for authentication purpose, it still provides a kind of obfuscation similar to encryption. In the old days when the passwords of the clients are stored in the server in clear text, the data leakage on the server means the usernames and the passwords are all revealed to the intruder. Things will be even worse if the clients have used the same password across different servers, meaning that the intruder has obtained credential for multiple services. ^One way hash can transfer the password into another piece of text, which has no notable clue to the password. Except for a brute-force search, there is no algorithm that can find the original password out of its hashed value. For more details, see the entry \"Hash algorithm\". \nHere is how it goes: instead of storing the client password itself, the server stores only the hash of the password. At each login attempt, the inserted password is also hashed, before being compared to the value stored. In this way, even if the server's defense is breached, the intruder still will not obtain the password, but only the hash value of it. ^It the intruder use the hash value for login, the server, or any other server will hash it again, converting it to another value, and the login attempt fails. Moreover, if two servers use two different hash algorithms, or the same hash algorithm with different block size (assuming a block cipher), the hashed values differ. However, there are offensive techniques to thwart the hashing of the password. Besides the most basic and slowest brute-force attack, which tests all possible passwords and their corresponding hash values, there are also dictionary attack and, its improved version, rainbow table attack.",
-			"sees":	["Hash algorithm", "Brute-force attack", "Dictionary attack", "Rainbow table"]
+			"sees":	["Hash algorithm", "Brute-force attack", "Dictionary attack", "Rainbow table", "Salt"]
 		},
 		{
 			"name":	"Password manager",
@@ -349,7 +392,8 @@
 		},
 		{
 			"name":	"PKI",
-			"desc":	"#text$220$180$A Public Key Infrastructure is a set of roles, policies, and procedures needed to create, manage, distribute, use, store, and revoke digital certificates and manage public-key encryption. It binds the public keys to respective identities, through the registration and issuance of the certificate at and by the certificate authority.         key point: certificates#image$490$430$pkiNotes$480$300",
+			"desc":	"#text$220$150$A Public Key Infrastructure is a set of roles, policies, and procedures needed to create, manage, distribute, use, store, and revoke digital certificates and manage public-key encryption. It binds the public keys to respective identities, through the registration and issuance of the certificate at and by the certificate authority. #image$490$400$pkiNotes$480$300#text$700$360$key point: certificates#text$700$420$based on: digital signature",
+			"sees":	["Digital signature"],
 			"url1":	"https://en.wikipedia.org/wiki/Public_key_infrastructure"
 		},
 		{
@@ -367,7 +411,7 @@
 		{
 			"name":	"Salt",
 			"desc":	"Salt is a random data to be added to the original text (e.g. password or passphrase) before hashing operation. It's closely related to the term of nonce. It's used against dictionary attack and pre-computed rainbow table attack. \nThe user password was stored in clear text in the server. Later on people stores only the hash of the password, in order to avoid password leakage from the server. Then, in face of the dictionary attack and the pre-computed rainbow table attack, salt is also added to the password before they are together hashed. The server then stores the salt-added-hash together with the salt used. ^The salt should be generated randomly every time, and should be long enough. With random salt, even if users used the same password, their salt-add password differs, and their final hash value differs. Also, the intruder has to generate one rainbow table for each random salt, which becomes greatly challenging (more challenging if the salt is long). With long salt, even if the password was short, the salt-add password can still be of size big enough to frustrates crackers.",
-			"sees":	["Dictionary attack", "Rainbow table", "Nonce"],
+			"sees":	["Dictionary attack", "Rainbow table", "Nonce", "Password hashed"],
 			"url1":	"https://en.wikipedia.org/wiki/Salt_(cryptography)"
 		},
 		{
@@ -390,89 +434,91 @@
 			"sees":	["Rogue access point"]
 		},
 		{
-			"name":	"Tip:open no unauthorized link",
-			"desc":	"Links sent from unknown sources are doubtable. It may lead to a shadow server, which looks and feels like a legitimate one, but will steal sensitive data from you. There could be also some techniques to obfuscate the query strings in the link, making it hard to be recognized. The link may also lead to some sites which distributes malware. Just by a single click on the link, one may have already been CSRF attacked.",
+			"name":	"Tip:open no unverified link",
+			"desc":	"Links sent from unknown sources (the emails or instant messages sent from unknown sender) are doubtable. It may lead to a shadow server, which looks and feels like a legitimate one, but will steal sensitive data from you. There could be also some techniques to obfuscate the query strings in the link, making it hard to be recognized. The link may also lead to some sites which distributes malware. Just by a single click on the link, one may have already been CSRF attacked.",
 			"sees":	["CSRF", "Spam email"]
 		}
 	]
 },
-"buffs": 
-{
-	"buffDesc":	"Buffs are the lasting effects of the offensive or defensive acts performed by the characters. There are positive acts, which enhance the ability of the character, or provide defense against attacks. There are also negative buffs, which are usually enforced on the defender by the intruder. Negative buffs indicate the states of how the intruders lure the victims into their traps. \nSome buffs have infinite length, but some others have finite length. If a buff's remaining length decreses to zero, the buff, together with its effects will vanish. ^In general, a defender is supposed to put on as many (positive) buffs as possible, to gurantee better security. An intruder, however, would like to remove those positive buffs (if possible) from the defender, and enforces some negative buffs on the defender, so as to successfully deal damage to the assets.",
-	"buffs":
-	[
-		{
-			"name":	"503 Server Unavailable",
-			"desc": "503 Server Unavailable. The server is overburdened with requests. Possible reason:\n - The server's computation or communication power does not match the need of the clients.\n - Because of some events (e.g. a festival or a promotion) many clients send requests within a short time period.\n - The server is under DoS attack, where a huge number of requests are fake requests aiming at exhaust the computational or communicational power of the server."
-		},
-		{
-			"name":	"Confidential message divulged",
-			"desc":	"German military movement and other important and secret information are revealed to the Allies.",
-			"sees":	["Credential compromised"]
-		},
-		{
-			"name":	"Connected to rogue AP",
-			"desc":	"The victim is connected to a rogue AP (access point). If the rogue access point has a rogue DHCP service installed, the victim could experience DHCP hijacking.",
-			"sees":	["Rogue access point"]
-		},
-		{
-			"name":	"Credential compromised",
-			"desc":	"The server/client's important data like username and password are compromised. The intruder obtains these data, and he can sell these data in the deep web, or even use the important login credential for more devastating things (e.g. deleting the whole database, exporting more client secret information, tampering with account credits).",
-			"sees":	["Confidential message divulged"]
-		},
-		{
-			"name": "Denial of service attacked",
-			"desc":	"The target server is under denial of service attack. The server is greatly loaded with countless request, and it may fail to serve the legitimate users.",
-			"sees":	["DoS", "DDoS", "Password DoS"]
-		},
-		{
-			"name": "DHCP hijacked",
-			"desc":	"The victim's device accept the configuration of a rogue DHCP server. Crucial parameters like default gateway and DNS server are set by the attacker. Because of the setting for the default gateway, the attacker is already in a Man-In-The-Middle state. Because of the setting for the DNS server, the attacker can set up a rogue DNS server and perform the attack of DNS hijacking. \nFor details, see Rogue DHCP server.",
-			"sees":	["Rogue DHCP server"],
-			"url1":	"https://en.wikipedia.org/wiki/Rogue_DHCP"
-		},
-		{
-			"name":	"DNS hijacked",
-			"desc":	"See Rogue DNS server",
-			"sees":	["Rogue DNS server"],
-			"url1":	"https://en.wikipedia.org/wiki/DNS_hijacking"
-		},
-		{
-			"name":	"Encrypted",
-			"desc":	"The data transferred over the Internet is encrypted with a symmetric key shared by the sender and the receiver. Sniffing attack alone will not compromise the secrecy. \nThe process to create encryption key known by and only by the two parties is called key exchange. For more information, please refer to \"Key exchange\".",
-			"sees":	["Key exchange", "Symmetric cryptography", "Encrypt with Enigma"]
-		},
-		{
-			"name":	"IP spoofed",
-			"desc":	"See IP spoofing",
-			"sees":	["IP spoofing"],
-			"url1":	"https://en.wikipedia.org/wiki/IP_address_spoofing"
-		},
-		{
-			"name":	"Key exchange",
-			"desc": "Key exchange represent the process to create a shared secret known by and only by two parties. Symmetric encryption is then used, taking the shared secret, or a variation derived from it as encryption key. No other people will be able to understand the encrypted messages, except that they crack the encryption or hack on the process of key exchange. \nTo securely exchange the key, people used to adopt out-of-band approaches like delivering the key in person. The creation of key exchange protocols like Diffie-Hellman key exchange totally changed this. With these protocols, the shared secret can be transmitted over insecure channels, while still not divulged to the third person. ^Symmetric keys are delivered by key exchange to encrypt the messages, but asymmetric keys are not used in this way. This is majorly because asymmetric encryption is much slower than symmetric encryption. Encrypting and decrypting the whole message takes up too much time. Nevertheless, Asymmetric cryptography, or better say, public-key cryptography turns out quite useful in the process of key exchange. For deatils, see \"Asymmetric cryptography\".",
-			"sees":	["Encrypted", "Symmetric cryptography", "Asymmetric cryptography"]
-		},
-		{
-			"name":	"Offline",
-			"desc": "The victim is kicked offline by Wi-fi deauth attack, or by a Zero-day attack. The character has to reconnect, and can do nothing for the moment.",
-			"sees":	["Deauth attack", "Zero-day attack"]
-		},
-		{
-			"name":	"Same-Origin policy",
-			"desc": "Same-Origin policy is an important concept for the security model of the web applications. Under this policy, the scripts from one web page can access data in the second page only if the two pages have the same origin. This policy protects the content of the page from being accessed by malicious codes from other pages. This policy is especially crucial for those web applications that use (client side) cookies as authentication tokens, as any tampering of the cookies from other websites could result in authentication breach. Same-Origin policy mainly applies to scripts, while data access through HTML tags is not restricted (except for the font). \nNevertheless, some offensive techniques like XSS and CSRF are there to bypass same-origin policy.",
-			"sees":	["XSS", "CSRF"],
-			"url1": "https://en.wikipedia.org/wiki/Same-origin_policy"
-		},
-		{
-			"name":	"Shared channel",
-			"desc": "Both characters have access to the communication channel to the other. Any unencrypted messages can be directly sniffed by the other one."
-		},
-		{
-			"name":	"Wi-Fi channel",
-			"desc": "Both characters are connected to the same Wi-Fi network. Wi-Fi based attacks like deauth attack or rogue access point can be launched against the victim.",
-			"sees":	["Deauth attack", "Rogue access point"]
-		}
-	]
-}
+"buffs":
+[
+	{
+		"name": "Buffs",
+		"desc":	"Buffs are the lasting effects of the offensive or defensive acts performed by the characters. There are positive acts, which enhance the ability of the character, or provide defense against attacks. There are also negative buffs, which are usually enforced on the defender by the intruder. Negative buffs indicate the states of how the intruders lure the victims into their traps. \nSome buffs have infinite length, but some others have finite length. If a buff's remaining length decreses to zero, the buff, together with its effects will vanish. ^In general, a defender is supposed to put on as many (positive) buffs as possible, to gurantee better security. An intruder, however, would like to remove those positive buffs (if possible) from the defender, and enforces some negative buffs on the defender, so as to successfully deal damage to the assets.",
+		"sees": ["Special buffs"]
+	},
+	{
+		"name":	"503 Server Unavailable",
+		"desc": "503 Server Unavailable. The server is overburdened with requests. Possible reason:\n - The server's computation or communication power does not match the need of the clients.\n - Because of some events (e.g. a festival or a promotion) many clients send requests within a short time period.\n - The server is under DoS attack, where a huge number of requests are fake requests aiming at exhaust the computational or communicational power of the server.",
+		"sees": ["Special buffs"]
+	},
+	{
+		"name":	"Confidential message divulged",
+		"desc":	"German military movement and other important and secret information are revealed to the Allies.",
+		"sees":	["Special buffs", "Credential compromised"]
+	},
+	{
+		"name":	"Connected to rogue AP",
+		"desc":	"The victim is connected to a rogue AP (access point). If the rogue access point has a rogue DHCP service installed, the victim could experience DHCP hijacking.",
+		"sees":	["Rogue access point"]
+	},
+	{
+		"name":	"Credential compromised",
+		"desc":	"The server/client's important data like username and password are compromised. The intruder obtains these data, and he can sell these data in the deep web, or even use the important login credential for more devastating things (e.g. deleting the whole database, exporting more client secret information, tampering with account credits).",
+		"sees":	["Special buffs", "Confidential message divulged"]
+	},
+	{
+		"name": "Denial of service attacked",
+		"desc":	"The target server is under denial of service attack. The server is greatly loaded with countless request, and it may fail to serve the legitimate users.",
+		"sees":	["Special buffs", "DoS", "DDoS", "Password DoS"]
+	},
+	{
+		"name": "DHCP hijacked",
+		"desc":	"The victim's device accept the configuration of a rogue DHCP server. Crucial parameters like default gateway and DNS server are set by the attacker. Because of the setting for the default gateway, the attacker is already in a Man-In-The-Middle state. Because of the setting for the DNS server, the attacker can set up a rogue DNS server and perform the attack of DNS hijacking. \nFor details, see Rogue DHCP server.",
+		"sees":	["Rogue DHCP server"],
+		"url1":	"https://en.wikipedia.org/wiki/Rogue_DHCP"
+	},
+	{
+		"name":	"DNS hijacked",
+		"desc":	"See Rogue DNS server",
+		"sees":	["Rogue DNS server"],
+		"url1":	"https://en.wikipedia.org/wiki/DNS_hijacking"
+	},
+	{
+		"name":	"Encrypted",
+		"desc":	"The data transferred over the Internet is encrypted with a symmetric key shared by the sender and the receiver. Sniffing attack alone will not compromise the secrecy. \nThe process to create encryption key known by and only by the two parties is called key exchange. For more information, please refer to \"Key exchange\".",
+		"sees":	["Key exchange", "Symmetric cryptography", "Encrypt with Enigma"]
+	},
+	{
+		"name":	"IP spoofed",
+		"desc":	"See IP spoofing",
+		"sees":	["IP spoofing"],
+		"url1":	"https://en.wikipedia.org/wiki/IP_address_spoofing"
+	},
+	{
+		"name":	"Key exchange",
+		"desc": "Key exchange represent the process to create a shared secret known by and only by two parties. Symmetric encryption is then used, taking the shared secret, or a variation derived from it as encryption key. No other people will be able to understand the encrypted messages, except that they crack the encryption or hack on the process of key exchange. \nTo securely exchange the key, people used to adopt out-of-band approaches like delivering the key in person. The creation of key exchange protocols like Diffie-Hellman key exchange totally changed this. With these protocols, the shared secret can be transmitted over insecure channels, while still not divulged to the third person. ^Symmetric keys are delivered by key exchange to encrypt the messages, but asymmetric keys are not used in this way. This is majorly because asymmetric encryption is much slower than symmetric encryption. Encrypting and decrypting the whole message takes up too much time. Nevertheless, Asymmetric cryptography, or better say, public-key cryptography turns out quite useful in the process of key exchange. For deatils, see \"Asymmetric cryptography\".",
+		"sees":	["Encrypted", "Symmetric cryptography", "Asymmetric cryptography"]
+	},
+	{
+		"name":	"Offline",
+		"desc": "The victim is kicked offline by Wi-fi deauth attack, or by a Zero-day attack. The character has to reconnect, and can do nothing for the moment.",
+		"sees":	["Deauth attack", "Zero-day attack"]
+	},
+	{
+		"name":	"Same-Origin policy",
+		"desc": "Same-Origin policy is an important concept for the security model of the web applications. Under this policy, the scripts from one web page can access data in the second page only if the two pages have the same origin. This policy protects the content of the page from being accessed by malicious codes from other pages. This policy is especially crucial for those web applications that use (client side) cookies as authentication tokens, as any tampering of the cookies from other websites could result in authentication breach. Same-Origin policy mainly applies to scripts, while data access through HTML tags is not restricted (except for the font). \nNevertheless, some offensive techniques like XSS and CSRF are there to bypass same-origin policy.",
+		"sees":	["XSS", "CSRF"],
+		"url1": "https://en.wikipedia.org/wiki/Same-origin_policy"
+	},
+	{
+		"name":	"Shared channel",
+		"desc": "Both characters have access to the communication channel to the other. Any unencrypted messages can be directly sniffed by the other one."
+	},
+	{
+		"name":	"Wi-Fi channel",
+		"desc": "Both characters are connected to the same Wi-Fi network. Wi-Fi based attacks like deauth attack or rogue access point can be launched against the victim.",
+		"sees":	["Deauth attack", "Rogue access point"]
+	}
+]
 }
