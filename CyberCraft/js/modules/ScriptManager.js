@@ -1,8 +1,8 @@
 var MultimediaText = require("../modules/MultimediaText");
-
 /** 
-@classdesc A class managing the in-game scripts used to dynamically show dialogues, unlock acts, or lock on end turn button before player has done an action.
+@classdesc A class managing the in-game scripts used to dynamically show dialogues, unlock acts, or lock on end turn button before player has done an action, as well as focusing animation.
 The AI however, is managed by AIManager.
+p.s. ScriptManager is also written Object-oriented, just like the game. However, it's better to write game scripts event-driven, just like the original javascript. This following object-oriented code are usually triggered at the start of a round. However, if it's event-driven, by create functions such as "OnApplyingAct", "OnEndingTurn", one can manage user interaction in a finer grandularity.
 @param {int} index - the scenario number
 @param {cyberspace} cyberspace - the reference to cyberspace state
 @param {ActManager} actManager - the reference to actManager

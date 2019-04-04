@@ -150,6 +150,7 @@ scenarioX_cyber.json and tutorialX_cyber.json:
 			name: the name to be displayed for the speaker of the dialogue
 			portrait: the portrait of the speaker
 			dialogue: the (multi-page)dialogue to display. Use "\^{}" to delimit pages.
+			focusing: a focusing animation will be created together with the dialogue. The animation is a shrinking rectangle, whose is specified by the x-axis and y-axis of its top-left corner and its width and height. So the format is: [x, y, width, height]
 		newActs: arrays of acts to be unlocked. First array for the intruder and second array for the defender
 		shouldApply: (should be specified only for player¡¯s rounds) it¡¯s an array of act names. It enforces the player to apply those acts in the designated round. If
 the player has not applied all the acts in the round, the ¡±End turn¡± button will be

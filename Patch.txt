@@ -20,4 +20,5 @@ Patch 1.2
 - Instructions on how to play added to personal notes
 - The data of acts balanced
 - Dialogues rephrased, especially in tutorials, to more clearly instruct the players
+- Two missing security terms filled in personal notes
 - Other minor change on texts or UI

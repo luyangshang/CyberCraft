@@ -427,7 +427,12 @@
 			"sees":	["Key exchange", "Asymmetric cryptography", "DES", "3DES"],
 			"url1":	"https://en.wikipedia.org/wiki/Symmetric-key_algorithm"
 		},
-		
+		{
+			"name":	"Timestamp",
+			"desc":	"A timestamp is a sequence of characters or encoded information to describe the time when something happened. \nIn computer security specifically, timestamp can be used to thrwart replay attack. With a timestamp in the packet, the recipient can note down the timestamp of the newest packet, and discard incoming packets with a timestamp not later than the noted value. Note that replay attack just resend the old packet to the recipient as it was, without any modification. Thereby, the replayed packet always has exactly the same timestamp as the old one. Thereby, the replayed packet will be discarded by the recipient.",
+			"sees":	["Replay attack"],
+			"url1":	"https://en.wikipedia.org/wiki/Timestamp"
+		},
 		{
 			"name":	"Tip:cautious for free Wi-Fi",
 			"desc":	"Attackers may set up free Wi-Fi for other to connect to. While it seems a generous act, the real intention of the attacker is to perform a Man-In-The-Middle attack. For more details, see the entry \"Rogue access point\".",
@@ -504,6 +509,11 @@
 		"name":	"Offline",
 		"desc": "The victim is kicked offline by Wi-fi deauth attack, or by a Zero-day attack. The character has to reconnect, and can do nothing for the moment.",
 		"sees":	["Deauth attack", "Zero-day attack"]
+	},
+	{
+		"name":	"Password auto-filled",
+		"desc": "See Password manager",
+		"sees":	["Password manager"]
 	},
 	{
 		"name":	"Same-Origin policy",
